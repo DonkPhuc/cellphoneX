@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "jsdom"],
+    "skipLibCheck": true
+  },
+  "include": [],
+  "exclude": ["node_modules", "dist", "**/*.md"]
+}

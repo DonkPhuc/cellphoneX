@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#app {
+  @apply h-full w-full bg-white text-base text-gray-700;
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+}
+
+.mapdiv *:not(i) {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+}
+
+.disabled {
+  @apply disabled:bg-slate-100 disabled:opacity-60;
+}
+
+.readonly {
+  @apply read-only:bg-slate-100 read-only:opacity-60;
+}
+
+.focus {
+  @apply focus:border-primary focus:ring-0;
+}
+
+.dp__theme_light {
+  --dp-primary-color: #1ab394 !important;
+  --dp-success-color: #1ab394 !important;
+}

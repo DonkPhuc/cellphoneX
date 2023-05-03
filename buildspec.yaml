@@ -1,0 +1,33 @@
+version: 0.2
+
+batch:
+  fast-fail: true
+  # build-list:
+  # build-matrix:
+  # build-graph:
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - yarn
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo -------Create env file---------
+      - echo VITE_API_URL=$BACKEND_API_URL > .env
+      - echo VITE_KEY_API=AIzaSyC6L6QkAwYq1oFiXgVRDQPcxOqPGKcnQeQ >> .env
+      - echo VITE_API_URL=$BACKEND_API_URL > .env.production
+      - echo VITE_KEY_API=AIzaSyC6L6QkAwYq1oFiXgVRDQPcxOqPGKcnQeQ >> .env.production
+  build:
+    on-failure: ABORT
+    commands:
+      - yarn run build
+  post_build:
+    on-failure: ABORT
+    commands:
+      - echo -------Upload to s3--------
+      - aws s3 cp dist/ $S3_BUCKET_DESTINATION_URI --recursive
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
