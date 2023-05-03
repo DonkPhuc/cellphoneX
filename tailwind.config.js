@@ -9,7 +9,6 @@ module.exports = {
     extend: {
       colors: {
         primary: '#1ab394',
-        main: '#D70018',
         'vtd-primary': colors.green,
       },
     },
