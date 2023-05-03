@@ -174,7 +174,6 @@
     "useGamepad": true,
     "useGeolocation": true,
     "useHead": true,
-    "useI18n": true,
     "useIdle": true,
     "useImage": true,
     "useInfiniteScroll": true,

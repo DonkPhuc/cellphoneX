@@ -45,11 +45,21 @@ async function goCart(go: string) {
 }
 
 function nextStep() {
-  step.value++;
+  if (selectedName.value && selectedPhoneNo.value && selectedEmail.value) step.value++;
 }
 
 function choosePayment(index: number) {
   selectedPayment.value = index;
+}
+
+function updateName(name: string) {
+  selectedName.value = name;
+}
+function updatePhoneNo(phoneNo: number) {
+  selectedPhoneNo.value = phoneNo;
+}
+function updateEmail(email: string) {
+  selectedEmail.value = email;
 }
 </script>
 
@@ -118,9 +128,24 @@ function choosePayment(index: number) {
 
           <div v-if="step === 0" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
             <VTitle title="Thông tin khách hàng" />
-            <VInput placeholder="Họ và tên(bắc buộc)" input-class="rounded-lg !h-10" />
-            <VInput placeholder="Số điện thoại(bắt buộc)" input-class="rounded-lg !h-10" />
-            <VInput placeholder="Email (Vui lòng điền email để nhận hóa đơn VAT)" input-class="rounded-lg !h-10" />
+            <VInput
+              :model="selectedName"
+              placeholder="Họ và tên(bắc buộc)"
+              input-class="rounded-lg !h-10"
+              @update:model="updateName"
+            />
+            <VInput
+              :model="selectedPhoneNo"
+              placeholder="Số điện thoại(bắt buộc)"
+              input-class="rounded-lg !h-10"
+              @update:model="updatePhoneNo"
+            />
+            <VInput
+              :model="selectedEmail"
+              placeholder="Email (Vui lòng điền email để nhận hóa đơn VAT)"
+              input-class="rounded-lg !h-10"
+              @update:model="updateEmail"
+            />
             <VTitle title="Chọn cách thức giao hàng" />
             <form class="flex items-center gap-2">
               <input

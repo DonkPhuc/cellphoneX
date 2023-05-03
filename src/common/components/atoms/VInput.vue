@@ -2,7 +2,7 @@
 import { DatePicker } from '~/types';
 
 interface VInputProps {
-  model?: string;
+  model?: string | number;
   type?: 'text' | 'password' | 'number' | 'date';
   size?: 'small' | 'medium' | 'large';
   format?: DatePicker;

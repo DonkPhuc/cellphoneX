@@ -1,9 +1,7 @@
-<script setup lang="ts">
-const { t } = useI18n();
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  {{ t('not-found.message') }}
+  {{ 'not-found.message' }}
 </template>
 
 <route lang="yaml">

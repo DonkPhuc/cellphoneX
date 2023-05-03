@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -14,7 +13,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
-      'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
     },
   },
   includeAssets: ['**/*.{png,svg,jpg,ico}'],
@@ -37,7 +35,7 @@ export default defineConfig({
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      imports: ['vue', 'vue-router', 'vue-i18n', 'vue/macros', '@vueuse/head', '@vueuse/core'],
+      imports: ['vue', 'vue-router', 'vue/macros', '@vueuse/head', '@vueuse/core'],
       dts: 'src/auto-imports.d.ts',
       eslintrc: {
         enabled: true,
@@ -65,13 +63,6 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['**/*.{png,svg,jpg,ico}'],
-    }),
-
-    // https://github.com/intlify/vite-plugin-vue-i18n
-    VueI18nPlugin({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [path.resolve(__dirname, 'locales/**')],
     }),
   ],
 });

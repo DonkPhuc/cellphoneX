@@ -1,7 +1,6 @@
 // register vue composition api globally
 import 'font-awesome/css/font-awesome.min.css';
 import '@vueform/multiselect/themes/default.css';
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import './common/styles/style.css';
 
 import { setupLayouts } from 'virtual:generated-layouts';
