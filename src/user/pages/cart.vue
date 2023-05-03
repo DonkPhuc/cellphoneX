@@ -77,7 +77,7 @@ async function go(getId: string) {
 
 <template>
   <main class="flex">
-    <div class="flex-1"></div>
+    <div class="hidden flex-1 lg:flex"></div>
 
     <div v-if="cart.length === 0" class="flex flex-1 flex-col py-4">
       <div class="flex flex-1 flex-col gap-12">
@@ -168,7 +168,7 @@ async function go(getId: string) {
       </div>
     </div>
 
-    <div class="flex-1"></div>
+    <div class="hidden flex-1 lg:flex"></div>
   </main>
 </template>
 

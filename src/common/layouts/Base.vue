@@ -2,10 +2,12 @@
   <div class="h-full w-full">
     <VHeader />
 
-    <main class="pb-10 pt-14">
+    <main class="overflow-y-hidden pb-10 pt-14">
       <RouterView />
     </main>
 
-    <VFooter />
+    <div class="hidden md:flex">
+      <VFooter />
+    </div>
   </div>
 </template>

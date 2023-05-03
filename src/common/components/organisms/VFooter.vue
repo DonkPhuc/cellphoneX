@@ -32,63 +32,67 @@ const listInfo3rd = [
 
 <template>
   <footer class="w-full border-t-2 pt-10">
-    <div class="mx-auto flex w-full lg:w-[65%]">
-      <div class="flex h-[300px] flex-1 flex-col gap-4">
-        <h1>Tổng đài hỗ trợ miễn phí</h1>
-        <div>
-          <div v-for="item in listInfo1st" :key="item" class="py-1 pl-2 text-xs font-normal">
-            <span>{{ item }}</span>
+    <div class="flex">
+      <div class="hidden flex-[0.35] lg:flex"></div>
+      <div class="flex flex-1">
+        <div class="flex flex-1 flex-col gap-4">
+          <h1>Tổng đài hỗ trợ miễn phí</h1>
+          <div>
+            <div v-for="item in listInfo1st" :key="item" class="py-1 pl-2 text-xs font-normal">
+              <span>{{ item }}</span>
+            </div>
+          </div>
+          <h1>Phương thức thanh toán</h1>
+          <div class="flex flex-wrap gap-2 pl-2 pt-2">
+            <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
+            <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
+            <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
+            <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
           </div>
         </div>
-        <h1>Phương thức thanh toán</h1>
-        <div class="flex gap-2 pl-2 pt-2">
-          <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
-          <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
-          <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
-          <img class="border" src="https://image.cellphones.com.vn/x35/media/logo/payment/alepay-logo.png" alt="" />
-        </div>
-      </div>
 
-      <div class="flex h-[300px] flex-1 flex-col gap-4">
-        <h1>Thông tin và chính sách</h1>
-        <div>
-          <div v-for="item in listInfo2nd" :key="item" class="py-1 pl-2 text-xs font-normal">
-            <span>{{ item }}</span>
+        <div class="flex flex-1 flex-col gap-4">
+          <h1>Thông tin và chính sách</h1>
+          <div>
+            <div v-for="item in listInfo2nd" :key="item" class="py-1 pl-2 text-xs font-normal">
+              <span>{{ item }}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="flex h-[300px] flex-1 flex-col gap-4">
-        <h1>Dịch vụ và thông tin khác</h1>
-        <div>
-          <div v-for="item in listInfo3rd" :key="item" class="py-1 pl-2 text-xs font-normal">
-            <span>{{ item }}</span>
+        <div class="flex flex-1 flex-col gap-4">
+          <h1>Dịch vụ và thông tin khác</h1>
+          <div>
+            <div v-for="item in listInfo3rd" :key="item" class="py-1 pl-2 text-xs font-normal">
+              <span>{{ item }}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="flex h-[300px] flex-1 flex-col gap-4">
-        <h1>Kết nối với CellphoneS</h1>
-        <div class="flex gap-2">
-          <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
-          <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
-          <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
-          <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
-          <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
+        <div class="flex flex-1 flex-col gap-4">
+          <h1>Kết nối với CellphoneS</h1>
+          <div class="flex flex-wrap gap-2">
+            <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
+            <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
+            <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
+            <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
+            <img src="https://image.cellphones.com.vn/44x/media/logo/social/cellphones-youtube.png" alt="" />
+          </div>
+          <h1>Website thành viên</h1>
+          <img
+            class="h-7 w-32"
+            src="https://image.cellphones.com.vn/x30/media/logo/corp-members/dienthoaivui.png"
+            alt=""
+          />
+          <img
+            class="h-7 w-32"
+            src="https://image.cellphones.com.vn/x30/media/logo/corp-members/dienthoaivui-asp.png"
+            alt=""
+          />
+          <img class="h-7 w-32" src="https://image.cellphones.com.vn/x30/media/logo/corp-members/sforum.png" alt="" />
         </div>
-        <h1>Website thành viên</h1>
-        <img
-          class="h-7 w-32"
-          src="https://image.cellphones.com.vn/x30/media/logo/corp-members/dienthoaivui.png"
-          alt=""
-        />
-        <img
-          class="h-7 w-32"
-          src="https://image.cellphones.com.vn/x30/media/logo/corp-members/dienthoaivui-asp.png"
-          alt=""
-        />
-        <img class="h-7 w-32" src="https://image.cellphones.com.vn/x30/media/logo/corp-members/sforum.png" alt="" />
       </div>
+      <div class="hidden flex-[0.35] lg:flex"></div>
     </div>
 
     <div class="w-full bg-slate-100 py-4">

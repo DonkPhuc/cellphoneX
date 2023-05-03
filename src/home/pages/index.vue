@@ -191,73 +191,78 @@ async function goDetail(index: number, id: string) {
 </script>
 
 <template>
-  <main class="mx-auto flex lg:w-[65%]">
-    <div class="flex flex-1 flex-col gap-4 pt-4">
-      <div class="flex h-[376px] w-full gap-4">
-        <div class="flex flex-[0.75] flex-col rounded-xl border shadow-xl">
-          <VMenuList :data="menuList" @event-menu="eventMenu" />
-        </div>
-        <div class="flex-[2] rounded-xl border shadow-xl">
-          <VProductsList :data-carousel="listCarousel" type="carousel" />
-        </div>
-        <div class="flex-1">
-          <div class="flex h-full flex-1 flex-col gap-4">
-            <div v-for="item in listFeature" :key="item.imageLink" class="flex-1 rounded-xl border shadow-xl">
-              <img class="h-[114px] w-full rounded-xl" :src="item.imageLink" />
+  <main class="mx-auto flex px-2">
+    <div class="hidden lg:flex lg:flex-[0.3]"></div>
+    <div class="flex flex-1">
+      <div class="flex flex-col gap-4 pt-4">
+        <div class="flex h-[376px] w-full gap-4">
+          <div class="hidden flex-[0.35] flex-col rounded-xl border shadow-xl lg:flex">
+            <VMenuList :data="menuList" @event-menu="eventMenu" />
+          </div>
+          <div class="hidden flex-1 rounded-xl border shadow-xl lg:block">
+            <VProductsList :data-carousel="listCarousel" type="carousel" />
+          </div>
+          <div class="hidden flex-[0.5] lg:flex">
+            <div class="flex h-full flex-1 flex-col gap-4">
+              <div v-for="item in listFeature" :key="item.imageLink" class="flex-1 rounded-xl border shadow-xl">
+                <img class="h-[114px] w-full rounded-xl" :src="item.imageLink" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="h-[75px]">
-        <img
-          src="https://cdn2.cellphones.com.vn/1200x75,webp,q100/https://dashboard.cellphones.com.vn/storage/banner-special-desktop-pkchaohe.png"
-          alt=""
-          class="w-full rounded-xl"
+        <div class="h-[75px]">
+          <img
+            src="https://cdn2.cellphones.com.vn/1200x75,webp,q100/https://dashboard.cellphones.com.vn/storage/banner-special-desktop-pkchaohe.png"
+            alt=""
+            class="w-full rounded-xl"
+          />
+        </div>
+
+        <VProductsList
+          type="product"
+          :button-list="buttonList"
+          :data="itemList"
+          title="ĐIỆN THOẠI NỔI BẬT NHẤT"
+          @go-detail="goDetail"
         />
-      </div>
 
-      <VProductsList
-        type="product"
-        :button-list="buttonList"
-        :data="itemList"
-        title="ĐIỆN THOẠI NỔI BẬT NHẤT"
-        @go-detail="goDetail"
-      />
+        <VProductsList
+          type="product"
+          :button-list="buttonList"
+          :data="itemList"
+          title="LAPTOP NỔI BẬT NHẤT "
+          @go-detail="goDetail"
+        />
 
-      <VProductsList
-        type="product"
-        :button-list="buttonList"
-        :data="itemList"
-        title="LAPTOP NỔI BẬT NHẤT "
-        @go-detail="goDetail"
-      />
+        <VProductsList
+          type="product"
+          :button-list="buttonList"
+          :data="itemList"
+          title="TAI NGHE NỔI BẬT NHẤT"
+          @go-detail="goDetail"
+        />
 
-      <VProductsList
-        type="product"
-        :button-list="buttonList"
-        :data="itemList"
-        title="TAI NGHE NỔI BẬT NHẤT"
-        @go-detail="goDetail"
-      />
-
-      <div class="h-[40px] w-full">
-        <div class="flex h-full items-center justify-between">
-          <VTitle title="PHỤ KIỆN" />
-          <div class="flex gap-2">
-            <span class="cursor-pointer text-sm hover:underline">Xem Tất Cả</span>
+        <!-- <div class="h-[40px] w-full">
+          <div class="flex h-full items-center justify-between">
+            <VTitle title="PHỤ KIỆN" />
+            <div class="flex gap-2">
+              <span class="cursor-pointer text-sm hover:underline">Xem Tất Cả</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="flex h-auto w-full gap-4 pb-10">
-        <div v-for="item in categories" :key="item.title" class="flex gap-4">
-          <div class="flex h-[125px] w-[111px] flex-col rounded-xl bg-[#F28376] shadow-xl">
-            <VTitle class="!pl-2 !text-white" title="Nổi Bật" />
-            <img class="mt-[-30px]" src="https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg" />
+        
+        <div class="flex h-auto w-full gap-4 pb-10">
+          <div v-for="item in categories" :key="item.title" class="flex gap-4">
+            <div class="flex h-[125px] w-[111px] flex-col rounded-xl bg-[#F28376] shadow-xl">
+              <VTitle class="!pl-2 !text-white" title="Nổi Bật" />
+              <img class="mt-[-30px]" src="https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg" />
+            </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
+    <div class="hidden lg:flex lg:flex-[0.3]"></div>
   </main>
 </template>
 

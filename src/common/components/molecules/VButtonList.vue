@@ -14,7 +14,7 @@ const eventButton = (title: string) => {
 </script>
 
 <template>
-  <div v-for="item in data" :key="item.title" class="flex">
+  <div v-for="item in data" :key="item.title" class="hidden lg:flex">
     <VButton
       class="!duration-200 hover:!bg-main hover:!text-white"
       input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600"
@@ -22,4 +22,5 @@ const eventButton = (title: string) => {
       @click="eventButton(item.title)"
     />
   </div>
+  <VButton label="Xem tất cả" />
 </template>

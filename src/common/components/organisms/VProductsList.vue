@@ -41,10 +41,19 @@ const settings = {
   snapAlign: 'center',
 };
 const breakpoints = {
+  // 364 and up
+  100: {
+    itemsToShow: 2,
+    snapAlign: 'start',
+  },
+  500: {
+    itemsToShow: 3,
+    snapAlign: 'start',
+  },
   // 700px and up
   700: {
-    itemsToShow: 3.5,
-    snapAlign: 'center',
+    itemsToShow: 4,
+    snapAlign: 'start',
   },
   // 1024 and up
   1024: {
@@ -61,14 +70,14 @@ const slideTo = (index: number) => {
 
 <template>
   <template v-if="type === 'product'">
-    <div class="h-[40px] w-full">
+    <!-- <div class="h-[40px] w-full">
       <div class="flex h-full items-center justify-between">
         <VTitle v-if="title" :title="title" />
         <div class="flex gap-2">
           <VButtonList v-if="buttonList" :data="buttonList" @event-button="eventButton" />
         </div>
       </div>
-    </div>
+    </div> -->
     <Carousel v-if="data" :settings="settings" :breakpoints="breakpoints">
       <Slide
         v-for="(slide, index) in data"

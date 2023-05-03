@@ -12,9 +12,9 @@ const switchMode = () => {
 
 <template>
   <main class="flex">
-    <div class="flex-1"></div>
+    <div class="hidden flex-1 lg:flex"></div>
 
-    <div v-if="isLogin" class="flex flex-1 flex-col py-4">
+    <div v-if="isLogin" class="flex flex-1 flex-col px-2 py-4">
       <div class="flex flex-1 flex-col gap-4">
         <div class="flex justify-center">
           <img class="w-[300px]" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
@@ -38,7 +38,7 @@ const switchMode = () => {
       </div>
     </div>
 
-    <div v-else class="flex flex-1 flex-col py-4">
+    <div v-else class="flex flex-1 flex-col px-2 py-4">
       <div class="flex flex-1 flex-col gap-4">
         <span class="cursor-pointer text-xl font-bold" @click="switchMode"
           ><VIcon icon="fa-arrow-left" /> Đăng nhập tài khoản</span
@@ -78,7 +78,7 @@ const switchMode = () => {
       </div>
     </div>
 
-    <div class="flex-1"></div>
+    <div class="hidden flex-1 lg:flex"></div>
   </main>
 </template>
 

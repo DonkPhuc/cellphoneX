@@ -4,7 +4,7 @@ import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOption
 import { Products } from '~/home/dtos';
 
 interface VSelectProps {
-  options?: Products[];
+  options?: any[];
   type?: 'dropdown' | 'combobox';
   size?: 'small' | 'medium' | 'large';
   model?: string | number;
