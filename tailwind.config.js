@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         primary: '#1ab394',
         'vtd-primary': colors.green,
+        main: '#D70018',
       },
     },
   },

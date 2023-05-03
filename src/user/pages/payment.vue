@@ -222,7 +222,7 @@ function choosePayment(index: number) {
                 >
                   <div class="flex-col">
                     <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
-                    <img class="mx-auto" src="/cart/_nuxt/img/COS.f5b9a7b.png" alt="" />
+                    <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
                 <div
@@ -232,7 +232,7 @@ function choosePayment(index: number) {
                 >
                   <div class="flex-col">
                     <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
-                    <img class="mx-auto" src="/cart/_nuxt/img/COS.f5b9a7b.png" alt="" />
+                    <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
               </div>
@@ -245,7 +245,7 @@ function choosePayment(index: number) {
                 >
                   <div class="flex-col">
                     <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
-                    <img class="mx-auto" src="/cart/_nuxt/img/COS.f5b9a7b.png" alt="" />
+                    <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
                 <div
@@ -255,7 +255,7 @@ function choosePayment(index: number) {
                 >
                   <div class="flex-col">
                     <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
-                    <img class="mx-auto" src="/cart/_nuxt/img/COS.f5b9a7b.png" alt="" />
+                    <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
               </div>
@@ -268,7 +268,7 @@ function choosePayment(index: number) {
                 >
                   <div class="flex-col">
                     <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
-                    <img class="mx-auto" src="/cart/_nuxt/img/COS.f5b9a7b.png" alt="" />
+                    <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
                 <div
@@ -278,7 +278,7 @@ function choosePayment(index: number) {
                 >
                   <div class="flex-col">
                     <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
-                    <img class="mx-auto" src="/cart/_nuxt/img/COS.f5b9a7b.png" alt="" />
+                    <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
               </div>
