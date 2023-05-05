@@ -15,9 +15,13 @@ const itemList = ref<Products[]>([]);
 
 onMounted(() => {
   itemList.value = [];
-  itemList.value = store.actions.getData();
+  getPhoneData();
   window.scrollTo(0, 0);
 });
+
+async function getPhoneData() {
+  itemList.value = await store.getData();
+}
 
 const listFeature = [
   {

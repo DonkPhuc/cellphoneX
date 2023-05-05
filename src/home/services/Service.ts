@@ -4,22 +4,22 @@ import { Products } from '../dtos/products.dto';
 
 const itemList = [
   {
-    imageLink: 'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png',
-    name: 'iPhone 14 Pro Max 128GB | Chính hãng VN/A',
+    imageLink: "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png",
+    name: "iPhone 14 Pro Max 128GB | Chính hãng VN/A",
     price: 4491000,
     priceRRP: 4491000,
-    description: 'Thu cũ lên đời - Giá thu tốt nhất - Tặng thêm 2 triệu khi lên đời',
+    description: "Thu cũ lên đời - Giá thu tốt nhất - Tặng thêm 2 triệu khi lên đời",
     rated: 4,
     favorite: true,
     quality: 1,
-    id: 'knjasd1',
+    id: "knjasd1",
     discount: 10,
     imageDetail: [
-      'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png',
-      'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png',
-      'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png',
-      'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png',
-      'https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png',
+      "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png",
+      "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png",
+      "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png",
+      "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png",
+      "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/t/_/t_m_18.png",
     ],
   },
   {
@@ -123,11 +123,11 @@ class Services extends BaseService {
     super(prefix);
   }
 
-  getData() {
-    return itemList;
-  }
-  // async getData(data?: Record<string, string>) {
-  //   return await this.performRequest(METHODS.POST, 'v2/track', data);
+  // getData() {
+  //   return itemList;
   // }
+  async getData() {
+    return await this.performRequest(METHODS.GET, 'product');
+  }
 }
-export default new Services('');
+export default new Services('v1');
