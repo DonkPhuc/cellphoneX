@@ -1,1 +1,0 @@
-import{d as n,a as o,t as s,e as a}from"./index-5ea1be58.js";import{b as t}from"./route-block-83d24a4e.js";const r=n({__name:"[...all]",setup(f){const{t:e}=o();return(p,c)=>s(a(e)("not-found.message"))}});typeof t=="function"&&t(r);export{r as default};

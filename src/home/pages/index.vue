@@ -251,7 +251,7 @@ async function goDetail(index: number, id: string) {
             @go-detail="goDetail"
           /> -->
         </div>
-
+        <!-- 
         <div class="h-[40px] w-full">
           <div class="flex h-full items-center justify-between">
             <VTitle title="PHỤ KIỆN" />
@@ -259,16 +259,16 @@ async function goDetail(index: number, id: string) {
               <span class="cursor-pointer text-sm hover:underline">Xem Tất Cả</span>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="flex h-auto w-full gap-4 bg-red-200 pb-10">
-          <!-- <div v-for="item in categories" :key="item.title" class="flex gap-4">
+        <!-- <div class="flex h-auto w-full gap-4 bg-red-200 pb-10">
+          <div v-for="item in categories" :key="item.title" class="flex gap-4">
             <div class="flex h-[125px] w-[111px] flex-col rounded-xl bg-[#F28376] shadow-xl">
               <VTitle class="!pl-2 !text-white" title="Nổi Bật" />
               <img class="mt-[-30px]" src="https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg" />
             </div>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
     </div>
     <div class="hidden lg:flex lg:flex-[0.3]"></div>
