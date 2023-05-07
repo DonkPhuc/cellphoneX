@@ -1,0 +1,1 @@
+import{g as c,r as _,o as a,c as l,f as e,b as o,h as r,i as f}from"./index-5ea1be58.js";const i={},u={class:"h-full w-full"},p={class:"flex h-full w-full flex-1 pb-10 pt-14"},d={class:"w-full overflow-y-auto"};function m(h,w){const s=r,t=_("RouterView"),n=f;return a(),l("div",u,[e(s),o("main",p,[o("div",d,[e(t)])]),e(n)])}const x=c(i,[["render",m]]);export{x as default};
