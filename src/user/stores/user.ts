@@ -3,31 +3,24 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 
 import { Products } from '~/home/dtos';
 
-import PersonalSettingsService from '../services/user';
+import customerServices from '../services/user';
 
 export const useUserStore = defineStore(
   'user',
   () => {
     const cart = ref<Products[]>([new Products()]);
     const currentProduct = ref<Products[]>([new Products()]);
-    // const load = async () => {
-    //   const data = await PersonalSettingsService.load();
-    //   settings.value = plainToInstance(PersonalSetting, data);
-    // };
+    const isLoginSuccess = ref(false);
 
-    // const invokeUpdatePersonalSetting = async (key: SettingToggleKey, value: boolean) => {
-    //   await PersonalSettingsService.update(key, value);
-    // };
-
-    // const toggle = (key: SettingToggleKey, value: boolean) => {
-    //   const updatedKey = key.replace(/(?!^)_(.)/g, (_, char) => char.toUpperCase());
-    //   settings.value = { ...settings.value, [updatedKey]: value };
-    //   invokeUpdatePersonalSetting(key, value);
-    // };
+    function getData() {
+      return customerServices.getCustomers();
+    }
 
     return {
       cart,
       currentProduct,
+      isLoginSuccess,
+      getData,
     };
   },
   {

@@ -1,13 +1,63 @@
 <script setup lang="ts">
-const isLogin = ref(true);
+import { useNotification } from '@kyvg/vue3-notification';
+import { storeToRefs } from 'pinia';
 
-onMounted(() => {
+const notification = useNotification();
+
+import { Customers } from '~/user/dtos/Customers.dto';
+import { useUserStore } from '~/user/stores/user';
+
+const userStore = useUserStore();
+const { isLoginSuccess } = storeToRefs(userStore);
+
+const router = useRouter();
+const isLogin = ref(true);
+const userName = ref('');
+const password = ref('');
+const customerList = ref<Customers[]>([]);
+
+watchEffect(async () => {
+  if (isLoginSuccess.value) {
+    await router.push(`/`);
+  }
+});
+
+onMounted(async () => {
+  if (isLoginSuccess.value) {
+    await router.push(`/`);
+  }
   window.scrollTo(0, 0);
+  customerList.value = (await userStore.getData()) as Customers[];
 });
 
 const switchMode = () => {
   isLogin.value = !isLogin.value;
 };
+
+function updateUsername(username: string) {
+  userName.value = username;
+}
+function updatePassword(pass: string) {
+  password.value = pass;
+}
+function login(value: string) {
+  notification.notify({
+    title: `Test ${value} notification`,
+    data: {
+      randomNumber: Math.random(),
+    },
+  });
+  const findUser = customerList.value.find((obj) => obj.username === userName.value);
+  if (findUser !== undefined) {
+    console.log('username is correct');
+    if (findUser.password === password.value) {
+      isLoginSuccess.value = true;
+      console.log('login successfully');
+    } else {
+      console.log('password is wrong');
+    }
+  }
+}
 </script>
 
 <template>
@@ -22,10 +72,19 @@ const switchMode = () => {
         <div class="flex justify-center">
           <p class="text-lg font-bold">Đăng nhập tài khoản Smember</p>
         </div>
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Vui lòng nhập số điện thoại/email" />
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Vui lòng nhập mật khẩu" type="password" />
+        <VInput
+          input-class="rounded-lg focus:border-main"
+          placeholder="Vui lòng nhập số điện thoại/email"
+          @update:model="updateUsername"
+        />
+        <VInput
+          input-class="rounded-lg focus:border-main"
+          placeholder="Vui lòng nhập mật khẩu"
+          type="password"
+          @update:model="updatePassword"
+        />
         <p class="flex cursor-pointer justify-end text-xs font-thin hover:text-main">Quên mật khẩu?</p>
-        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Nhập" />
+        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Nhập" @click="login('full-width')" />
         <div class="flex py-4">
           <div class="mt-[9px] !h-[1px] flex-1 border-2"></div>
           <p class="mx-1">Hoặc</p>
@@ -77,7 +136,7 @@ const switchMode = () => {
         </div>
       </div>
     </div>
-
+    <notifications group="custom-style" position="top center" classes="n-light" :max="3" :width="400" />
     <div class="hidden flex-1 lg:flex"></div>
   </main>
 </template>

@@ -10,6 +10,6 @@
   "bracketSameLine": false,
   "arrowParens": "always",
   "proseWrap": "never",
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "plugins": ["prettier-plugin-tailwindcss"]
 }

@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia';
+
+import { useStore } from '~/home/stores/Store';
+import { useUserStore } from '~/user/stores/user';
+
+const userStore = useUserStore();
+const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 
 /**
@@ -67,10 +74,18 @@ async function go(url?: string) {
           </div>
 
           <div
+            v-if="!isLoginSuccess"
             class="flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-[hsla(0,0%,100%,.2)]"
             @click="go('login')"
           >
             <p>Đăng Nhập</p>
+          </div>
+          <div
+            v-else
+            class="flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-[hsla(0,0%,100%,.2)]"
+            @click="isLoginSuccess = false"
+          >
+            <p>Đăng Xuất</p>
           </div>
         </div>
       </div>

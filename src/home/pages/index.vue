@@ -20,51 +20,47 @@ onMounted(() => {
 });
 
 async function getPhoneData() {
-  itemList.value = await store.getData();
+  const result = (await store.getData()) as Products[];
+  result.forEach((e) => {
+    e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+  });
+  itemList.value = result;
 }
 
 const listFeature = [
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-s23-ultra-new.jpg',
+    imageLink: 'dist/images/right-banner-ideapad-3.webp',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/ipad-th4-009.jpg',
+    imageLink: 'dist/images/right-banner-th5-newww1.webp',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/ideapad%203.jpg',
+    imageLink: 'dist/images/s20-fe-right-th555.webp',
   },
 ] as Products[];
 const listCarousel = [
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-s23-ultra-new.jpg',
+    imageLink: 'dist/images/right-banner-ideapad-3.webp',
     title: 'Mừng Khai Trương',
     description: 'giảm đến 70%',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/ipad-th4-009.jpg',
+    imageLink: 'dist/images/right-banner-th5-newww1.webp',
     title: 'IPhone 14 Pro',
     description: 'giá tốt bất ngờ',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/ideapad%203.jpg',
+    imageLink: 'dist/images/s20-fe-right-th555.webp',
     title: 'Redmi Note 12',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/ideapad%203.jpg',
+    imageLink: 'dist/images/right-banner-th5-newww1.webp',
     title: 'Redmi Note 123',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/ideapad%203.jpg',
+    imageLink: 'dist/images/right-banner-ideapad-3.webp',
     title: 'Redmi Note 124',
     description: 'mở bán giá tốt',
   },

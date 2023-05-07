@@ -20,8 +20,7 @@
       "vue/ref-macros",
       "vite-plugin-pwa/client",
       "vite-plugin-pages/client",
-      "vite-plugin-vue-layouts/client",
-      "googlemaps"
+      "vite-plugin-vue-layouts/client"
     ],
     "paths": {
       "~/*": ["src/*"]

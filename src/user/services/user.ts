@@ -1,20 +1,13 @@
 import BaseService, { METHODS } from '~/common/services/BaseService';
 
-class PersonalSettingsService extends BaseService {
+class customerServices extends BaseService {
   constructor(prefix: string) {
     super(prefix);
   }
 
-  // load() {
-  //   return this.performRequest<PersonalSetting>(METHODS.GET, '');
-  // }
-
-  // update(key: SettingToggleKey, value: boolean) {
-  //   return this.performRequest<PersonalSetting>(METHODS.POST, 'update', {
-  //     key,
-  //     value,
-  //   });
-  // }
+  async getCustomers() {
+    return await this.performRequest(METHODS.GET, 'customer');
+  }
 }
 
-export default new PersonalSettingsService('configs/settings');
+export default new customerServices('v1/api');

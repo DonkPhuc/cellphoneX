@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 export class Products {
-  id = '';
+  _id = '';
   name = '';
   title = '';
   price = 0;

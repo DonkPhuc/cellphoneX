@@ -8,13 +8,7 @@ export const useStore = defineStore(
   'store',
   () => {
     function getData() {
-      const result = Services.getData();
-
-      // result.forEach((e) => {
-      //   e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
-      // });
-      console.log(result);
-      return result;
+      return Services.getData();
     }
 
     return {
