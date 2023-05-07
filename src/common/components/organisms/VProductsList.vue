@@ -36,29 +36,23 @@ const eventButton = (title: string) => {
 function goToProduct(index: number, id: string) {
   emit('goDetail', index, id);
 }
-const settings = {
-  itemsToShow: 1,
-  snapAlign: 'center',
-};
+
 const breakpoints = {
-  // 364 and up
-  100: {
+  1: {
+    itemsToShow: 1,
+    align: 'start',
+  },
+  486: {
     itemsToShow: 2,
-    snapAlign: 'start',
+    align: 'start',
   },
-  500: {
+  768: {
     itemsToShow: 3,
-    snapAlign: 'start',
+    align: 'start',
   },
-  // 700px and up
-  700: {
-    itemsToShow: 4,
-    snapAlign: 'start',
-  },
-  // 1024 and up
   1024: {
     itemsToShow: 5,
-    snapAlign: 'start',
+    align: 'start',
   },
 };
 
@@ -66,58 +60,75 @@ const currentSlide = ref(0);
 const slideTo = (index: number) => {
   currentSlide.value = index;
 };
+
+const resize = computed(() => {
+  let itemShow = 5;
+  const screenWidth = window.innerWidth;
+  if (screenWidth < 1024) {
+    itemShow = 3;
+  }
+  return itemShow;
+});
 </script>
 
 <template>
   <template v-if="type === 'product'">
-    <!-- <div class="h-[40px] w-full">
-      <div class="flex h-full items-center justify-between">
-        <VTitle v-if="title" :title="title" />
-        <div class="flex gap-2">
+    <div class="flex w-full flex-col gap-2 p-2">
+      <div class="flex h-[40px] items-center">
+        <div class="flex flex-[2] items-center lg:flex-[0.6]">
+          <VTitle v-if="title" :title="title" />
+        </div>
+        <div class="flex flex-1 justify-end gap-2">
           <VButtonList v-if="buttonList" :data="buttonList" @event-button="eventButton" />
+          <VButton
+            class="!duration-200 hover:!bg-main hover:!text-white"
+            input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600"
+            :label="'Xem tất cả'"
+          />
         </div>
       </div>
-    </div> -->
-    <Carousel v-if="data" :settings="settings" :breakpoints="breakpoints">
-      <Slide
-        v-for="(slide, index) in data"
-        :key="index"
-        class="cursor-pointer shadow-xl"
-        @click="goToProduct(index, slide.id)"
-      >
-        <div class="mx-auto w-[95%] rounded-xl border border-slate-200 p-4">
-          <div class="flex flex-col gap-4">
-            <div class="w-full"><img :src="slide.imageLink" alt="" /></div>
-            <div class="w-full">
-              <p class="text-justify text-sm font-bold">{{ slide.name }}</p>
-            </div>
-            <div class="flex w-full justify-around">
-              <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
-              <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
-                {{ formatVND(slide).priceRRP }}
-              </p>
-            </div>
-            <div class="w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs">
-              {{ slide.description }}
-            </div>
-            <div class="flex w-full justify-start">
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-            </div>
-            <div class="flex h-[20px] flex-1 items-center justify-end gap-2">
-              <p class="text-xs text-gray-500">Yêu Thích</p>
-              <VIcon icon="fa-heart" :icon-class="slide.favorite ? '!text-red-500' : '!text-yellow-500'" />
+
+      <Carousel v-if="data" :breakpoints="breakpoints">
+        <Slide v-for="(slide, index) in data" :key="index" @click="goToProduct(index, slide._id)">
+          <div class="p-1">
+            <div class="flex w-full flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-xl">
+              <img class="mx-auto h-[180px] w-[180px]" :src="slide.imageLink" alt="" />
+              <p class="hidden h-14 text-justify text-sm font-bold md:flex">{{ slide.name }}</p>
+
+              <div class="hidden gap-2 md:flex">
+                <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
+                <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
+                  {{ formatVND(slide).priceRRP }}
+                </p>
+              </div>
+
+              <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
+                {{ slide.description }}
+              </div>
+
+              <div class="hidden w-full justify-start md:flex">
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+              </div>
+
+              <div class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex">
+                <p class="text-xs text-gray-500">Yêu Thích</p>
+                <VIcon
+                  :icon="slide.favorite ? 'fa-heart' : 'fa-heart-o'"
+                  :icon-class="slide.favorite ? '!text-red-500' : '!text-black-500'"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Slide>
-      <template #addons>
-        <Navigation />
-      </template>
-    </Carousel>
+        </Slide>
+        <template #addons>
+          <Navigation />
+        </template>
+      </Carousel>
+    </div>
   </template>
 
   <template v-if="dataCarousel && type === 'carousel'">
@@ -129,7 +140,7 @@ const slideTo = (index: number) => {
       </Slide>
     </Carousel>
 
-    <Carousel v-if="dataCarousel" ref="carousel" v-model="currentSlide" :items-to-show="5" :wrap-around="false">
+    <Carousel v-if="dataCarousel" ref="carousel" v-model="currentSlide" :items-to-show="resize" :wrap-around="false">
       <Slide v-for="(slide, index) in dataCarousel" :key="index">
         <div
           :class="index === currentSlide ? 'border-b-4 border-b-main' : ''"

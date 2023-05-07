@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useNotification } from '@kyvg/vue3-notification';
 import { storeToRefs } from 'pinia';
-
-const notification = useNotification();
 
 import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
@@ -40,13 +37,7 @@ function updateUsername(username: string) {
 function updatePassword(pass: string) {
   password.value = pass;
 }
-function login(value: string) {
-  notification.notify({
-    title: `Test ${value} notification`,
-    data: {
-      randomNumber: Math.random(),
-    },
-  });
+function login() {
   const findUser = customerList.value.find((obj) => obj.username === userName.value);
   if (findUser !== undefined) {
     console.log('username is correct');
@@ -84,7 +75,7 @@ function login(value: string) {
           @update:model="updatePassword"
         />
         <p class="flex cursor-pointer justify-end text-xs font-thin hover:text-main">Quên mật khẩu?</p>
-        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Nhập" @click="login('full-width')" />
+        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Nhập" @click="login" />
         <div class="flex py-4">
           <div class="mt-[9px] !h-[1px] flex-1 border-2"></div>
           <p class="mx-1">Hoặc</p>

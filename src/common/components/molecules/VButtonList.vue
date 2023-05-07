@@ -22,5 +22,4 @@ const eventButton = (title: string) => {
       @click="eventButton(item.title)"
     />
   </div>
-  <VButton label="Xem tất cả" />
 </template>

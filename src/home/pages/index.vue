@@ -87,9 +87,6 @@ const buttonList = [
   {
     title: 'Apple2',
   },
-  {
-    title: 'Xem Tất Cả',
-  },
 ] as Products[];
 const menuList = [
   {
@@ -199,7 +196,7 @@ async function goDetail(index: number, id: string) {
           <div class="hidden flex-[0.35] flex-col rounded-xl border shadow-xl lg:flex">
             <VMenuList :data="menuList" @event-menu="eventMenu" />
           </div>
-          <div class="hidden flex-1 rounded-xl border shadow-xl lg:block">
+          <div class="flex-1 rounded-xl border shadow-xl">
             <VProductsList :data-carousel="listCarousel" type="carousel" />
           </div>
           <div class="hidden flex-[0.5] lg:flex">
@@ -211,7 +208,7 @@ async function goDetail(index: number, id: string) {
           </div>
         </div>
 
-        <div class="h-[75px]">
+        <div class="flex h-[75px]">
           <img
             src="https://cdn2.cellphones.com.vn/1200x75,webp,q100/https://dashboard.cellphones.com.vn/storage/banner-special-desktop-pkchaohe.png"
             alt=""
@@ -219,31 +216,43 @@ async function goDetail(index: number, id: string) {
           />
         </div>
 
-        <VProductsList
-          type="product"
-          :button-list="buttonList"
-          :data="itemList"
-          title="ĐIỆN THOẠI NỔI BẬT NHẤT"
-          @go-detail="goDetail"
-        />
+        <div class="flex flex-col gap-4">
+          <div class="flex w-full">
+            <VProductsList
+              type="product"
+              :button-list="buttonList"
+              :data="itemList"
+              title="ĐIỆN THOẠI NỔI BẬT NHẤT"
+              @go-detail="goDetail"
+            />
+          </div>
 
-        <VProductsList
-          type="product"
-          :button-list="buttonList"
-          :data="itemList"
-          title="LAPTOP NỔI BẬT NHẤT "
-          @go-detail="goDetail"
-        />
+          <!-- <VProductsList
+            type="product"
+            :button-list="buttonList"
+            :data="itemList"
+            title="ĐIỆN THOẠI NỔI BẬT NHẤT"
+            @go-detail="goDetail"
+          />
+  
+          <VProductsList
+            type="product"
+            :button-list="buttonList"
+            :data="itemList"
+            title="LAPTOP NỔI BẬT NHẤT "
+            @go-detail="goDetail"
+          />
+  
+          <VProductsList
+            type="product"
+            :button-list="buttonList"
+            :data="itemList"
+            title="TAI NGHE NỔI BẬT NHẤT"
+            @go-detail="goDetail"
+          /> -->
+        </div>
 
-        <VProductsList
-          type="product"
-          :button-list="buttonList"
-          :data="itemList"
-          title="TAI NGHE NỔI BẬT NHẤT"
-          @go-detail="goDetail"
-        />
-
-        <!-- <div class="h-[40px] w-full">
+        <div class="h-[40px] w-full">
           <div class="flex h-full items-center justify-between">
             <VTitle title="PHỤ KIỆN" />
             <div class="flex gap-2">
@@ -251,15 +260,15 @@ async function goDetail(index: number, id: string) {
             </div>
           </div>
         </div>
-        
-        <div class="flex h-auto w-full gap-4 pb-10">
-          <div v-for="item in categories" :key="item.title" class="flex gap-4">
+
+        <div class="flex h-auto w-full gap-4 bg-red-200 pb-10">
+          <!-- <div v-for="item in categories" :key="item.title" class="flex gap-4">
             <div class="flex h-[125px] w-[111px] flex-col rounded-xl bg-[#F28376] shadow-xl">
               <VTitle class="!pl-2 !text-white" title="Nổi Bật" />
               <img class="mt-[-30px]" src="https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg" />
             </div>
-          </div>
-        </div> -->
+          </div> -->
+        </div>
       </div>
     </div>
     <div class="hidden lg:flex lg:flex-[0.3]"></div>
