@@ -219,6 +219,7 @@ async function goDetail(index: number, id: string) {
         <div class="flex flex-col gap-4">
           <div class="flex w-full">
             <VProductsList
+              v-if="itemList.length"
               type="product"
               :button-list="buttonList"
               :data="itemList"

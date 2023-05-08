@@ -8,6 +8,9 @@ class customerServices extends BaseService {
   async getCustomers() {
     return await this.performRequest(METHODS.GET, 'customer');
   }
+  async postSignUp(username: string, password: string) {
+    return await this.performRequest(METHODS.POST, 'customer', { username, password });
+  }
 }
 
 export default new customerServices('v1/api');

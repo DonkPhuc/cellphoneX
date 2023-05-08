@@ -10,7 +10,10 @@ const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 const isLogin = ref(true);
 const userName = ref('');
+const userFullName = ref('');
+const userEmail = ref('');
 const password = ref('');
+const password2 = ref('');
 const customerList = ref<Customers[]>([]);
 
 watchEffect(async () => {
@@ -30,12 +33,20 @@ onMounted(async () => {
 const switchMode = () => {
   isLogin.value = !isLogin.value;
 };
-
 function updateUsername(username: string) {
   userName.value = username;
 }
 function updatePassword(pass: string) {
   password.value = pass;
+}
+function updatePassword2(pass: string) {
+  password2.value = pass;
+}
+function updateEmail(value: string) {
+  userEmail.value = value;
+}
+function updateFullName(value: string) {
+  userFullName.value = value;
 }
 function login() {
   const findUser = customerList.value.find((obj) => obj.username === userName.value);
@@ -48,6 +59,34 @@ function login() {
       console.log('password is wrong');
     }
   }
+}
+async function signUp() {
+  let errorSignUp = '';
+  let result = '';
+  if (!userEmail.value) errorSignUp = 'invalid email';
+  if (!userFullName.value) errorSignUp = 'invalid Full name';
+  if (!userName.value) errorSignUp = 'invalid number phone';
+  if (!password.value) errorSignUp = 'invalid password';
+  if (!password2.value) errorSignUp = 'invalid password2';
+
+  if (errorSignUp === 'successfully') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneNumberRegex = /^0\d{9}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    if (!emailRegex.test(userEmail.value)) errorSignUp = 'email wrong';
+    if (!passwordRegex.test(password.value)) errorSignUp = 'password wrong';
+    if (!phoneNumberRegex.test(userName.value)) errorSignUp = 'number phone wrong';
+    if (password.value !== password2.value) errorSignUp = 'confirm password wrong';
+  }
+
+  if (errorSignUp === '') {
+    result = (await userStore.postSignUp(userName.value, password.value)) as string;
+  }
+  console.log(errorSignUp);
+  if (result !== 'exists account') console.log('successfully');
+
+  return errorSignUp;
 }
 </script>
 
@@ -99,15 +138,42 @@ function login() {
         <div class="flex justify-center">
           <p class="text-lg font-bold">Đăng ký tài khoản Smember</p>
         </div>
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Vui lòng nhập số điện thoại(bắt buộc)" />
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Vui lòng nhập địa chỉ email(bắt buộc)" />
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Vui lòng nhập họ tên" />
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Nhập mật khẩu của bạn" type="password" />
+        <VInput
+          :max-length="10"
+          input-class="rounded-lg focus:border-main"
+          placeholder="Vui lòng nhập số điện thoại(bắt buộc)"
+          @update:model="updateUsername"
+        />
+        <VInput
+          :max-length="50"
+          input-class="rounded-lg focus:border-main"
+          placeholder="Vui lòng nhập địa chỉ email(bắt buộc)"
+          @update:model="updateEmail"
+        />
+        <VInput
+          :max-length="50"
+          input-class="rounded-lg focus:border-main"
+          placeholder="Vui lòng nhập họ tên"
+          @update:model="updateFullName"
+        />
+        <VInput
+          :max-length="50"
+          input-class="rounded-lg focus:border-main"
+          placeholder="Nhập mật khẩu của bạn"
+          type="password"
+          @update:model="updatePassword"
+        />
         <p class="-mt-[14px] flex items-start text-xs font-semibold">
           Mật khẩu phải nhiều hơn 8 ký tự, ít nhất 1 chữ thường 1 chữ in hoa, 1 chữ số, 1 ký tự đặc biệt
         </p>
-        <VInput input-class="rounded-lg focus:border-main" placeholder="Xác nhận lại mật khẩu" type="password" />
-        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Ký" />
+        <VInput
+          :max-length="50"
+          input-class="rounded-lg focus:border-main"
+          placeholder="Xác nhận lại mật khẩu"
+          type="password"
+          @update:model="updatePassword2"
+        />
+        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Ký" @click="signUp" />
         <div class="flex gap-2 text-xs">
           <input :checked="true" class="text-main active:bg-main" type="checkbox" />
           <p>Tôi đồng ý với các điều khoản bảo mật cá nhân</p>

@@ -11,7 +11,7 @@ const { cart, currentProduct } = storeToRefs(userStore);
 const router = useRouter();
 
 onMounted(() => {
-  const removeEmpty = cart.value.find((e) => e.id === '');
+  const removeEmpty = cart.value.find((e) => e._id === '');
   if (removeEmpty) {
     cart.value.splice(0, 1);
   }
@@ -62,7 +62,7 @@ function remove(index: number) {
 }
 
 async function go(getId: string) {
-  let result = cart.value.find(({ id }) => id === getId);
+  let result = cart.value.find(({ _id }) => _id === getId);
   currentProduct.value = [];
   if (result) {
     currentProduct.value.push(result);
@@ -121,7 +121,7 @@ async function go(getId: string) {
 
             <div class="flex flex-1 flex-col gap-2">
               <div class="flex justify-between">
-                <p class="cursor-pointer font-bold hover:underline" @click="go(item.id)">{{ item.name }}</p>
+                <p class="cursor-pointer font-bold hover:underline" @click="go(item._id)">{{ item.name }}</p>
                 <div class="cursor-pointer" @click="remove(index)">
                   <VIcon icon="fa-times" />
                 </div>

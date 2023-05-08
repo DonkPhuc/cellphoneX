@@ -12,8 +12,11 @@ export const useUserStore = defineStore(
     const currentProduct = ref<Products[]>([new Products()]);
     const isLoginSuccess = ref(false);
 
-    function getData() {
-      return customerServices.getCustomers();
+    async function getData() {
+      return await customerServices.getCustomers();
+    }
+    async function postSignUp(username: string, password: string) {
+      return await customerServices.postSignUp(username, password);
     }
 
     return {
@@ -21,6 +24,7 @@ export const useUserStore = defineStore(
       currentProduct,
       isLoginSuccess,
       getData,
+      postSignUp,
     };
   },
   {
