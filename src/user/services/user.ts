@@ -5,11 +5,14 @@ class customerServices extends BaseService {
     super(prefix);
   }
 
-  async getCustomers() {
-    return await this.performRequest(METHODS.GET, 'customer');
+  async getCustomer(params: string) {
+    return await this.performRequest(METHODS.GET, `customer/${params}`);
+  }
+  async getAllCustomers() {
+    return await this.performRequest(METHODS.GET, `customer`);
   }
   async postSignUp(username: string, password: string) {
-    return await this.performRequest(METHODS.POST, 'customer', { username, password });
+    return await this.performRequest(METHODS.POST, 'customer/add', { username, password });
   }
 }
 

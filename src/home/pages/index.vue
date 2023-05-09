@@ -29,38 +29,46 @@ async function getPhoneData() {
 
 const listFeature = [
   {
-    imageLink: 'dist/images/right-banner-ideapad-3.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/s20-fe-right-th555.jpg',
   },
   {
-    imageLink: 'dist/images/right-banner-th5-newww1.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-th5-newww1.jpg',
   },
   {
-    imageLink: 'dist/images/s20-fe-right-th555.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-ideapad-3.jpg',
   },
 ] as Products[];
 const listCarousel = [
   {
-    imageLink: 'dist/images/right-banner-ideapad-3.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png',
     title: 'Mừng Khai Trương',
     description: 'giảm đến 70%',
   },
   {
-    imageLink: 'dist/images/right-banner-th5-newww1.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/apple%20watch%20sliding.png',
     title: 'IPhone 14 Pro',
     description: 'giá tốt bất ngờ',
   },
   {
-    imageLink: 'dist/images/s20-fe-right-th555.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/seagames-tv-toshiba.png',
     title: 'Redmi Note 12',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink: 'dist/images/right-banner-th5-newww1.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12-sliding-0805.jpg',
     title: 'Redmi Note 123',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink: 'dist/images/right-banner-ideapad-3.webp',
+    imageLink:
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png',
     title: 'Redmi Note 124',
     description: 'mở bán giá tốt',
   },
@@ -190,15 +198,18 @@ async function goDetail(index: number, id: string) {
 <template>
   <main class="mx-auto flex px-2">
     <div class="hidden lg:flex lg:flex-[0.3]"></div>
+
     <div class="flex flex-1">
       <div class="flex flex-col gap-4 pt-4">
         <div class="flex h-[376px] w-full gap-4">
           <div class="hidden flex-[0.35] flex-col rounded-xl border shadow-xl lg:flex">
             <VMenuList :data="menuList" @event-menu="eventMenu" />
           </div>
+
           <div class="flex-1 rounded-xl border shadow-xl">
             <VProductsList :data-carousel="listCarousel" type="carousel" />
           </div>
+
           <div class="hidden flex-[0.5] lg:flex">
             <div class="flex h-full flex-1 flex-col gap-4">
               <div v-for="item in listFeature" :key="item.imageLink" class="flex-1 rounded-xl border shadow-xl">
@@ -227,51 +238,10 @@ async function goDetail(index: number, id: string) {
               @go-detail="goDetail"
             />
           </div>
-
-          <!-- <VProductsList
-            type="product"
-            :button-list="buttonList"
-            :data="itemList"
-            title="ĐIỆN THOẠI NỔI BẬT NHẤT"
-            @go-detail="goDetail"
-          />
-  
-          <VProductsList
-            type="product"
-            :button-list="buttonList"
-            :data="itemList"
-            title="LAPTOP NỔI BẬT NHẤT "
-            @go-detail="goDetail"
-          />
-  
-          <VProductsList
-            type="product"
-            :button-list="buttonList"
-            :data="itemList"
-            title="TAI NGHE NỔI BẬT NHẤT"
-            @go-detail="goDetail"
-          /> -->
         </div>
-        <!-- 
-        <div class="h-[40px] w-full">
-          <div class="flex h-full items-center justify-between">
-            <VTitle title="PHỤ KIỆN" />
-            <div class="flex gap-2">
-              <span class="cursor-pointer text-sm hover:underline">Xem Tất Cả</span>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- <div class="flex h-auto w-full gap-4 bg-red-200 pb-10">
-          <div v-for="item in categories" :key="item.title" class="flex gap-4">
-            <div class="flex h-[125px] w-[111px] flex-col rounded-xl bg-[#F28376] shadow-xl">
-              <VTitle class="!pl-2 !text-white" title="Nổi Bật" />
-              <img class="mt-[-30px]" src="https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg" />
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
+
     <div class="hidden lg:flex lg:flex-[0.3]"></div>
   </main>
 </template>

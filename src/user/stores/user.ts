@@ -10,10 +10,13 @@ export const useUserStore = defineStore(
   () => {
     const cart = ref<Products[]>([new Products()]);
     const currentProduct = ref<Products[]>([new Products()]);
-    const isLoginSuccess = ref(false);
+    const isLoginSuccess = ref('');
 
-    async function getData() {
-      return await customerServices.getCustomers();
+    async function getCustomer(params: string) {
+      return await customerServices.getCustomer(params);
+    }
+    async function getAllCustomers() {
+      return await customerServices.getAllCustomers();
     }
     async function postSignUp(username: string, password: string) {
       return await customerServices.postSignUp(username, password);
@@ -23,7 +26,8 @@ export const useUserStore = defineStore(
       cart,
       currentProduct,
       isLoginSuccess,
-      getData,
+      getCustomer,
+      getAllCustomers,
       postSignUp,
     };
   },

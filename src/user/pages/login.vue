@@ -27,7 +27,8 @@ onMounted(async () => {
     await router.push(`/`);
   }
   window.scrollTo(0, 0);
-  customerList.value = (await userStore.getData()) as Customers[];
+  customerList.value = (await userStore.getAllCustomers()) as Customers[];
+  console.log('🚀 ~ file: login.vue:31 ~ onMounted ~ customerList.value:', customerList.value);
 });
 
 const switchMode = () => {
@@ -48,13 +49,15 @@ function updateEmail(value: string) {
 function updateFullName(value: string) {
   userFullName.value = value;
 }
-function login() {
+async function login() {
   const findUser = customerList.value.find((obj) => obj.username === userName.value);
   if (findUser !== undefined) {
+    console.log(findUser.username);
     console.log('username is correct');
     if (findUser.password === password.value) {
-      isLoginSuccess.value = true;
+      isLoginSuccess.value = findUser.username;
       console.log('login successfully');
+      customerList.value = (await userStore.getAllCustomers()) as Customers[];
     } else {
       console.log('password is wrong');
     }

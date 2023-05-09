@@ -2,19 +2,23 @@
 import { storeToRefs } from 'pinia';
 
 import { Products } from '~/home/dtos';
+import { Customers } from '~/user/dtos/Customers.dto';
 
 import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
-const { cart, currentProduct } = storeToRefs(userStore);
+const { currentProduct, isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
+const cart = ref();
 
-onMounted(() => {
-  const removeEmpty = cart.value.find((e) => e._id === '');
-  if (removeEmpty) {
-    cart.value.splice(0, 1);
-  }
+onMounted(async () => {
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
+  cart.value = result[0].cart;
+  // const removeEmpty = cart.value.find((e) => e._id === '');
+  // if (removeEmpty) {
+  //   cart.value.splice(0, 1);
+  // }
   window.scrollTo(0, 0);
 });
 
@@ -43,9 +47,9 @@ const formatVND = computed(() => (slide: Products) => {
 
 const totalCart = computed(() => {
   let total = 0;
-  cart.value.forEach((element) => {
-    total += Number(element.price * element.quality);
-  });
+  // cart.value.forEach((element) => {
+  //   total += Number(element.price * element.quality);
+  // });
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
 });
 
@@ -62,10 +66,11 @@ function remove(index: number) {
 }
 
 async function go(getId: string) {
-  let result = cart.value.find(({ _id }) => _id === getId);
+  // let result = cart.value.find(({ _id }) => _id === getId);
+  let result = '';
   currentProduct.value = [];
   if (result) {
-    currentProduct.value.push(result);
+    // currentProduct.value.push(result);
   }
   if (getId === '/') {
     await goHome();
@@ -79,7 +84,7 @@ async function go(getId: string) {
   <main class="flex">
     <div class="hidden flex-1 lg:flex"></div>
 
-    <div v-if="cart.length === 0" class="flex flex-1 flex-col py-4">
+    <div v-if="cart" class="flex flex-1 flex-col py-4">
       <div class="flex flex-1 flex-col gap-12">
         <div class="flex">
           <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')"
