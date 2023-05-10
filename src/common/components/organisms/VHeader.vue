@@ -83,7 +83,7 @@ async function go(url?: string) {
           <div
             v-else
             class="flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-[hsla(0,0%,100%,.2)]"
-            @click="isLoginSuccess = false"
+            @click="isLoginSuccess = ''"
           >
             <p>Đăng Xuất</p>
           </div>

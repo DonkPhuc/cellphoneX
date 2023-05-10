@@ -2,23 +2,32 @@
 import { storeToRefs } from 'pinia';
 
 import { Products } from '~/home/dtos';
+import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 
 import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
+const store = useStore();
 const { currentProduct, isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
-const cart = ref();
+const cart = ref<Products[]>([]);
+
+watchEffect(() => {
+  if (isLoginSuccess.value === '') {
+    goHome();
+  }
+});
 
 onMounted(async () => {
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
-  cart.value = result[0].cart;
-  // const removeEmpty = cart.value.find((e) => e._id === '');
-  // if (removeEmpty) {
-  //   cart.value.splice(0, 1);
-  // }
+  if (result[0]) {
+    cart.value = result[0].cart;
+    cart.value.forEach((e) => {
+      e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    });
+  }
   window.scrollTo(0, 0);
 });
 
@@ -36,10 +45,10 @@ const formatVND = computed(() => (slide: Products) => {
     priceRRP: '',
   };
   result.price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-    slide.price * slide.quality
+    slide.price * slide.quantity
   );
   result.priceRRP = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-    slide.priceRRP * slide.quality
+    slide.priceRRP * slide.quantity
   );
 
   return result;
@@ -47,22 +56,30 @@ const formatVND = computed(() => (slide: Products) => {
 
 const totalCart = computed(() => {
   let total = 0;
-  // cart.value.forEach((element) => {
-  //   total += Number(element.price * element.quality);
-  // });
+  cart.value.forEach((e: Products) => {
+    total += Number(e.price * e.quantity);
+  });
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
 });
 
 function plusQuality(index: number) {
-  cart.value[index].quality++;
+  cart.value[index].quantity++;
+  console.log(cart.value);
 }
 function minusQuality(index: number) {
-  if (cart.value[index].quality > 1) {
-    cart.value[index].quality--;
+  if (cart.value[index].quantity > 1) {
+    cart.value[index].quantity--;
   }
 }
-function remove(index: number) {
-  cart.value.splice(index, 1);
+async function remove(id: string) {
+  await store.postRemoveCart(isLoginSuccess.value, id);
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
+  if (result[0]) {
+    cart.value = result[0].cart;
+    cart.value.forEach((e) => {
+      e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    });
+  }
 }
 
 async function go(getId: string) {
@@ -84,7 +101,7 @@ async function go(getId: string) {
   <main class="flex">
     <div class="hidden flex-1 lg:flex"></div>
 
-    <div v-if="cart" class="flex flex-1 flex-col py-4">
+    <div v-if="cart[0] && !cart[0]._id" class="flex flex-1 flex-col py-4">
       <div class="flex flex-1 flex-col gap-12">
         <div class="flex">
           <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')"
@@ -123,25 +140,26 @@ async function go(getId: string) {
         <div v-for="(item, index) in cart" :key="index" class="flex max-h-[400px] flex-col overflow-y-auto">
           <div class="flex gap-8 border-b-2 p-4">
             <img class="h-32 w-32" :src="item.imageLink" alt="" />
-
             <div class="flex flex-1 flex-col gap-2">
               <div class="flex justify-between">
-                <p class="cursor-pointer font-bold hover:underline" @click="go(item._id)">{{ item.name }}</p>
-                <div class="cursor-pointer" @click="remove(index)">
+                <p class="cursor-pointer font-bold hover:underline" @click="go(item._id)">
+                  {{ item.name }}
+                </p>
+                <div class="cursor-pointer" @click="remove(item._id)">
                   <VIcon icon="fa-times" />
                 </div>
               </div>
 
               <div class="flex justify-between">
                 <p class="font-bold text-main">
-                  {{ formatVND(item).price }}
-                  <span class="text-xs text-gray-500 line-through"> {{ formatVND(item).priceRRP }} </span>
+                  {{ formatVND(cart[index]).price }}
+                  <span class="text-xs text-gray-500 line-through"> {{ formatVND(cart[index]).priceRRP }} </span>
                 </p>
                 <div class="flex items-center rounded-xl border bg-[#f4f4f4]">
                   <div class="cursor-pointer" @click="minusQuality(index)">
                     <VIcon icon="fa-minus" />
                   </div>
-                  <p class="px-3 text-xs">{{ item.quality }}</p>
+                  <p class="px-3 text-xs">{{ item.quantity }}</p>
                   <div class="cursor-pointer" @click="plusQuality(index)">
                     <VIcon icon="fa-plus" />
                   </div>

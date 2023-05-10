@@ -12,19 +12,22 @@ const { currentProduct } = storeToRefs(userStore);
 const router = useRouter();
 
 const itemList = ref<Products[]>([]);
+const phoneList = ref<Products[]>([]);
+const laptopList = ref<Products[]>([]);
 
 onMounted(() => {
-  itemList.value = [];
-  getPhoneData();
+  getData();
   window.scrollTo(0, 0);
 });
 
-async function getPhoneData() {
+async function getData() {
   const result = (await store.getData()) as Products[];
   result.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
   });
   itemList.value = result;
+  phoneList.value = itemList.value.filter((e) => e.type === 'phone');
+  laptopList.value = itemList.value.filter((e) => e.type === 'laptop');
 }
 
 const listFeature = [
@@ -134,48 +137,6 @@ const menuList = [
     imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-tech.svg',
   },
 ] as Products[];
-const categories = [
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-  {
-    title: 'Nổi Bật',
-    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/category/cate-669.svg',
-  },
-] as Products[];
 
 function eventMenu(title: string) {
   console.log(title);
@@ -233,8 +194,18 @@ async function goDetail(index: number, id: string) {
               v-if="itemList.length"
               type="product"
               :button-list="buttonList"
-              :data="itemList"
+              :data="phoneList"
               title="ĐIỆN THOẠI NỔI BẬT NHẤT"
+              @go-detail="goDetail"
+            />
+          </div>
+          <div class="flex w-full">
+            <VProductsList
+              v-if="itemList.length"
+              type="product"
+              :button-list="buttonList"
+              :data="laptopList"
+              title="LAPTOP NỔI BẬT NHẤT"
               @go-detail="goDetail"
             />
           </div>

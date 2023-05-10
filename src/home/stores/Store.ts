@@ -7,12 +7,20 @@ import { Products } from '../dtos';
 export const useStore = defineStore(
   'store',
   () => {
-    function getData() {
-      return Services.getData();
+    async function getData() {
+      return await Services.getData();
+    }
+    async function postAddToCart(username: string, id: string) {
+      return await Services.postAddToCart(username, id);
+    }
+    async function postRemoveCart(username: string, id: string) {
+      return await Services.postRemoveCart(username, id);
     }
 
     return {
       getData,
+      postRemoveCart,
+      postAddToCart,
     };
   },
   {

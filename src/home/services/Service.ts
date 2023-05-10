@@ -6,7 +6,13 @@ class Services extends BaseService {
   }
 
   async getData() {
-    return await this.performRequest(METHODS.GET, 'product');
+    return await this.performRequest(METHODS.GET, '');
+  }
+  async postAddToCart(username: string, id: string) {
+    return await this.performRequest(METHODS.POST, `cart/${username}/`, { _id: id });
+  }
+  async postRemoveCart(username: string, id: string) {
+    return await this.performRequest(METHODS.DELETE, `cart/delete/${username}/${id}`);
   }
 }
-export default new Services('v1/api');
+export default new Services('v1/api/product');

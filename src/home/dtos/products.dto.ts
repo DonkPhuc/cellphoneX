@@ -9,9 +9,10 @@ export class Products {
   description = '';
   rated = 0;
   favorite = false;
-  quality = 1;
+  quantity = 1;
   discount = 0;
   label = '';
+  type = '';
   value = 0 || '';
   imageDetail = [];
 }

@@ -2,14 +2,16 @@
 import { storeToRefs } from 'pinia';
 
 import { Products } from '~/home/dtos';
+import { useStore } from '~/home/stores/Store';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
-const { currentProduct, cart } = storeToRefs(userStore);
+const store = useStore();
+const { currentProduct, cart, isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
 
 onBeforeMount(() => {
-  if ((currentProduct.value[0] && currentProduct.value[0].id === '') || currentProduct.value.length === 0) {
+  if ((currentProduct.value[0] && currentProduct.value[0]._id === '') || currentProduct.value.length === 0) {
     router.push(`/`);
   }
   window.scrollTo(0, 0);
@@ -26,32 +28,37 @@ const formatVND = computed(() => (slide: Products) => {
   return result;
 });
 
-async function buyNow() {
-  addToCart();
-  await router.push(`/cart`);
-}
+// async function buyNow() {
+//   addToCart();
+//   await router.push(`/cart`);
+// }
 
-function addToCart() {
-  const isFound = cart.value.some((element) => {
-    if (element.name === currentProduct.value[0].name) {
-      return true;
-    }
-
-    return false;
-  });
-
-  if (cart.value.length === 0) {
-    cart.value.push(currentProduct.value[0]);
+async function addToCart(action: string) {
+  let id = currentProduct.value[0]._id;
+  if (action === 'cart') {
+    await store.postAddToCart(isLoginSuccess.value, id);
   } else {
-    if (isFound) {
-      const result = cart.value.find(({ id }) => id === currentProduct.value[0].id);
-      if (result) {
-        result.quality++;
-      }
-    } else {
-      cart.value.push(currentProduct.value[0]);
-    }
+    await store.postAddToCart(isLoginSuccess.value, id);
+    await router.push(`/cart`);
   }
+  // const isFound = cart.value.some((element) => {
+  //   if (element.name === currentProduct.value[0].name) {
+  //     return true;
+  //   }
+  //   return false;
+  // });
+  // if (cart.value.length === 0) {
+  //   cart.value.push(currentProduct.value[0]);
+  // } else {
+  //   if (isFound) {
+  //     const result = cart.value.find(({ id }) => id === currentProduct.value[0].id);
+  //     if (result) {
+  //       result.quantity++;
+  //     }
+  //   } else {
+  //     cart.value.push(currentProduct.value[0]);
+  //   }
+  // }
 }
 </script>
 
@@ -135,7 +142,7 @@ function addToCart() {
                     :style="'2line'"
                     label="Mua Ngay"
                     label2="(Giao hàng nhanh từ 2 giờ hoặc nhận tại cửa hàng)"
-                    @click="buyNow"
+                    @click="addToCart('buy')"
                   />
                 </div>
                 <div class="flex-[1/4] rounded-xl">
@@ -145,7 +152,7 @@ function addToCart() {
                     variant="outlined"
                     label2="Thêm vào giỏ"
                     icon="fa-cart-arrow-down"
-                    @click="addToCart"
+                    @click="addToCart('cart')"
                   />
                 </div>
               </div>
