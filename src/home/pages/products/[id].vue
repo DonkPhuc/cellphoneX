@@ -6,13 +6,21 @@ import { useStore } from '~/home/stores/Store';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
-const { currentProduct, cart, isLoginSuccess } = storeToRefs(userStore);
+const { cart, isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
+const route = useRoute();
+const currentProduct = ref();
 
 onBeforeMount(() => {
-  if ((currentProduct.value[0] && currentProduct.value[0]._id === '') || currentProduct.value.length === 0) {
+  // if ((currentProduct.value[0] && currentProduct.value[0]._id === '') || currentProduct.value.length === 0) {
+  //   router.push(`/`);
+  // }
+  if (!route.params.id) {
     router.push(`/`);
+  } else {
+    currentProduct.value = store.getProduct(route.params.id.toString());
+    console.log('🚀 ~ file: [id].vue:22 ~ onBeforeMount ~ currentProduct.value:', currentProduct.value._id);
   }
   window.scrollTo(0, 0);
 });
@@ -34,11 +42,15 @@ const formatVND = computed(() => (slide: Products) => {
 // }
 
 async function addToCart(action: string) {
-  let id = currentProduct.value[0]._id;
   if (action === 'cart') {
-    await store.postAddToCart(isLoginSuccess.value, id);
+    await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
+    console.log(
+      '🚀 ~ file: [id].vue:43 ~ addToCart ~ isLoginSuccess.value, route.params.id.toString():',
+      isLoginSuccess.value,
+      route.params.id.toString()
+    );
   } else {
-    await store.postAddToCart(isLoginSuccess.value, id);
+    await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
     await router.push(`/cart`);
   }
   // const isFound = cart.value.some((element) => {

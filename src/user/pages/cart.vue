@@ -176,6 +176,8 @@ async function go(getId: string) {
           </div>
 
           <VButton
+            class="!text-white disabled:!bg-main/60"
+            :disabled="cart.length === 0"
             input-class="!h-16 w-full !bg-main border-none rounded text-[16px] !font-bold"
             label="TIẾN HÀNH ĐẶT HÀNG"
             @click="goPayment"

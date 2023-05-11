@@ -1,17 +1,21 @@
 <script setup lang="ts">
+import 'vue3-toastify/dist/index.css';
+
 import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
 
 import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
-
 const userStore = useUserStore();
 const { isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
 const isLogin = ref(true);
 const userName = ref('');
+const userNameLogin = ref('');
 const userFullName = ref('');
 const userEmail = ref('');
+const passwordLogin = ref('');
 const password = ref('');
 const password2 = ref('');
 const customerList = ref<Customers[]>([]);
@@ -28,12 +32,17 @@ onMounted(async () => {
   }
   window.scrollTo(0, 0);
   customerList.value = (await userStore.getAllCustomers()) as Customers[];
-  console.log('🚀 ~ file: login.vue:31 ~ onMounted ~ customerList.value:', customerList.value);
 });
 
 const switchMode = () => {
   isLogin.value = !isLogin.value;
 };
+function updateUsernameLogin(username: string) {
+  userNameLogin.value = username;
+}
+function updatePasswordLogin(pass: string) {
+  passwordLogin.value = pass;
+}
 function updateUsername(username: string) {
   userName.value = username;
 }
@@ -50,47 +59,72 @@ function updateFullName(value: string) {
   userFullName.value = value;
 }
 async function login() {
-  const findUser = customerList.value.find((obj) => obj.username === userName.value);
-  if (findUser !== undefined) {
-    console.log(findUser.username);
-    console.log('username is correct');
-    if (findUser.password === password.value) {
-      isLoginSuccess.value = findUser.username;
-      console.log('login successfully');
-      customerList.value = (await userStore.getAllCustomers()) as Customers[];
+  const phoneNumberRegex = /^0\d{9}$/;
+  let errorSignUp = '';
+
+  if (!phoneNumberRegex.test(userNameLogin.value)) errorSignUp = 'SĐT không đúng định dạng';
+  if (!passwordLogin.value) errorSignUp = 'Mật khẩu không được để trống';
+  if (!userNameLogin.value) errorSignUp = 'SĐT không được để trống';
+
+  if (errorSignUp === '') {
+    const findUser = customerList.value.find((obj) => obj.username === userNameLogin.value);
+    if (findUser !== undefined) {
+      if (findUser.password === passwordLogin.value) {
+        isLoginSuccess.value = findUser.username;
+        errorSignUp = 'Đăng nhập thành công';
+        customerList.value = (await userStore.getAllCustomers()) as Customers[];
+      } else {
+        errorSignUp = 'Mật khẩu không đúng';
+      }
     } else {
-      console.log('password is wrong');
+      errorSignUp = 'Tài khoản/Mật khẩu không đúng';
     }
   }
+
+  notifySignUp(errorSignUp);
 }
 async function signUp() {
-  let errorSignUp = '';
+  let errorSignUp = 'Đăng ký thành công';
   let result = '';
-  if (!userEmail.value) errorSignUp = 'invalid email';
-  if (!userFullName.value) errorSignUp = 'invalid Full name';
-  if (!userName.value) errorSignUp = 'invalid number phone';
-  if (!password.value) errorSignUp = 'invalid password';
-  if (!password2.value) errorSignUp = 'invalid password2';
+  if (!password.value) errorSignUp = 'Mật khẩu không được để trống';
+  if (!userFullName.value) errorSignUp = 'Họ tên không được để trống';
+  if (!userEmail.value) errorSignUp = 'Email không được để trống';
+  if (!userName.value) errorSignUp = 'SĐT không được để trống';
 
-  if (errorSignUp === 'successfully') {
+  if (errorSignUp === 'Đăng ký thành công') {
+    const nameRegex = /^[a-zA-Z]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneNumberRegex = /^0\d{9}$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
-    if (!emailRegex.test(userEmail.value)) errorSignUp = 'email wrong';
-    if (!passwordRegex.test(password.value)) errorSignUp = 'password wrong';
-    if (!phoneNumberRegex.test(userName.value)) errorSignUp = 'number phone wrong';
-    if (password.value !== password2.value) errorSignUp = 'confirm password wrong';
+    if (password.value !== password2.value) errorSignUp = 'Mật khẩu xác nhận không chính xác';
+    if (!passwordRegex.test(password.value)) errorSignUp = 'Mật khẩu không đúng định dạng';
+    if (!nameRegex.test(userFullName.value)) errorSignUp = 'Họ tên không được chứa số';
+    if (!emailRegex.test(userEmail.value)) errorSignUp = 'Email không đúng định dạng';
+    if (!phoneNumberRegex.test(userName.value)) errorSignUp = 'SĐT không đúng định dạng';
   }
 
-  if (errorSignUp === '') {
+  if (errorSignUp === 'Đăng ký thành công') {
     result = (await userStore.postSignUp(userName.value, password.value)) as string;
   }
-  console.log(errorSignUp);
-  if (result !== 'exists account') console.log('successfully');
+  if (result !== 'exists account') notifySignUp(errorSignUp);
+  else if (result === 'exists account') notifySignUp('Tài khoản đã tồn tại');
 
   return errorSignUp;
 }
+
+const notifySignUp = (error?: string) => {
+  if (error !== '') {
+    toast(`${error}`, {});
+    if (error === 'Đăng ký thành công') {
+      userName.value = '';
+      userEmail.value = '';
+      userFullName.value = '';
+      password.value = '';
+      password2.value = '';
+    }
+  }
+};
 </script>
 
 <template>
@@ -106,15 +140,18 @@ async function signUp() {
           <p class="text-lg font-bold">Đăng nhập tài khoản Smember</p>
         </div>
         <VInput
+          :max-length="10"
           input-class="rounded-lg focus:border-main"
-          placeholder="Vui lòng nhập số điện thoại/email"
-          @update:model="updateUsername"
+          placeholder="Vui lòng nhập số điện thoại"
+          :model="userNameLogin"
+          @update:model="updateUsernameLogin"
         />
         <VInput
           input-class="rounded-lg focus:border-main"
           placeholder="Vui lòng nhập mật khẩu"
           type="password"
-          @update:model="updatePassword"
+          :model="passwordLogin"
+          @update:model="updatePasswordLogin"
         />
         <p class="flex cursor-pointer justify-end text-xs font-thin hover:text-main">Quên mật khẩu?</p>
         <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Nhập" @click="login" />
@@ -145,24 +182,28 @@ async function signUp() {
           :max-length="10"
           input-class="rounded-lg focus:border-main"
           placeholder="Vui lòng nhập số điện thoại(bắt buộc)"
+          :model="userName"
           @update:model="updateUsername"
         />
         <VInput
           :max-length="50"
           input-class="rounded-lg focus:border-main"
           placeholder="Vui lòng nhập địa chỉ email(bắt buộc)"
+          :model="userEmail"
           @update:model="updateEmail"
         />
         <VInput
           :max-length="50"
           input-class="rounded-lg focus:border-main"
           placeholder="Vui lòng nhập họ tên"
+          :model="userFullName"
           @update:model="updateFullName"
         />
         <VInput
           :max-length="50"
           input-class="rounded-lg focus:border-main"
           placeholder="Nhập mật khẩu của bạn"
+          :model="password"
           type="password"
           @update:model="updatePassword"
         />
@@ -174,6 +215,7 @@ async function signUp() {
           input-class="rounded-lg focus:border-main"
           placeholder="Xác nhận lại mật khẩu"
           type="password"
+          :model="password2"
           @update:model="updatePassword2"
         />
         <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Ký" @click="signUp" />
@@ -196,7 +238,6 @@ async function signUp() {
         </div>
       </div>
     </div>
-    <notifications group="custom-style" position="top center" classes="n-light" :max="3" :width="400" />
     <div class="hidden flex-1 lg:flex"></div>
   </main>
 </template>

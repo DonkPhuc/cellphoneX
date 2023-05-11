@@ -2,13 +2,17 @@
 import { storeToRefs } from 'pinia';
 
 import { Products } from '~/home/dtos';
+import { useStore } from '~/home/stores/Store';
+import { Customers } from '~/user/dtos/Customers.dto';
 
 import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
-const { cart, currentProduct } = storeToRefs(userStore);
+const store = useStore();
+const { currentProduct, isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
+const cart = ref<Products[]>([]);
 
 const deliveryMode = ref('pickup');
 const company = ref(false);
@@ -22,6 +26,7 @@ const selectedDistrict = ref('');
 const selectedStore = ref('');
 const selectedDeliveryAddress = ref('');
 const orderNo = ref('');
+let total = 0;
 
 const cityList = [
   {
@@ -117,13 +122,25 @@ const districtList = [
     value: 17,
   },
 ];
-
-onMounted(() => {
-  if (cart.value.length === 0) {
-    router.push(`/`);
+onMounted(async () => {
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
+  if (result[0]) {
+    cart.value = result[0].cart;
+    cart.value.forEach((e) => {
+      e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    });
+    if (totalCart) {
+      router.push(`/`);
+    }
   }
   window.scrollTo(0, 0);
 });
+
+// onMounted(() => {
+//   if (cart.value.length === 0) {
+//     router.push(`/`);
+//   }
+// });
 
 const styleSelectedPayment = computed(() => (index: number) => {
   if (selectedPayment.value === index) {
@@ -142,9 +159,9 @@ const filterDistrict = computed(() => {
 });
 
 const totalCart = computed(() => {
-  let total = 0;
   cart.value.forEach((element) => {
-    total += Number(element.price * element.quality);
+    total += Number(element.price * element.quantity);
+    console.log('🚀 ~ file: payment.vue:148 ~ cart.value.forEach ~ total:', total);
   });
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
 });
@@ -236,10 +253,10 @@ function validateEmail(email: string): boolean {
                 >
                   <VIcon icon="fa-shopping-cart" />
                 </div>
-                <p class="text-xs text-main">Chọn sản phẩm</p>
+                <p class="text-center text-xs text-main">Chọn sản phẩm</p>
               </div>
             </div>
-            <div class="flex flex-[0.2] items-center text-main">-----</div>
+            <div class="flex flex-[0.2] items-center text-main">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
@@ -247,10 +264,10 @@ function validateEmail(email: string): boolean {
                 >
                   <VIcon icon="fa-address-card" />
                 </div>
-                <p class="text-xs text-main">Thông tin đặt hàng</p>
+                <p class="text-center text-xs text-main">Thông tin đặt hàng</p>
               </div>
             </div>
-            <div class="flex flex-[0.2] items-center" :class="step > 0 ? 'text-main' : ''">-----</div>
+            <div class="flex flex-[0.2] items-center" :class="step > 0 ? 'text-main' : ''">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
@@ -259,10 +276,10 @@ function validateEmail(email: string): boolean {
                 >
                   <VIcon icon="fa-credit-card-alt" />
                 </div>
-                <p :class="step > 0 ? 'text-main' : ''" class="text-xs">Thanh toán</p>
+                <p :class="step > 0 ? 'text-main' : ''" class="text-center text-xs">Thanh toán</p>
               </div>
             </div>
-            <div class="flex flex-[0.2] items-center">-----</div>
+            <div class="flex flex-[0.2] items-center">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
@@ -270,7 +287,7 @@ function validateEmail(email: string): boolean {
                 >
                   <VIcon icon="fa-archive" />
                 </div>
-                <p class="text-xs">Hoàn tất đặt hàng</p>
+                <p class="text-center text-xs">Hoàn tất đặt hàng</p>
               </div>
             </div>
           </div>

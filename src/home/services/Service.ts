@@ -8,6 +8,10 @@ class Services extends BaseService {
   async getData() {
     return await this.performRequest(METHODS.GET, '');
   }
+
+  async getProduct(id: string) {
+    return await this.performRequest(METHODS.GET, `${id}`);
+  }
   async postAddToCart(username: string, id: string) {
     return await this.performRequest(METHODS.POST, `cart/${username}/`, { _id: id });
   }

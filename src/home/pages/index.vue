@@ -143,13 +143,13 @@ function eventMenu(title: string) {
 }
 
 async function goDetail(index: number, id: string) {
-  currentProduct.value = [];
-  let result = itemList.value[index];
-  if (result) {
-    currentProduct.value.push(result);
-  }
+  // currentProduct.value = [];
+  // let result = itemList.value[index];
+  // if (result) {
+  //   currentProduct.value.push(result);
+  // }
   const currentRoute = router.currentRoute.value.fullPath;
-  await router.push(`products/detail`);
+  await router.push(`products/${id}`);
   if (currentRoute === id) {
     router.go(0);
   }
