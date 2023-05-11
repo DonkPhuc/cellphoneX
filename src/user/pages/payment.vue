@@ -129,18 +129,12 @@ onMounted(async () => {
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });
-    if (totalCart) {
+    if (totalCart.value === '0 ₫') {
       router.push(`/`);
     }
   }
   window.scrollTo(0, 0);
 });
-
-// onMounted(() => {
-//   if (cart.value.length === 0) {
-//     router.push(`/`);
-//   }
-// });
 
 const styleSelectedPayment = computed(() => (index: number) => {
   if (selectedPayment.value === index) {
@@ -161,7 +155,6 @@ const filterDistrict = computed(() => {
 const totalCart = computed(() => {
   cart.value.forEach((element) => {
     total += Number(element.price * element.quantity);
-    console.log('🚀 ~ file: payment.vue:148 ~ cart.value.forEach ~ total:', total);
   });
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
 });

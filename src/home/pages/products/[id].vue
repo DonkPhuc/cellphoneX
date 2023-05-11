@@ -1,27 +1,24 @@
 <script setup lang="ts">
+import 'vue3-toastify/dist/index.css';
+
 import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
 
 import { Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
-const { cart, isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
 const route = useRoute();
 const currentProduct = ref();
 
-onBeforeMount(() => {
-  // if ((currentProduct.value[0] && currentProduct.value[0]._id === '') || currentProduct.value.length === 0) {
-  //   router.push(`/`);
-  // }
-  if (!route.params.id) {
-    router.push(`/`);
-  } else {
-    currentProduct.value = store.getProduct(route.params.id.toString());
-    console.log('🚀 ~ file: [id].vue:22 ~ onBeforeMount ~ currentProduct.value:', currentProduct.value._id);
-  }
+onMounted(async () => {
+  currentProduct.value = (await store.getProduct(route.params.id.toString())) as Products;
+  currentProduct.value.price =
+    currentProduct.value.priceRRP - (currentProduct.value.priceRRP * currentProduct.value.discount) / 100;
   window.scrollTo(0, 0);
 });
 
@@ -36,51 +33,53 @@ const formatVND = computed(() => (slide: Products) => {
   return result;
 });
 
-// async function buyNow() {
-//   addToCart();
-//   await router.push(`/cart`);
-// }
-
 async function addToCart(action: string) {
-  if (action === 'cart') {
-    await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
-    console.log(
-      '🚀 ~ file: [id].vue:43 ~ addToCart ~ isLoginSuccess.value, route.params.id.toString():',
-      isLoginSuccess.value,
-      route.params.id.toString()
-    );
+  if (!isLoginSuccess.value) {
+    console.log('chua login');
   } else {
-    await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
-    await router.push(`/cart`);
+    const rs = await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
+    if (action === 'buy') {
+      await router.push(`/cart`);
+    } else if (rs === 'successfully') {
+      notifySignUp('Đã thêm vào giỏ hàng');
+    } else {
+      notifySignUp('Sản phẩm đã có trong giỏ hàng');
+    }
   }
-  // const isFound = cart.value.some((element) => {
-  //   if (element.name === currentProduct.value[0].name) {
-  //     return true;
-  //   }
-  //   return false;
-  // });
-  // if (cart.value.length === 0) {
-  //   cart.value.push(currentProduct.value[0]);
-  // } else {
-  //   if (isFound) {
-  //     const result = cart.value.find(({ id }) => id === currentProduct.value[0].id);
-  //     if (result) {
-  //       result.quantity++;
-  //     }
-  //   } else {
-  //     cart.value.push(currentProduct.value[0]);
-  //   }
-  // }
 }
+
+const notifySignUp = (error?: string) => {
+  if (error !== '') {
+    toast(`${error}`, {});
+  }
+};
+// const isFound = cart.value.some((element) => {
+//   if (element.name === currentProduct.value[0].name) {
+//     return true;
+//   }
+//   return false;
+// });
+// if (cart.value.length === 0) {
+//   cart.value.push(currentProduct.value[0]);
+// } else {
+//   if (isFound) {
+//     const result = cart.value.find(({ id }) => id === currentProduct.value[0].id);
+//     if (result) {
+//       result.quantity++;
+//     }
+//   } else {
+//     cart.value.push(currentProduct.value[0]);
+//   }
+// }
 </script>
 
 <template>
   <div class="flex">
     <div class="hidden flex-[0.3] lg:flex"></div>
-    <main class="flex-1 py-4">
+    <main v-if="currentProduct" class="flex-1 py-4">
       <div class="flex flex-col gap-4">
         <div class="flex w-full items-center gap-4 border-b-2 px-4 py-2">
-          <span class="text-lg font-bold text-black">{{ currentProduct[0].name }}</span>
+          <span class="text-lg font-bold text-black">{{ currentProduct.name }}</span>
           <div class="hidden pl-8 lg:flex">
             <div class="hidden items-center justify-end lg:flex">
               <VIcon icon-class="text-yellow-600" icon="fa-star" />
@@ -95,14 +94,14 @@ async function addToCart(action: string) {
 
         <div class="flex flex-col gap-4 border-b-2 p-4 md:flex-row md:px-2 lg:flex-row">
           <div class="flex-1">
-            <VProductsList :data-detail="currentProduct[0]" type="detail" />
+            <VProductsList :data-detail="currentProduct" type="detail" />
           </div>
 
           <div class="flex-1">
             <div class="flex flex-col gap-4">
               <div class="flex items-center gap-4">
-                <span class="font-bold text-red-600"> {{ formatVND(currentProduct[0]).price }} </span>
-                <span class="text-xs line-through"> {{ formatVND(currentProduct[0]).priceRRP }} </span>
+                <span class="font-bold text-red-600"> {{ formatVND(currentProduct).price }} </span>
+                <span class="text-xs line-through"> {{ formatVND(currentProduct).priceRRP }} </span>
               </div>
 
               <div class="flex gap-4">
@@ -237,7 +236,7 @@ async function addToCart(action: string) {
         <div class="flex flex-col gap-4 md:flex-row lg:flex-row">
           <div class="flex-1 rounded-xl border p-4 shadow-xl">
             <div class="flex flex-col gap-4 rounded-xl">
-              <span class="py-2 font-bold">Đánh giá & nhận xét {{ currentProduct[0].name }}</span>
+              <span class="py-2 font-bold">Đánh giá & nhận xét {{ currentProduct.name }}</span>
 
               <div class="flex">
                 <div class="flex flex-[0.7] items-center justify-center rounded-l-2xl border">

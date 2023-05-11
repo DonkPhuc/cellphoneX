@@ -13,7 +13,7 @@ class Services extends BaseService {
     return await this.performRequest(METHODS.GET, `${id}`);
   }
   async postAddToCart(username: string, id: string) {
-    return await this.performRequest(METHODS.POST, `cart/${username}/`, { _id: id });
+    return await this.performRequest(METHODS.POST, `cart/${username}`, { _id: id });
   }
   async postRemoveCart(username: string, id: string) {
     return await this.performRequest(METHODS.DELETE, `cart/delete/${username}/${id}`);

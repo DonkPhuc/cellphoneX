@@ -83,16 +83,11 @@ async function remove(id: string) {
 }
 
 async function go(getId: string) {
-  // let result = cart.value.find(({ _id }) => _id === getId);
-  let result = '';
-  currentProduct.value = [];
-  if (result) {
-    // currentProduct.value.push(result);
-  }
+  let result = cart.value.find(({ _id }) => _id === getId);
   if (getId === '/') {
     await goHome();
-  } else {
-    await router.push(`products/detail`);
+  } else if (result) {
+    await router.push(`products/${result._id}`);
   }
 }
 </script>
