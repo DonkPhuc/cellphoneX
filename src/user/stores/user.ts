@@ -8,8 +8,6 @@ import customerServices from '../services/user';
 export const useUserStore = defineStore(
   'user',
   () => {
-    const cart = ref<Products[]>([new Products()]);
-    const currentProduct = ref<Products[]>([new Products()]);
     const isLoginSuccess = ref('');
 
     async function getCustomer(params: string) {
@@ -23,8 +21,6 @@ export const useUserStore = defineStore(
     }
 
     return {
-      cart,
-      currentProduct,
       isLoginSuccess,
       getCustomer,
       getAllCustomers,

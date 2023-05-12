@@ -7,7 +7,6 @@ import { useUserStore } from '~/user/stores/user';
 import { Products } from '../dtos';
 const userStore = useUserStore();
 const store = useStore();
-const { currentProduct } = storeToRefs(userStore);
 
 const router = useRouter();
 
@@ -81,22 +80,13 @@ const buttonList = [
     title: 'Apple',
   },
   {
-    title: 'Apple2',
+    title: 'OPPO',
   },
   {
-    title: 'Apple3',
+    title: 'Samsung',
   },
   {
-    title: 'Apple4',
-  },
-  {
-    title: 'Apple5',
-  },
-  {
-    title: 'Apple4',
-  },
-  {
-    title: 'Apple2',
+    title: 'Xiaomi',
   },
 ] as Products[];
 const menuList = [
@@ -143,11 +133,7 @@ function eventMenu(title: string) {
 }
 
 async function goDetail(index: number, id: string) {
-  // currentProduct.value = [];
-  // let result = itemList.value[index];
-  // if (result) {
-  //   currentProduct.value.push(result);
-  // }
+  console.log('🚀 ~ file: index.vue:136 ~ goDetail ~ id: string:', id);
   const currentRoute = router.currentRoute.value.fullPath;
   await router.push(`products/${id}`);
   if (currentRoute === id) {

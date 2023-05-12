@@ -14,6 +14,9 @@ const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 const route = useRoute();
 const currentProduct = ref();
+const open = ref(false);
+const selectedRom = ref(0);
+const selectedColor = ref(0);
 
 onMounted(async () => {
   currentProduct.value = (await store.getProduct(route.params.id.toString())) as Products;
@@ -35,7 +38,7 @@ const formatVND = computed(() => (slide: Products) => {
 
 async function addToCart(action: string) {
   if (!isLoginSuccess.value) {
-    console.log('chua login');
+    open.value = true;
   } else {
     const rs = await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
     if (action === 'buy') {
@@ -48,32 +51,61 @@ async function addToCart(action: string) {
   }
 }
 
+function selectedOptionRom(value: number) {
+  selectedRom.value = value;
+}
+function selectedOptionColor(value: number) {
+  selectedColor.value = value;
+}
+
 const notifySignUp = (error?: string) => {
   if (error !== '') {
     toast(`${error}`, {});
   }
 };
+
 // const isFound = cart.value.some((element) => {
 //   if (element.name === currentProduct.value[0].name) {
 //     return true;
 //   }
 //   return false;
 // });
+
 // if (cart.value.length === 0) {
-//   cart.value.push(currentProduct.value[0]);
+//   console.log('not exist');
 // } else {
 //   if (isFound) {
 //     const result = cart.value.find(({ id }) => id === currentProduct.value[0].id);
 //     if (result) {
-//       result.quantity++;
+//       // result.quantity++;
+//       console.log('exist');
 //     }
-//   } else {
-//     cart.value.push(currentProduct.value[0]);
 //   }
-// }
 </script>
 
 <template>
+  <VDialog :is-open="open" @close="open = false">
+    <template #title>
+      <div class="flex items-center gap-2">
+        <img
+          class="h-10 w-10"
+          src="https://cdn2.cellphones.com.vn/213x213,webp,q100/media/wysiwyg/Shipper_CPS.jpg"
+          alt=""
+        />
+        <span class="font-bold text-main">MemberCPX</span>
+      </div>
+    </template>
+    <template #detail>
+      <p class="w-[350px] text-justify font-bold">Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn</p>
+    </template>
+    <template #action>
+      <div class="mb-5 flex justify-between gap-2">
+        <VButton input-class="w-36" size="large" label="Đăng nhập ngay" @click="router.push(`/login`)" />
+        <VButton input-class="w-36" size="large" variant="outlined" class="w-20" label="Để sau" @click="open = false" />
+      </div>
+    </template>
+  </VDialog>
+
   <div class="flex">
     <div class="hidden flex-[0.3] lg:flex"></div>
     <main v-if="currentProduct" class="flex-1 py-4">
@@ -105,17 +137,41 @@ const notifySignUp = (error?: string) => {
               </div>
 
               <div class="flex gap-4">
-                <div class="h-20 flex-1 rounded-md border"></div>
-                <div class="h-20 flex-1 rounded-md border"></div>
-                <div class="h-20 flex-1 rounded-md border"></div>
+                <div
+                  :class="selectedRom === 0 ? 'border border-main' : ''"
+                  class="h-20 flex-1 rounded-md border"
+                  @click="selectedOptionRom(0)"
+                ></div>
+                <div
+                  :class="selectedRom === 1 ? 'border border-main' : ''"
+                  class="h-20 flex-1 rounded-md border"
+                  @click="selectedOptionRom(1)"
+                ></div>
+                <div
+                  :class="selectedRom === 2 ? 'border border-main' : ''"
+                  class="h-20 flex-1 rounded-md border"
+                  @click="selectedOptionRom(2)"
+                ></div>
               </div>
 
               <span>Chọn màu để xem giá và chi nhánh có hàng</span>
 
               <div class="flex gap-4">
-                <div class="h-10 flex-1 rounded-md border"></div>
-                <div class="h-10 flex-1 rounded-md border"></div>
-                <div class="h-10 flex-1 rounded-md border"></div>
+                <div
+                  :class="selectedColor === 0 ? 'border border-main' : ''"
+                  class="h-10 flex-1 rounded-md border"
+                  @click="selectedOptionColor(0)"
+                ></div>
+                <div
+                  :class="selectedColor === 1 ? 'border border-main' : ''"
+                  class="h-10 flex-1 rounded-md border"
+                  @click="selectedOptionColor(1)"
+                ></div>
+                <div
+                  :class="selectedColor === 2 ? 'border border-main' : ''"
+                  class="h-10 flex-1 rounded-md border"
+                  @click="selectedOptionColor(2)"
+                ></div>
               </div>
 
               <div class="flex flex-col">

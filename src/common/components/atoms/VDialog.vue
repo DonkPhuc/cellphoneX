@@ -51,13 +51,13 @@ function closeModal() {
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
-            <DialogPanel class="transform overflow-hidden bg-white align-middle shadow-xl transition-all">
-              <DialogTitle class="flex justify-center bg-primary text-lg text-white">
+            <DialogPanel class="transform overflow-hidden rounded-xl bg-white align-middle shadow-xl transition-all">
+              <DialogTitle class="flex items-center justify-center text-lg">
                 <div class="p-2">
                   <slot name="title"></slot>
                 </div>
               </DialogTitle>
-              <div class="p-6">
+              <div class="px-6">
                 <slot name="detail"></slot>
               </div>
 

@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
 
 import { Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 
 import { useUserStore } from '../stores/user';
-
 const userStore = useUserStore();
 const store = useStore();
-const { currentProduct, isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
-const cart = ref<Products[]>([]);
 
+const cart = ref<Products[]>([]);
 const deliveryMode = ref('pickup');
 const company = ref(false);
 const step = ref(0);
@@ -164,23 +164,36 @@ async function goCart(go: string) {
 }
 
 function nextStep() {
-  if (
-    selectedName.value &&
-    selectedPhoneNo.value &&
-    validateEmail(selectedEmail.value) &&
-    validatePhoneNumber(selectedPhoneNo.value) &&
-    selectedCity.value &&
-    selectedDistrict.value &&
-    (selectedDeliveryAddress.value || selectedStore.value)
-  )
-    step.value++;
-  generateRandomString(10);
-}
+  let errorMessage = '';
 
+  if (step.value === 0) {
+    generateRandomString(10);
+    if (deliveryMode.value === 'delivery' && !selectedDeliveryAddress.value) errorMessage = 'Vui lòng chọn địa chỉ';
+    if (deliveryMode.value === 'pickup' && !selectedStore.value) errorMessage = 'Vui lòng chọn địa chỉ';
+    if (!selectedDistrict.value) errorMessage = 'Vui lòng chọn quận,huyện';
+    if (!selectedCity.value) errorMessage = 'Vui lòng chọn thành phố';
+    if (!validateName(selectedName.value)) errorMessage = 'Sai định dạng họ tên';
+    if (!validateEmail(selectedEmail.value)) errorMessage = 'Sai định dạng email';
+    if (!validatePhoneNumber(selectedPhoneNo.value)) errorMessage = 'Sai định dạng SĐT';
+    if (!selectedPhoneNo.value) errorMessage = 'Vui lòng nhập SĐT';
+    if (!selectedName.value) errorMessage = 'Vui lòng nhập họ tên';
+    if (errorMessage === '') {
+      step.value = 1;
+    }
+    notifySignUp(errorMessage);
+  }
+
+  if (step.value === 1) {
+    if (selectedPayment.value === 0) {
+      notifySignUp('Vui lòng chọn phương thức thanh toán');
+    } else {
+      step.value = 2;
+    }
+  }
+}
 function choosePayment(index: number) {
   selectedPayment.value = index;
 }
-
 function updateName(name: string) {
   selectedName.value = name;
 }
@@ -202,7 +215,6 @@ function updateStore(store: number) {
 function updateDeliveryAddress(address: string) {
   selectedDeliveryAddress.value = address;
 }
-
 function generateRandomString(length: number) {
   orderNo.value = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -210,16 +222,23 @@ function generateRandomString(length: number) {
     orderNo.value += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 }
-
 function validatePhoneNumber(phoneNumber: number): boolean {
   const regex = /^0\d{9}$/;
   return regex.test(phoneNumber.toString());
 }
-
 function validateEmail(email: string): boolean {
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return regex.test(email);
 }
+function validateName(name: string): boolean {
+  const regex = /[\w]{2,}/g;
+  return regex.test(name);
+}
+const notifySignUp = (error?: string) => {
+  if (error !== '') {
+    toast(`${error}`, {});
+  }
+};
 </script>
 
 <template>
@@ -272,15 +291,16 @@ function validateEmail(email: string): boolean {
                 <p :class="step > 0 ? 'text-main' : ''" class="text-center text-xs">Thanh toán</p>
               </div>
             </div>
-            <div class="flex flex-[0.2] items-center">---</div>
+            <div class="flex flex-[0.2] items-center" :class="step > 1 ? 'text-main' : ''">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
+                  :class="step > 1 ? '!border-main !text-main' : ''"
                   class="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-black/40 text-lg text-black/40"
                 >
                   <VIcon icon="fa-archive" />
                 </div>
-                <p class="text-center text-xs">Hoàn tất đặt hàng</p>
+                <p class="text-center text-xs" :class="step > 1 ? 'text-main' : ''">Hoàn tất đặt hàng</p>
               </div>
             </div>
           </div>
@@ -382,7 +402,7 @@ function validateEmail(email: string): boolean {
             <VInput v-if="company" placeholder="Mã số thuế" input-class="rounded-lg !h-10" />
           </div>
 
-          <div v-if="step >= 1" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
+          <div v-if="step === 1" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
             <div class="flex flex-col gap-3 rounded-2xl border p-3 shadow-xl">
               <div class="flex justify-center">
                 <VTitle title="THÔNG TIN ĐẶT HÀNG" />
@@ -490,9 +510,93 @@ function validateEmail(email: string): boolean {
               </div>
             </div>
           </div>
+
+          <div v-if="step === 2" class="z-1 flex flex-col gap-6 rounded-2xl border bg-white p-2 shadow-xl">
+            <div class="flex">
+              <p>
+                Cảm ơn Quý khách hàng đã chọn mua hàng tại CellphoneS. Trong 15 phút, CellphoneS sẽ SMS hoặc gọi để xác
+                nhận đơn hàng.
+                <br />
+                * Các đơn hàng từ 21h30 tối tới 8h sáng hôm sau. CellphoneS sẽ liên hệ với Quý khách trước 10h trưa cùng
+                ngày
+              </p>
+            </div>
+            <div class="flex flex-col gap-3 rounded-2xl border bg-[#E4EDDA] p-3 shadow-xl">
+              <div class="flex flex-col gap-2 text-lg">
+                <div class="flex justify-center">
+                  <span class="!text-lg font-bold !text-[#155724]">ĐẶT HÀNG THÀNH CÔNG</span>
+                </div>
+                <span>
+                  Mã Đơn Hàng:<span class="!text-lg font-bold !text-[#155724]"> {{ orderNo }} </span></span
+                >
+                <span>
+                  Người Đặt: <span class="!text-lg font-bold !text-[#155724]"> {{ selectedName }} </span></span
+                >
+                <span>
+                  Số Điện Thoại: <span class="!text-lg font-bold !text-[#155724]"> {{ selectedPhoneNo }} </span></span
+                >
+                <span>
+                  Nhận Sản Phẩm Tại:<span class="!text-lg font-bold !text-[#155724]">
+                    {{ `${(selectedDeliveryAddress || selectedStore, selectedDistrict, selectedCity)}` }}
+                  </span></span
+                >
+                <span>
+                  Hình Thức Thanh Toán:<span class="!text-lg font-bold !text-[#155724]">
+                    {{ selectedPayment }}
+                  </span></span
+                >
+                <span>
+                  Tổng Tiền: <span class="!text-lg font-bold !text-[#155724]"> {{ totalCart }} </span></span
+                >
+              </div>
+            </div>
+            <div class="flex flex-col gap-3 rounded-2xl border px-5 py-3 shadow-xl">
+              <div v-for="item in cart" :key="item._id" class="flex gap-4 border-b-2">
+                <img :src="item.imageLink" class="h-24 w-24" alt="" />
+                <div class="flex flex-col">
+                  <p class="text-lg font-bold">{{ item.name }}</p>
+                  <span class="flex gap-1">
+                    Giá:
+                    <span class="font-bold"
+                      >{{ Math.round(item.priceRRP - (item.priceRRP * item.discount) / 100) }}₫</span
+                    >
+                    <span class="font-gray-400 line-through">{{ item.priceRRP }}₫</span>
+                  </span>
+                  <p class="">
+                    Số lượng: <span class="font-bold">{{ item.quantity }}</span>
+                  </p>
+                  <p class="">
+                    Tổng tiền:
+                    <span class="font-bold">
+                      {{ Math.round((item.priceRRP - (item.priceRRP * item.discount) / 100) * item.quantity) }} ₫
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-center gap-4">
+              <div class="flex gap-2">
+                <VButton
+                  input-class="!h-16 w-full !font-bold !bg-[#007BFF] !text-white border-none !rounded-xl text-[16px] !font-bold"
+                  label="Kiểm tra đơn hàng "
+                />
+                <VButton
+                  input-class="!h-16 w-full !font-bold !border-main !text-white !rounded-xl !bg-main"
+                  label="Tiếp tục mua hàng "
+                  @click="router.push(`/`)"
+                />
+              </div>
+
+              <VButton
+                input-class="!border-none !text-white !font-bold  w-full bg-[#28A745] !h-10 !rounded-xl !text-main"
+                label="Góp ý về trải nghiệm trong việc đặt hàng và thanh toán"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
+        <div v-if="step !== 2" class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
           <div class="flex flex-1 justify-between">
             <span class="font-bold">Tổng tiền tạm tính:</span>
             <span class="font-bold text-main">{{ totalCart }} </span>
