@@ -40,8 +40,15 @@ async function go(url?: string) {
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">
-        <VButton input-class="w-36" size="large" label="Đăng nhập ngay" @click="go('login')" />
-        <VButton input-class="w-36" size="large" variant="outlined" class="w-20" label="Để sau" @click="open = false" />
+        <VButton input-class="w-36 !ring-0" size="large" label="Đăng nhập ngay" @click="go('login')" />
+        <VButton
+          input-class="w-36 !ring-0"
+          size="large"
+          variant="outlined"
+          class="w-20"
+          label="Để sau"
+          @click="open = false"
+        />
       </div>
     </template>
   </VDialog>

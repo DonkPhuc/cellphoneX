@@ -14,14 +14,18 @@ const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 const route = useRoute();
 const currentProduct = ref();
+const currentPrice = ref();
+const currentPriceRRP = ref();
 const open = ref(false);
-const selectedRom = ref(0);
-const selectedColor = ref(0);
+const selectedRom = ref(1);
+const selectedColor = ref(1);
 
 onMounted(async () => {
   currentProduct.value = (await store.getProduct(route.params.id.toString())) as Products;
   currentProduct.value.price =
     currentProduct.value.priceRRP - (currentProduct.value.priceRRP * currentProduct.value.discount) / 100;
+  currentPrice.value = currentProduct.value.price;
+  currentPriceRRP.value = currentProduct.value.priceRRP;
   window.scrollTo(0, 0);
 });
 
@@ -53,9 +57,13 @@ async function addToCart(action: string) {
 
 function selectedOptionRom(value: number) {
   selectedRom.value = value;
+  currentProduct.value.price = currentPrice.value * selectedColor.value * selectedRom.value;
+  currentProduct.value.priceRRP = currentPrice.value * selectedColor.value * selectedRom.value;
 }
 function selectedOptionColor(value: number) {
   selectedColor.value = value;
+  currentProduct.value.price = currentPrice.value * selectedColor.value * selectedRom.value;
+  currentProduct.value.priceRRP = currentPrice.value * selectedColor.value * selectedRom.value;
 }
 
 const notifySignUp = (error?: string) => {
@@ -81,6 +89,35 @@ const notifySignUp = (error?: string) => {
 //       console.log('exist');
 //     }
 //   }
+
+const listRom = [
+  {
+    rom: '128GB',
+    value: 1,
+  },
+  {
+    rom: '256GB',
+    value: 1.1,
+  },
+  {
+    rom: '512GB',
+    value: 1.2,
+  },
+];
+const listColor = [
+  {
+    color: 'Đen',
+    value: 1,
+  },
+  {
+    color: 'Xám',
+    value: 1.1,
+  },
+  {
+    color: 'Tím',
+    value: 1.2,
+  },
+];
 </script>
 
 <template>
@@ -100,8 +137,15 @@ const notifySignUp = (error?: string) => {
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">
-        <VButton input-class="w-36" size="large" label="Đăng nhập ngay" @click="router.push(`/login`)" />
-        <VButton input-class="w-36" size="large" variant="outlined" class="w-20" label="Để sau" @click="open = false" />
+        <VButton input-class="w-36 ring-0" size="large" label="Đăng nhập ngay" @click="router.push(`/login`)" />
+        <VButton
+          input-class="w-36 ring-0"
+          size="large"
+          variant="outlined"
+          class="w-20"
+          label="Để sau"
+          @click="open = false"
+        />
       </div>
     </template>
   </VDialog>
@@ -138,40 +182,28 @@ const notifySignUp = (error?: string) => {
 
               <div class="flex gap-4">
                 <div
-                  :class="selectedRom === 0 ? 'border border-main' : ''"
-                  class="h-20 flex-1 rounded-md border"
-                  @click="selectedOptionRom(0)"
-                ></div>
-                <div
-                  :class="selectedRom === 1 ? 'border border-main' : ''"
-                  class="h-20 flex-1 rounded-md border"
-                  @click="selectedOptionRom(1)"
-                ></div>
-                <div
-                  :class="selectedRom === 2 ? 'border border-main' : ''"
-                  class="h-20 flex-1 rounded-md border"
-                  @click="selectedOptionRom(2)"
-                ></div>
+                  v-for="item in listRom"
+                  :key="item.value"
+                  :class="selectedRom === item.value ? 'border border-main' : ''"
+                  class="h-20 flex-1 cursor-pointer rounded-md border"
+                  @click="selectedOptionRom(item.value)"
+                >
+                  <span class="flex h-full items-center justify-center font-bold"> {{ item.rom }}</span>
+                </div>
               </div>
 
               <span>Chọn màu để xem giá và chi nhánh có hàng</span>
 
               <div class="flex gap-4">
                 <div
-                  :class="selectedColor === 0 ? 'border border-main' : ''"
-                  class="h-10 flex-1 rounded-md border"
-                  @click="selectedOptionColor(0)"
-                ></div>
-                <div
-                  :class="selectedColor === 1 ? 'border border-main' : ''"
-                  class="h-10 flex-1 rounded-md border"
-                  @click="selectedOptionColor(1)"
-                ></div>
-                <div
-                  :class="selectedColor === 2 ? 'border border-main' : ''"
-                  class="h-10 flex-1 rounded-md border"
-                  @click="selectedOptionColor(2)"
-                ></div>
+                  v-for="item in listColor"
+                  :key="item.value"
+                  :class="selectedColor === item.value ? 'border border-main' : ''"
+                  class="h-10 flex-1 cursor-pointer rounded-md border"
+                  @click="selectedOptionColor(item.value)"
+                >
+                  <span class="flex h-full items-center justify-center font-bold"> {{ item.color }}</span>
+                </div>
               </div>
 
               <div class="flex flex-col">
@@ -227,7 +259,8 @@ const notifySignUp = (error?: string) => {
               <div class="flex gap-2">
                 <div class="flex-1 rounded-xl">
                   <VButton
-                    input-class="w-full !h-14 rounded-xl border-none !bg-[linear-gradient(180deg,#3a78d0,#277cea)]"
+                    :disabled="true"
+                    input-class="disabled:!text-white w-full !h-14 rounded-xl border-none !bg-[linear-gradient(180deg,#3a78d0,#277cea)]"
                     label="trả góp 0%"
                     :style="'2line'"
                     label2="(Xét duyệt qua điện thoại)"
@@ -235,10 +268,11 @@ const notifySignUp = (error?: string) => {
                 </div>
                 <div class="flex-1 rounded-xl">
                   <VButton
-                    input-class="w-full !h-14 rounded-xl border-none !bg-[linear-gradient(180deg,#3a78d0,#277cea)]"
+                    :disabled="true"
+                    input-class="disabled:!text-white w-full !h-14 rounded-xl border-none !bg-[linear-gradient(180deg,#3a78d0,#277cea)]"
                     :style="'2line'"
                     label2="(Visa, MasterCard, JCB)"
-                    label="tra góp qua thẻ"
+                    label="trả góp qua thẻ"
                   />
                 </div>
               </div>
