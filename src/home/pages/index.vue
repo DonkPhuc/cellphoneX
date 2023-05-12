@@ -25,8 +25,8 @@ async function getData() {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
   });
   itemList.value = result;
-  phoneList.value = itemList.value.filter((e) => e.type === 'phone');
-  laptopList.value = itemList.value.filter((e) => e.type === 'laptop');
+  phoneList.value = itemList.value.filter((e) => e.type === 'apple');
+  laptopList.value = itemList.value.filter((e) => e.type === 'samsung');
 }
 
 const listFeature = [
@@ -80,13 +80,7 @@ const buttonList = [
     title: 'Apple',
   },
   {
-    title: 'OPPO',
-  },
-  {
     title: 'Samsung',
-  },
-  {
-    title: 'Xiaomi',
   },
 ] as Products[];
 const menuList = [
@@ -181,7 +175,7 @@ async function goDetail(index: number, id: string) {
               type="product"
               :button-list="buttonList"
               :data="phoneList"
-              title="ĐIỆN THOẠI NỔI BẬT NHẤT"
+              title="IPHONE NỔI BẬT NHẤT"
               @go-detail="goDetail"
             />
           </div>
@@ -191,7 +185,7 @@ async function goDetail(index: number, id: string) {
               type="product"
               :button-list="buttonList"
               :data="laptopList"
-              title="LAPTOP NỔI BẬT NHẤT"
+              title="SAMSUNG NỔI BẬT NHẤT"
               @go-detail="goDetail"
             />
           </div>

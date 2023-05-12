@@ -9,7 +9,7 @@ import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
 const store = useStore();
-const { currentProduct, isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
 const cart = ref<Products[]>([]);
