@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import "vue3-toastify/dist/index.css";
-import "@vueform/slider/themes/default.css"
-import Slider from '@vueform/slider'
+import "@vueform/slider/themes/default.css";
+import Slider from "@vueform/slider";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import { storeToRefs } from "pinia";
 import { toast } from "vue3-toastify";
@@ -18,14 +18,19 @@ const router = useRouter();
 const route = useRoute();
 
 const range = ref(0);
+const filterRange = ref(false);
 const data = ref<Products[]>([]);
 
 watchEffect(() => {
   if (route.params.type) {
     if (route.params.type === "all") {
       data.value = dataAll.value;
+      filterRange.value = false;
+      range.value = 0;
     } else {
       data.value = dataAll.value.filter((e) => e.type === route.params.type);
+      filterRange.value = false;
+      range.value = 0;
     }
   }
 });
@@ -76,6 +81,30 @@ function sortPrice(type: string) {
     selectedSort.value = "discount";
   }
 }
+function filterPriceRange() {
+  data.value = dataAll.value;
+  const rs = data.value.filter(
+    (e) => e.price >= range.value && e.price < 5000 * 100 * 100
+  );
+  data.value = [];
+  data.value = rs;
+  filterRange.value = true;
+}
+function unFilterPrice() {
+  data.value = dataAll.value;
+  if (route.params.type === "all") {
+    data.value = dataAll.value;
+    filterRange.value = false;
+    range.value = 0;
+  } else {
+    data.value = dataAll.value.filter((e) => e.type === route.params.type);
+    filterRange.value = false;
+    range.value = 0;
+  }
+}
+function addToFav() {
+  console.log("add fav");
+}
 </script>
 
 <template>
@@ -83,60 +112,91 @@ function sortPrice(type: string) {
     <div class="hidden h-40 lg:flex lg:flex-1"></div>
     <main v-if="data" class="flex flex-[3] flex-col gap-4">
       <div class="flex flex-col gap-2 py-4 md:flex-row">
-        <div class="flex-1 bg-red-200">
+        <div class="flex-1">
           <img
             src="https://cdn2.cellphones.com.vn/595x,webp,q80/https://dashboard.cellphones.com.vn/storage/galaxy-tab-s8-cate-th5.png"
-            alt="" />
+            alt=""
+          />
         </div>
-        <div class="flex-1 bg-red-200">
+        <div class="flex-1">
           <img
             src="https://cdn2.cellphones.com.vn/595x,webp,q80/https://dashboard.cellphones.com.vn/storage/seagame-banner-cate.png"
-            alt="" />
+            alt=""
+          />
         </div>
       </div>
 
       <VTitle title="Chọn theo tiêu chí" />
 
       <div class="flex gap-4">
-        <div class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
-          :class="route.params.type === 'apple' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/apple`)">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="
+            route.params.type === 'apple'
+              ? 'border-main bg-[#fef2f2] text-main'
+              : ''
+          "
+          @click="router.push(`/products/brand/apple`)"
+        >
           <VIcon icon="fa-apple" /> Apple
         </div>
-        <div class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
-          :class="route.params.type === 'samsung' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/samsung`)">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="
+            route.params.type === 'samsung'
+              ? 'border-main bg-[#fef2f2] text-main'
+              : ''
+          "
+          @click="router.push(`/products/brand/samsung`)"
+        >
           <VIcon icon="fa-money" /> Samsung
         </div>
         <div class="flex">
           <Popover v-slot="{ open: openPrice }" class="relative !ring-0">
-            <PopoverButton :class="openPrice ? 'border-main bg-[#fef2f2] text-main' : ''"
-              class="focus-visible:!ring-0 cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs !ring-0">
-              <span>
-                <VIcon icon="fa-money" /> Giá
-              </span>
+            <PopoverButton
+              :class="openPrice ? 'border-main bg-[#fef2f2] text-main' : ''"
+              class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs !ring-0 focus-visible:!ring-0"
+            >
+              <span> <VIcon icon="fa-money" /> Giá </span>
             </PopoverButton>
 
-            <transition enter-active-class="transition duration-200 ease-out ring-0"
-              enter-from-class="translate-y-1 opacity-0" enter-to-class="translate-y-0 opacity-100"
-              leave-active-class="transition duration-150 ease-in" leave-from-class="translate-y-0 opacity-100"
-              leave-to-class="translate-y-1 opacity-0">
-              <PopoverPanel class="absolute left-1/2 z-10 mt-3 w-[320px] -translate-x-1/2 transform bg-gray-100 p-4">
+            <transition
+              enter-active-class="transition duration-200 ease-out ring-0"
+              enter-from-class="translate-y-1 opacity-0"
+              enter-to-class="translate-y-0 opacity-100"
+              leave-active-class="transition duration-150 ease-in"
+              leave-from-class="translate-y-0 opacity-100"
+              leave-to-class="translate-y-1 opacity-0"
+            >
+              <PopoverPanel
+                class="absolute left-1/2 z-10 mt-3 w-[320px] -translate-x-1/2 transform bg-gray-100 p-4"
+              >
                 <div class="flex flex-col gap-4">
-                  <div class="flex flex-1 justify-between">
-                    <span>{{ range }}đ </span> <span> 50.000.000đ </span>
+                  <div class="flex flex-1 justify-between pb-6">
+                    <span>
+                      {{
+                        new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(range)
+                      }}
+                    </span>
+                    <span> 50.000.000đ </span>
                   </div>
-                  <Slider class="slider-red" :classes="{
-                    ltr: 'slider-ltr',
-                    rtl: 'slider-rtl',
-                  }" v-model="range" :min="0" :max="500 * 100 * 100" :ariaLabelledby="true" />
+                  <Slider v-model="range" :min="0" :max="5000 * 100 * 100" />
                   <div class="flex flex-1 justify-between gap-2">
                     <div class="flex-1">
-                      <PopoverButton class="h-8 !w-full rounded border border-main text-main hover:bg-main/20">Đóng
+                      <PopoverButton
+                        class="h-8 !w-full rounded border border-main text-main hover:bg-main/20"
+                        >Đóng
                       </PopoverButton>
                     </div>
                     <div class="flex-1">
-                      <VButton class="!w-full" label="Xem kết quả" />
+                      <PopoverButton
+                        @click="filterPriceRange"
+                        class="h-8 !w-full rounded bg-main text-white"
+                        >Xem kết quả
+                      </PopoverButton>
                     </div>
                   </div>
                 </div>
@@ -144,63 +204,131 @@ function sortPrice(type: string) {
             </transition>
           </Popover>
         </div>
-        <div class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
-          :class="route.params.type === 'all' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/all`)">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="
+            route.params.type === 'all'
+              ? 'border-main bg-[#fef2f2] text-main'
+              : ''
+          "
+          @click="router.push(`/products/brand/all`)"
+        >
           <VIcon icon="fa-align-justify" />
           Tất cả
         </div>
       </div>
 
+      <template v-if="filterRange">
+        <VTitle title="Đang lọc theo" />
+
+        <div class="flex gap-4">
+          <div
+            class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main"
+          >
+            <VIcon icon="fa-sort-amount-desc" />
+            Giá từ
+            {{
+              new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(range)
+            }}
+            -
+            {{
+              new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(5000 * 100 * 100)
+            }}
+          </div>
+
+          <div
+            @click="unFilterPrice"
+            class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main"
+          >
+            × Bỏ chọn tất cả
+          </div>
+        </div>
+      </template>
+
       <VTitle title="Sắp xếp theo" />
 
       <div class="flex gap-4">
-        <div class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs" :class="selectedSort === 'highToLow'
-          ? 'border-main bg-[#fef2f2] text-main'
-          : ''
-          " @click="sortPrice('highToLow')">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="
+            selectedSort === 'highToLow'
+              ? 'border-main bg-[#fef2f2] text-main'
+              : ''
+          "
+          @click="sortPrice('highToLow')"
+        >
           <VIcon icon="fa-sort-amount-desc" />
           Giá Cao - Thấp
         </div>
-        <div class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs" :class="selectedSort === 'lowToHigh'
-          ? 'border-main bg-[#fef2f2] text-main'
-          : ''
-          " @click="sortPrice('lowToHigh')">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="
+            selectedSort === 'lowToHigh'
+              ? 'border-main bg-[#fef2f2] text-main'
+              : ''
+          "
+          @click="sortPrice('lowToHigh')"
+        >
           <VIcon icon="fa-sort-amount-asc" />
           Giá Thấp - Cao
         </div>
-        <div class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs" :class="selectedSort === 'discount'
-          ? 'border-main bg-[#fef2f2] text-main'
-          : ''
-          " @click="sortPrice('discount')">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="
+            selectedSort === 'discount'
+              ? 'border-main bg-[#fef2f2] text-main'
+              : ''
+          "
+          @click="sortPrice('discount')"
+        >
           <VIcon icon="fa-strikethrough" />
           Khuyến Mãi Hot
         </div>
       </div>
 
       <div class="flex flex-wrap justify-start gap-4">
-        <div v-for="item in data" :key="item._id"
-          class="mx-auto flex w-full basis-[100%] flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-lg md:basis-[46%] lg:basis-[21%]">
+        <div
+          v-for="item in data"
+          :key="item._id"
+          class="mx-auto flex w-full basis-[100%] flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-lg md:basis-[46%] lg:basis-[21%]"
+        >
           <div class="flex w-full justify-end">
-            <span class="vc text-xs py-1 font-semibold after:hidden before:hidden after:md:block before:md:block">Giảm {{
-              item.discount +
-              "%" }}</span>
+            <span
+              class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block"
+              >Giảm {{ item.discount + "%" }}</span
+            >
           </div>
-          <img class="mx-auto h-[180px] w-[180px] cursor-pointer" :src="item.imageLink" alt=""
-            @click="router.push(`/products/${item._id}`)" />
-          <p class="h-14 cursor-pointer text-justify text-sm font-bold md:flex"
-            @click="router.push(`/products/${item._id}`)">
+          <img
+            class="mx-auto h-[180px] w-[180px] cursor-pointer"
+            :src="item.imageLink"
+            alt=""
+            @click="router.push(`/products/${item._id}`)"
+          />
+          <p
+            class="h-14 cursor-pointer text-justify text-sm font-bold md:flex"
+            @click="router.push(`/products/${item._id}`)"
+          >
             {{ item.name }}
           </p>
 
           <div class="gap-2 md:flex">
             <p class="font-bold text-red-500">{{ formatVND(item).price }}</p>
-            <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
+            <p
+              class="flex items-center text-[14px] font-semibold text-gray-500 line-through"
+            >
               {{ formatVND(item).priceRRP }}
             </p>
           </div>
 
-          <div class="w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
+          <div
+            class="w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex"
+          >
             {{ item.description }}
           </div>
 
@@ -212,24 +340,34 @@ function sortPrice(type: string) {
             <VIcon icon-class="text-yellow-600" icon="fa-star" />
           </div>
 
-          <div class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex">
+          <div
+            @click="addToFav"
+            class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex"
+          >
             <p class="text-xs text-gray-500">Yêu Thích</p>
-            <VIcon :icon="item.favorite ? 'fa-heart' : 'fa-heart-o'"
-              :icon-class="item.favorite ? '!text-red-500' : '!text-black-500'" />
+            <VIcon
+              :icon="1 ? 'fa-heart' : 'fa-heart-o'"
+              :icon-class="1 ? '!text-red-500' : '!text-black-500'"
+            />
           </div>
         </div>
       </div>
     </main>
-    <div v-else class="flex flex-col items-center w-full h-[500px] justify-center   ">
+    <div
+      v-else
+      class="flex h-[500px] w-full flex-col items-center justify-center"
+    >
       <VSpinner size="large" />
-      <p>Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về <a class="text-main" href="/">trang chủ</a></p>
+      <p>
+        Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về
+        <a class="text-main" href="/">trang chủ</a>
+      </p>
     </div>
     <div class="hidden h-40 lg:flex lg:flex-1"></div>
   </div>
 </template>
 
-
-<style lang="scss">
+<style scoped>
 .vc {
   right: -10px;
   background: #ff0045;

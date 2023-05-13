@@ -351,20 +351,17 @@ const randomName2: string = getRandomName();
                 <div class="h-40 rounded-b-2xl border">
                   <div class="flex flex-col">
                     <div class="flex items-center gap-2 p-2">
-                      1
-                      <p class="text-xs">
+                      <p class="text-xs max-h-8">
                         Giảm ngay 3.000.000đ khi tham gia thu cũ đổi mới - Giá thu tốt nhất thị trường (Xem chi tiết)
                       </p>
                     </div>
                     <div class="flex items-center gap-2 p-2">
-                      1
-                      <p class="text-xs">
+                      <p class="text-xs max-h-8">
                         Giảm ngay 3.000.000đ khi tham gia thu cũ đổi mới - Giá thu tốt nhất thị trường (Xem chi tiết)
                       </p>
                     </div>
                     <div class="flex items-center gap-2 p-2">
-                      1
-                      <p class="text-xs">
+                      <p class="text-xs max-h-8">
                         Giảm ngay 3.000.000đ khi tham gia thu cũ đổi mới - Giá thu tốt nhất thị trường (Xem chi tiết)
                       </p>
                     </div>
@@ -443,7 +440,7 @@ const randomName2: string = getRandomName();
               <span class="py-2 font-bold">Đánh giá & nhận xét {{ currentProduct.name }}</span>
 
               <div class="flex">
-                <div class="flex flex-[0.7] items-center justify-center rounded-l-2xl border">
+                <div class="flex md:flex-[0.7] flex-1 items-center justify-center lg:rounded-l-2xl border">
                   <div class="flex flex-col items-center">
                     <span class="flex justify-center text-2xl font-bold">5.0/5</span>
                     <div class="flex w-full justify-center">
@@ -453,10 +450,10 @@ const randomName2: string = getRandomName();
                       <VIcon icon-class="text-yellow-600" icon="fa-star" />
                       <VIcon icon-class="text-yellow-600" icon="fa-star" />
                     </div>
-                    <span class="flex justify-center"> <b>8 </b> đánh giá và nhận xét </span>
+                    <span class="flex justify-center"> <b>8</b> đánh giá và nhận xét </span>
                   </div>
                 </div>
-                <div class="flex-1 rounded-r-2xl border p-2">
+                <div class="hidden md:block flex-1 rounded-r-2xl border p-2">
                   <div class="flex items-center">
                     <p class="flex-[0.2]">5
                       <VIcon icon-class="text-yellow-600" icon="fa-star" />

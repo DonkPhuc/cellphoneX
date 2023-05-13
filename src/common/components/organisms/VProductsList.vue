@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import 'vue3-carousel/dist/carousel.css';
+import "vue3-carousel/dist/carousel.css";
 
-import { Carousel, Navigation, Slide } from 'vue3-carousel';
+import { Carousel, Navigation, Slide } from "vue3-carousel";
 
-import { Products } from '~/home/dtos';
+import { Products } from "~/home/dtos";
 const router = useRouter();
 interface Props {
   type: string;
@@ -16,15 +16,21 @@ interface Props {
 const props = defineProps<Props>();
 const { title, data, buttonList, type, dataCarousel } = toRefs(props);
 
-const emit = defineEmits(['goDetail']);
+const emit = defineEmits(["goDetail"]);
 
 const formatVND = computed(() => (slide: Products) => {
   let result = {
-    price: '',
-    priceRRP: '',
+    price: "",
+    priceRRP: "",
   };
-  result.price = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(slide.price);
-  result.priceRRP = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(slide.priceRRP);
+  result.price = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(slide.price);
+  result.priceRRP = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(slide.priceRRP);
 
   return result;
 });
@@ -34,24 +40,24 @@ const eventButton = async (title: string) => {
 };
 
 function goToProduct(index: number, id: string) {
-  emit('goDetail', index, id);
+  emit("goDetail", index, id);
 }
 const settings = {
   itemsToShow: 1,
-  snapAlign: 'end',
+  snapAlign: "start",
 };
 const breakpoints = {
   486: {
     itemsToShow: 1,
-    align: 'end',
+    align: "start",
   },
   768: {
     itemsToShow: 3,
-    align: 'end',
+    align: "start",
   },
   1624: {
-    itemsToShow: 4,
-    align: 'end',
+    itemsToShow: 5,
+    align: "start",
   },
 };
 
@@ -68,6 +74,10 @@ const resize = computed(() => {
   }
   return itemShow;
 });
+
+function addToFav(id: string) {
+  console.log(id)
+}
 </script>
 
 <template>
@@ -79,12 +89,9 @@ const resize = computed(() => {
         </div>
         <div class="flex flex-1 justify-end gap-2">
           <VButtonList v-if="buttonList" :data="buttonList" @event-button="eventButton" />
-          <VButton
-            class="!duration-200 hover:!bg-main hover:!text-white"
-            input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600"
-            :label="'Xem tất cả'"
-            @click="eventButton('all')"
-          />
+          <VButton class="!duration-200 hover:!bg-main hover:!text-white"
+            input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600" :label="'Xem tất cả'"
+            @click="eventButton('all')" />
         </div>
       </div>
 
@@ -92,67 +99,46 @@ const resize = computed(() => {
         <Slide v-for="(slide, index) in data" :key="index">
           <div class="rounded-xl border border-slate-200 p-2 shadow-xl">
             <div class="flex w-full flex-col gap-4">
-              <!-- <span class="vc">{{ slide.discount + '%' }}</span>
-
-              <img
-                class="mx-auto h-[180px] w-[180px] cursor-pointer"
-                :src="slide.imageLink"
-                alt=""
-                @click="goToProduct(index, slide._id)"
-              /> -->
-              <div class="w-full bg-red-100">
-                {{ slide.discount + '%' }}
+              <div class="flex w-full justify-end">
+                <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block">Giảm
+                  {{ slide.discount + "%" }}</span>
               </div>
-              <div class="w-full bg-red-100">
-                <img
-                  class="mx-auto h-[180px] w-[180px] cursor-pointer"
-                  :src="slide.imageLink"
-                  alt=""
-                  @click="goToProduct(index, slide._id)"
-                />
+              <img class="mx-auto h-[180px] w-[180px] cursor-pointer" :src="slide.imageLink" alt=""
+                @click="goToProduct(index, slide._id)" />
+              <div @click="goToProduct(index, slide._id)" class="w-full">
+                <span class="h-14 max-w-[180px] text-justify text-sm font-bold md:flex">
+                  {{ slide.name }}
+                </span>
               </div>
-              <div class="w-full bg-red-100">
-                1
-                <!-- <p class="h-14 max-w-[180px] text-justify text-sm font-bold md:flex">{{ slide.name }}</p> -->
-              </div>
-              <!-- <div class="w-full bg-red-100">
+              <div class="w-full">
                 <div class="flex gap-2">
-                  <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
+                  <p class="font-bold text-red-500">
+                    {{ formatVND(slide).price }}
+                  </p>
                   <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
                     {{ formatVND(slide).priceRRP }}
                   </p>
                 </div>
-              </div> -->1
-              <div class="w-full bg-red-100">1</div>
-            </div>
-            <!-- <p class="h-14 text-justify text-sm font-bold md:flex">{{ slide.name }}</p> -->
+              </div>
 
-            <!-- <div class="hidden gap-2 md:flex">
-                  <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
-                  <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
-                    {{ formatVND(slide).priceRRP }}
-                  </p>
-                </div>
-  
-                <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
-                  {{ slide.description }}
-                </div>
-  
-                <div class="hidden w-full justify-start md:flex">
-                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                </div>
-  
-                <div class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex">
-                  <p class="text-xs text-gray-500">Yêu Thích</p>
-                  <VIcon
-                    :icon="slide.favorite ? 'fa-heart' : 'fa-heart-o'"
-                    :icon-class="slide.favorite ? '!text-red-500' : '!text-black-500'"
-                  />
-                </div> -->
+              <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
+                {{ slide.description }}
+              </div>
+
+              <div class="hidden w-full justify-start md:flex">
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                <VIcon icon-class="text-yellow-600" icon="fa-star" />
+              </div>
+
+              <div @click="addToFav(slide._id)"
+                class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex cursor-pointer">
+                <p class="text-xs text-gray-500">Yêu Thích</p>
+                <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
+              </div>
+            </div>
           </div>
         </Slide>
         <template #addons>
@@ -173,11 +159,8 @@ const resize = computed(() => {
 
     <Carousel v-if="dataCarousel" ref="carousel" v-model="currentSlide" :items-to-show="resize" :wrap-around="false">
       <Slide v-for="(slide, index) in dataCarousel" :key="index">
-        <div
-          :class="index === currentSlide ? 'border-b-4 border-b-main' : ''"
-          class="h-[76px] w-full cursor-pointer rounded-b-xl pt-5 hover:bg-gray-100"
-          @click="slideTo(index)"
-        >
+        <div :class="index === currentSlide ? 'border-b-4 border-b-main' : ''"
+          class="h-[76px] w-full cursor-pointer rounded-b-xl pt-5 hover:bg-gray-100" @click="slideTo(index)">
           <p class="text-center text-xs font-bold">{{ slide.title }}</p>
           <p class="text-center text-xs font-normal">{{ slide.description }}</p>
         </div>
@@ -198,12 +181,8 @@ const resize = computed(() => {
       <Carousel ref="carousel" v-model="currentSlide" :items-to-show="5" :wrap-around="false">
         <Slide v-for="(slide, index) in dataDetail.imageDetail" :key="index">
           <div class="mx-auto h-16 w-16 cursor-pointer rounded-xl" @click="slideTo(index)">
-            <img
-              class="m-auto h-3/4 w-3/4 rounded-md border"
-              :src="slide"
-              alt=""
-              :class="index === currentSlide ? 'border border-main' : ''"
-            />
+            <img class="m-auto h-3/4 w-3/4 rounded-md border" :src="slide" alt=""
+              :class="index === currentSlide ? 'border border-main' : ''" />
           </div>
         </Slide>
       </Carousel>
@@ -222,23 +201,25 @@ const resize = computed(() => {
   position: relative;
   border-right: 1px dashed #fff;
 }
+
 .vc:after {
   width: 0;
   height: 0;
   border: 12.5px solid transparent;
   position: absolute;
-  content: '';
+  content: "";
   border-top-color: #ff0045;
   right: -26px;
   top: 0px;
   border-left-color: #ff0045;
 }
+
 .vc:before {
   width: 0;
   height: 0;
   border: 13px solid transparent;
   position: absolute;
-  content: '';
+  content: "";
   border-bottom-color: #ff0045;
   right: -25px;
   top: 2px;
