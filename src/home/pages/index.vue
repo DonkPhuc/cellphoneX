@@ -162,35 +162,26 @@ async function goDetail(index: number, id: string) {
         <div class="flex h-[75px]">
           <img
             src="https://cdn2.cellphones.com.vn/1200x75,webp,q100/https://dashboard.cellphones.com.vn/storage/banner-special-desktop-pkchaohe.png"
-            alt=""
-            class="w-full rounded-xl"
-          />
+            alt="" class="w-full rounded-xl" />
         </div>
 
-        <div class="flex flex-col gap-4">
+        <div v-if="itemList.length > 0" class="flex flex-col gap-4">
           <div class="flex w-full">
-            <VProductsList
-              v-if="itemList.length"
-              type="product"
-              :button-list="buttonList"
-              :data="phoneList"
-              title="IPHONE NỔI BẬT NHẤT"
-              @go-detail="goDetail"
-            />
+            <VProductsList type="product" :button-list="buttonList" :data="phoneList" title="IPHONE NỔI BẬT NHẤT"
+              @go-detail="goDetail" />
           </div>
           <div class="flex w-full">
-            <VProductsList
-              v-if="itemList.length"
-              type="product"
-              :button-list="buttonList"
-              :data="laptopList"
-              title="SAMSUNG NỔI BẬT NHẤT"
-              @go-detail="goDetail"
-            />
+            <VProductsList type="product" :button-list="buttonList" :data="laptopList" title="SAMSUNG NỔI BẬT NHẤT"
+              @go-detail="goDetail" />
           </div>
         </div>
+        <div v-else class="flex items-center w-full justify-center   ">
+          <VSpinner size="large" />
+        </div>
+
       </div>
     </div>
+
 
     <div class="hidden lg:flex lg:flex-[0.3]"></div>
   </main>

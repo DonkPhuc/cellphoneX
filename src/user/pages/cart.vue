@@ -96,97 +96,99 @@ async function go(getId: string) {
   <main class="flex">
     <div class="hidden flex-1 lg:flex"></div>
 
-    <div v-if="cart[0] && !cart[0]._id" class="flex flex-1 flex-col py-4">
-      <div class="flex flex-1 flex-col gap-12">
-        <div class="flex">
-          <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')"
-            ><VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
-          </span>
-          <span class="flex flex-1 justify-center text-xl font-bold text-main"> <p class="-ml-16">Giỏ hàng</p> </span>
-        </div>
+    <template v-if="cart.length > 0">
+      <div v-if="cart[0] && !cart[0]._id" class="flex flex-1 flex-col py-4">
+        <div class="flex flex-1 flex-col gap-12">
+          <div class="flex">
+            <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')">
+              <VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
+            </span>
+            <span class="flex flex-1 justify-center text-xl font-bold text-main">
+              <p class="-ml-16">Giỏ hàng</p>
+            </span>
+          </div>
 
-        <div class="flex justify-center pt-20">
-          <VIcon size="text-[80px]" icon="fa-smile-o" />
-        </div>
+          <div class="flex justify-center pt-20">
+            <VIcon size="text-[80px]" icon="fa-smile-o" />
+          </div>
 
-        <div class="flex justify-center">
-          <p class="text-xl">Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
-        </div>
+          <div class="flex justify-center">
+            <p class="text-xl">Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
+          </div>
 
-        <div class="flex justify-center">
-          <VButton
-            input-class="!h-10 w-44 !bg-main border-none rounded-lg"
-            label="Quay lại trang chủ"
-            @click="goHome"
-          />
+          <div class="flex justify-center">
+            <VButton input-class="!h-10 w-44 !bg-main border-none rounded-lg" label="Quay lại trang chủ"
+              @click="goHome" />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div v-else class="flex flex-1 flex-col py-4">
-      <div class="flex flex-1 flex-col gap-12">
-        <div class="flex">
-          <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')"
-            ><VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
-          </span>
-          <span class="flex flex-1 justify-center text-xl font-bold text-main"> <p class="-ml-16">Giỏ hàng</p> </span>
-        </div>
+      <div v-else class="flex flex-1 flex-col py-4">
+        <div class="flex flex-1 flex-col gap-12">
+          <div class="flex">
+            <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')">
+              <VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
+            </span>
+            <span class="flex flex-1 justify-center text-xl font-bold text-main">
+              <p class="-ml-16">Giỏ hàng</p>
+            </span>
+          </div>
 
-        <div v-for="(item, index) in cart" :key="index" class="flex max-h-[400px] flex-col overflow-y-auto">
-          <div class="flex gap-8 border-b-2 p-4">
-            <img class="h-32 w-32" :src="item.imageLink" alt="" />
-            <div class="flex flex-1 flex-col gap-2">
-              <div class="flex justify-between">
-                <p class="cursor-pointer font-bold hover:underline" @click="go(item._id)">
-                  {{ item.name }}
-                </p>
-                <div class="cursor-pointer" @click="remove(item._id)">
-                  <VIcon icon="fa-times" />
-                </div>
-              </div>
-
-              <div class="flex justify-between">
-                <p class="font-bold text-main">
-                  {{ formatVND(cart[index]).price }}
-                  <span class="text-xs text-gray-500 line-through"> {{ formatVND(cart[index]).priceRRP }} </span>
-                </p>
-                <div class="flex items-center rounded-xl border bg-[#f4f4f4]">
-                  <div class="cursor-pointer" @click="minusQuality(index)">
-                    <VIcon icon="fa-minus" />
+          <div v-for="(item, index) in cart" :key="index" class="flex max-h-[400px] flex-col overflow-y-auto">
+            <div class="flex gap-8 border-b-2 p-4">
+              <img class="h-32 w-32" :src="item.imageLink" alt="" />
+              <div class="flex flex-1 flex-col gap-2">
+                <div class="flex justify-between">
+                  <p class="cursor-pointer font-bold hover:underline" @click="go(item._id)">
+                    {{ item.name }}
+                  </p>
+                  <div class="cursor-pointer" @click="remove(item._id)">
+                    <VIcon icon="fa-times" />
                   </div>
-                  <p class="px-3 text-xs">{{ item.quantity }}</p>
-                  <div class="cursor-pointer" @click="plusQuality(index)">
-                    <VIcon icon="fa-plus" />
+                </div>
+
+                <div class="flex justify-between">
+                  <p class="font-bold text-main">
+                    {{ formatVND(cart[index]).price }}
+                    <span class="text-xs text-gray-500 line-through"> {{ formatVND(cart[index]).priceRRP }} </span>
+                  </p>
+                  <div class="flex items-center rounded-xl border bg-[#f4f4f4]">
+                    <div class="cursor-pointer" @click="minusQuality(index)">
+                      <VIcon icon="fa-minus" />
+                    </div>
+                    <p class="px-3 text-xs">{{ item.quantity }}</p>
+                    <div class="cursor-pointer" @click="plusQuality(index)">
+                      <VIcon icon="fa-plus" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
-          <div class="flex flex-1 justify-between">
-            <span class="font-bold">Tổng tiền tạm tính:</span>
-            <span class="font-bold text-main">{{ totalCart }} </span>
+          <div class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
+            <div class="flex flex-1 justify-between">
+              <span class="font-bold">Tổng tiền tạm tính:</span>
+              <span class="font-bold text-main">{{ totalCart }} </span>
+            </div>
+
+            <VButton class="!text-white disabled:!bg-main/60" :disabled="cart.length === 0"
+              input-class="!h-16 w-full !bg-main border-none rounded text-[16px] !font-bold" label="TIẾN HÀNH ĐẶT HÀNG"
+              @click="goPayment" />
+
+            <VButton variant="outlined"
+              input-class="!h-16 w-full !border-main !text-main rounded hover:!bg-main/70 hover:!text-white !text-[16px] !font-bold active:bg-main/70"
+              label="CHỌN THÊM SẢN PHẨM KHÁC" @click="goHome" />
           </div>
-
-          <VButton
-            class="!text-white disabled:!bg-main/60"
-            :disabled="cart.length === 0"
-            input-class="!h-16 w-full !bg-main border-none rounded text-[16px] !font-bold"
-            label="TIẾN HÀNH ĐẶT HÀNG"
-            @click="goPayment"
-          />
-
-          <VButton
-            variant="outlined"
-            input-class="!h-16 w-full !border-main !text-main rounded hover:!bg-main/70 hover:!text-white !text-[16px] !font-bold active:bg-main/70"
-            label="CHỌN THÊM SẢN PHẨM KHÁC"
-            @click="goHome"
-          />
         </div>
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <div class="flex flex-col items-center w-full h-[500px] justify-center   ">
+        <VSpinner size="large" />
+        <p>Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về <a class="text-main" href="/">trang chủ</a></p>
+      </div>
+    </template>
 
     <div class="hidden flex-1 lg:flex"></div>
   </main>
