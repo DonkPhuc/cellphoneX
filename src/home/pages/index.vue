@@ -122,12 +122,11 @@ const menuList = [
   },
 ] as Products[];
 
-function eventMenu(title: string) {
-  console.log(title);
+async function eventMenu(title: string) {
+  console.log(title.toLowerCase);
 }
 
 async function goDetail(index: number, id: string) {
-  console.log('🚀 ~ file: index.vue:136 ~ goDetail ~ id: string:', id);
   const currentRoute = router.currentRoute.value.fullPath;
   await router.push(`products/${id}`);
   if (currentRoute === id) {

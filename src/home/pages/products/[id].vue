@@ -118,6 +118,161 @@ const listColor = [
     value: 1.2,
   },
 ];
+const surnames: string[] = [
+  'Nguyễn',
+  'Trần',
+  'Lê',
+  'Phạm',
+  'Hoàng',
+  'Huỳnh',
+  'Phan',
+  'Vũ',
+  'Võ',
+  'Đặng',
+  'Bùi',
+  'Đỗ',
+  'Hồ',
+  'Ngô',
+  'Dương',
+  'Lý',
+  'An',
+  'Âu',
+  'Bành',
+  'Bạch',
+  'Bành',
+  'Bùi',
+  'Bửu',
+  'Cao',
+  'Cù',
+  'Cung',
+  'Cao',
+  'Châu',
+  'Chung',
+  'Chu',
+  'Chử',
+  'Chử',
+  'Cao',
+  'Cao',
+  'Cao',
+  'Cù',
+  'Danh',
+  'Diệp',
+  'Diệm',
+  'Đàm',
+  'Đan',
+  'Đặng',
+  'Đào',
+  'Điền',
+  'Đinh',
+  'Đoàn',
+  'Đôn',
+  'Đồng',
+  'Đổng',
+  'Đường',
+  'Giang',
+  'Hà',
+  'Hàn',
+  'Hạnh',
+  'Hứa',
+  'Hoa',
+  'Hồng',
+  'Hứa',
+  'Hướng',
+  'Huyền',
+  'Kha',
+  'Kiều',
+  'Kim',
+  'Lã',
+  'Lâm',
+  'Lê',
+  'Liễu',
+  'Lô',
+  'Lục',
+  'Lư',
+  'Lưu',
+  'Ly',
+  'Lý',
+  'Mã',
+  'Mạc',
+  'Mai',
+  'Minh',
+  'Nghiêm',
+  'Ngô',
+  'Ngôi',
+  'Ngu',
+  'Nghiêm',
+  'Ngôn',
+  'Nguyễn',
+  'Nhan',
+  'Nhâm',
+  'Nhậm',
+  'Ông',
+  'Ôn',
+  'Ông',
+  'Ông',
+  'Ông',
+  'Phạm',
+  'Phi',
+  'Phó',
+  'Phong',
+  'Phùng',
+  'Quách',
+  'Quản',
+  'Sầm',
+  'Sử',
+  'Thạch',
+  'Thái',
+  'Thân',
+  'Thi',
+  'Thiều',
+  'Thủy',
+  'Tiêu',
+  'Tiết',
+  'Tiêu',
+  'Tiền',
+  'Tôn',
+  'Tòng',
+  'Tống',
+  'Trác',
+  'Triệu',
+  'Trịnh',
+  'Trương',
+  'Uông',
+  'Văn',
+  'Vi',
+  'Viên',
+  'Viễn',
+  'Vương',
+  'Vưu',
+  'Xa',
+  'Xuân',
+  'Yên',
+];
+
+function getRandomName(): string {
+  const randomFirstName: string = surnames[Math.floor(Math.random() * surnames.length)];
+  const randomLastName: string = surnames[Math.floor(Math.random() * surnames.length)];
+  return randomFirstName + ' ' + randomLastName;
+}
+
+function getRandomTime(): string {
+  const randomDate: Date = new Date(Math.random() * Date.now());
+  const hours: string = ('0' + randomDate.getHours()).slice(-2);
+  const minutes: string = ('0' + randomDate.getMinutes()).slice(-2);
+  const seconds: string = ('0' + randomDate.getSeconds()).slice(-2);
+  return hours + ':' + minutes + ':' + seconds;
+}
+
+const currentDate: Date = new Date();
+const year: number = currentDate.getFullYear();
+const month: number = currentDate.getMonth() + 1;
+const day: number = currentDate.getDate();
+const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+
+const randomTime: string = getRandomTime();
+const randomName: string = getRandomName();
+const randomTime2: string = getRandomTime();
+const randomName2: string = getRandomName();
 </script>
 
 <template>
@@ -388,10 +543,12 @@ const listColor = [
                 <div class="flex-col">
                   <div class="flex justify-between">
                     <div class="flex gap-2">
-                      <img class="h-5 w-5 bg-red-100" src="" alt="" />
-                      <span class="font-bold">Ha Quoc</span>
+                      <span class="flex h-5 w-5 items-center justify-center bg-red-100 font-bold">
+                        {{ randomName.charAt(0) }}
+                      </span>
+                      <span class="font-bold">{{ randomName }}</span>
                     </div>
-                    <span class="text-xs font-bold text-gray-500">26/2/2023 09:25</span>
+                    <span class="text-xs font-bold text-gray-500">{{ randomTime + ' ' + formattedDate }}</span>
                   </div>
                   <div class="flex justify-end">
                     <div class="flex flex-1 flex-col gap-2 rounded-xl bg-[#f3f4f6] p-2">
@@ -415,10 +572,13 @@ const listColor = [
                 <div class="flex-col">
                   <div class="flex justify-between">
                     <div class="flex gap-2">
-                      <img class="h-5 w-5 bg-red-100" src="" alt="" />
-                      <span class="font-bold">Ha Quoc</span>
+                      <span class="flex h-5 w-5 items-center justify-center bg-red-100 font-bold">
+                        {{ randomName2.charAt(0) }}
+                      </span>
+
+                      <span class="font-bold">{{ randomName2 }}</span>
                     </div>
-                    <span class="text-xs font-bold text-gray-500">26/2/2023 09:25</span>
+                    <span class="text-xs font-bold text-gray-500">{{ randomTime2 + ' ' + formattedDate }}</span>
                   </div>
                   <div class="flex justify-end">
                     <div class="flex flex-1 flex-col gap-2 rounded-xl bg-[#f3f4f6] p-2">

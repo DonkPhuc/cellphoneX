@@ -4,7 +4,7 @@ import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Navigation, Slide } from 'vue3-carousel';
 
 import { Products } from '~/home/dtos';
-
+const router = useRouter();
 interface Props {
   type: string;
   title?: string;
@@ -29,30 +29,29 @@ const formatVND = computed(() => (slide: Products) => {
   return result;
 });
 
-const eventButton = (title: string) => {
-  console.log(title);
+const eventButton = async (title: string) => {
+  await router.push(`products/brand/${title.toLowerCase()}`);
 };
 
 function goToProduct(index: number, id: string) {
   emit('goDetail', index, id);
 }
-
+const settings = {
+  itemsToShow: 1,
+  snapAlign: 'end',
+};
 const breakpoints = {
-  1: {
-    itemsToShow: 1,
-    align: 'start',
-  },
   486: {
-    itemsToShow: 2,
-    align: 'start',
+    itemsToShow: 1,
+    align: 'end',
   },
   768: {
     itemsToShow: 3,
-    align: 'start',
+    align: 'end',
   },
-  1024: {
-    itemsToShow: 5,
-    align: 'start',
+  1624: {
+    itemsToShow: 4,
+    align: 'end',
   },
 };
 
@@ -84,44 +83,76 @@ const resize = computed(() => {
             class="!duration-200 hover:!bg-main hover:!text-white"
             input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600"
             :label="'Xem tất cả'"
+            @click="eventButton('all')"
           />
         </div>
       </div>
 
-      <Carousel v-if="data" :breakpoints="breakpoints">
-        <Slide v-for="(slide, index) in data" :key="index" @click="goToProduct(index, slide._id)">
-          <div class="p-1">
-            <div class="flex w-full flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-xl">
-              <img class="mx-auto h-[180px] w-[180px]" :src="slide.imageLink" alt="" />
-              <p class="hidden h-14 text-justify text-sm font-bold md:flex">{{ slide.name }}</p>
+      <Carousel v-if="data" :breakpoints="breakpoints" :settings="settings">
+        <Slide v-for="(slide, index) in data" :key="index">
+          <div class="rounded-xl border border-slate-200 p-2 shadow-xl">
+            <div class="flex w-full flex-col gap-4">
+              <!-- <span class="vc">{{ slide.discount + '%' }}</span>
 
-              <div class="hidden gap-2 md:flex">
-                <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
-                <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
-                  {{ formatVND(slide).priceRRP }}
-                </p>
+              <img
+                class="mx-auto h-[180px] w-[180px] cursor-pointer"
+                :src="slide.imageLink"
+                alt=""
+                @click="goToProduct(index, slide._id)"
+              /> -->
+              <div class="w-full bg-red-100">
+                {{ slide.discount + '%' }}
               </div>
-
-              <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
-                {{ slide.description }}
-              </div>
-
-              <div class="hidden w-full justify-start md:flex">
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              </div>
-
-              <div class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex">
-                <p class="text-xs text-gray-500">Yêu Thích</p>
-                <VIcon
-                  :icon="slide.favorite ? 'fa-heart' : 'fa-heart-o'"
-                  :icon-class="slide.favorite ? '!text-red-500' : '!text-black-500'"
+              <div class="w-full bg-red-100">
+                <img
+                  class="mx-auto h-[180px] w-[180px] cursor-pointer"
+                  :src="slide.imageLink"
+                  alt=""
+                  @click="goToProduct(index, slide._id)"
                 />
               </div>
+              <div class="w-full bg-red-100">
+                1
+                <!-- <p class="h-14 max-w-[180px] text-justify text-sm font-bold md:flex">{{ slide.name }}</p> -->
+              </div>
+              <!-- <div class="w-full bg-red-100">
+                <div class="flex gap-2">
+                  <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
+                  <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
+                    {{ formatVND(slide).priceRRP }}
+                  </p>
+                </div>
+              </div> -->1
+              <div class="w-full bg-red-100">1</div>
             </div>
+            <!-- <p class="h-14 text-justify text-sm font-bold md:flex">{{ slide.name }}</p> -->
+
+            <!-- <div class="hidden gap-2 md:flex">
+                  <p class="font-bold text-red-500">{{ formatVND(slide).price }}</p>
+                  <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
+                    {{ formatVND(slide).priceRRP }}
+                  </p>
+                </div>
+  
+                <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
+                  {{ slide.description }}
+                </div>
+  
+                <div class="hidden w-full justify-start md:flex">
+                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                  <VIcon icon-class="text-yellow-600" icon="fa-star" />
+                </div>
+  
+                <div class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex">
+                  <p class="text-xs text-gray-500">Yêu Thích</p>
+                  <VIcon
+                    :icon="slide.favorite ? 'fa-heart' : 'fa-heart-o'"
+                    :icon-class="slide.favorite ? '!text-red-500' : '!text-black-500'"
+                  />
+                </div> -->
           </div>
         </Slide>
         <template #addons>
@@ -179,3 +210,37 @@ const resize = computed(() => {
     </div>
   </template>
 </template>
+
+<style scoped>
+.vc {
+  right: -10px;
+  background: #ff0045;
+  border-radius: 30px 0 0 30px;
+  color: #fff;
+  width: 80px;
+  text-align: center;
+  position: relative;
+  border-right: 1px dashed #fff;
+}
+.vc:after {
+  width: 0;
+  height: 0;
+  border: 12.5px solid transparent;
+  position: absolute;
+  content: '';
+  border-top-color: #ff0045;
+  right: -26px;
+  top: 0px;
+  border-left-color: #ff0045;
+}
+.vc:before {
+  width: 0;
+  height: 0;
+  border: 13px solid transparent;
+  position: absolute;
+  content: '';
+  border-bottom-color: #ff0045;
+  right: -25px;
+  top: 2px;
+}
+</style>
