@@ -125,8 +125,11 @@ const menuList = [
 ] as Products[];
 
 async function eventMenu(title: string) {
-  let id = "all";
-  await router.push(`products/brand/${id}`);
+  if (title === 'Điện Thoại') {
+    await router.push(`products/brand/all`);
+  } else {
+    await router.push(`products/brand/all?selloff=true`);
+  }
 }
 
 async function goDetail(index: number, id: string) {
@@ -145,9 +148,7 @@ async function goDetail(index: number, id: string) {
     <div class="flex flex-1">
       <div class="flex flex-col gap-4 pt-4">
         <div class="flex h-[376px] w-full gap-4">
-          <div
-            class="hidden flex-[0.35] flex-col rounded-xl border shadow-xl lg:flex"
-          >
+          <div class="hidden flex-[0.35] flex-col rounded-xl border shadow-xl lg:flex">
             <VMenuList :data="menuList" @event-menu="eventMenu" />
           </div>
 
@@ -157,15 +158,8 @@ async function goDetail(index: number, id: string) {
 
           <div class="hidden flex-[0.5] lg:flex">
             <div class="flex h-full flex-1 flex-col gap-4">
-              <div
-                v-for="item in listFeature"
-                :key="item.imageLink"
-                class="flex-1 rounded-xl border shadow-xl"
-              >
-                <img
-                  class="h-[114px] w-full rounded-xl"
-                  :src="item.imageLink"
-                />
+              <div v-for="item in listFeature" :key="item.imageLink" class="flex-1 rounded-xl border shadow-xl">
+                <img class="h-[114px] w-full rounded-xl" :src="item.imageLink" />
               </div>
             </div>
           </div>
@@ -174,29 +168,17 @@ async function goDetail(index: number, id: string) {
         <div class="flex h-[75px]">
           <img
             src="https://cdn2.cellphones.com.vn/1200x75,webp,q100/https://dashboard.cellphones.com.vn/storage/banner-special-desktop-pkchaohe.png"
-            alt=""
-            class="w-full rounded-xl"
-          />
+            alt="" class="w-full rounded-xl" />
         </div>
 
         <div v-if="itemList.length > 0" class="flex flex-col gap-4">
           <div class="flex w-full">
-            <VProductsList
-              type="product"
-              :button-list="buttonList"
-              :data="phoneList"
-              title="IPHONE NỔI BẬT NHẤT"
-              @go-detail="goDetail"
-            />
+            <VProductsList type="product" :button-list="buttonList" :data="phoneList" title="IPHONE NỔI BẬT NHẤT"
+              @go-detail="goDetail" />
           </div>
           <div class="flex w-full">
-            <VProductsList
-              type="product"
-              :button-list="buttonList"
-              :data="laptopList"
-              title="SAMSUNG NỔI BẬT NHẤT"
-              @go-detail="goDetail"
-            />
+            <VProductsList type="product" :button-list="buttonList" :data="laptopList" title="SAMSUNG NỔI BẬT NHẤT"
+              @go-detail="goDetail" />
           </div>
         </div>
         <div v-else class="flex w-full items-center justify-center pt-8">

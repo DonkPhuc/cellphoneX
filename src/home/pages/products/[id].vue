@@ -626,7 +626,8 @@ const randomName2: string = getRandomName();
     </main>
     <div v-else class="flex flex-col items-center w-full h-[500px] justify-center   ">
       <VSpinner size="large" />
-      <p>Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về <a class="text-main" href="/">trang chủ</a></p>
+      <p class="text-center">Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về <a class="text-main" href="/">trang
+          chủ</a></p>
     </div>
     <div class="hidden flex-[0.3] lg:flex"></div>
   </div>

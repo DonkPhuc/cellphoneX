@@ -186,7 +186,8 @@ async function go(getId: string) {
     <template v-else>
       <div class="flex flex-col items-center w-full h-[500px] justify-center   ">
         <VSpinner size="large" />
-        <p>Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về <a class="text-main" href="/">trang chủ</a></p>
+        <p class="text-center">Nếu thời gian tải dữ liệu quá lâu vui lòng quay trở về <a class="text-main" href="/">trang
+            chủ</a></p>
       </div>
     </template>
 
