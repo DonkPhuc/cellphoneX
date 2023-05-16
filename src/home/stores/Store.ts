@@ -1,11 +1,11 @@
-import { acceptHMRUpdate, defineStore } from 'pinia';
+import { acceptHMRUpdate, defineStore } from "pinia";
 
-import Services from '~/home/services/Service';
+import Services from "~/home/services/Service";
 
-import { Products } from '../dtos';
+import { Products } from "../dtos";
 
 export const useStore = defineStore(
-  'store',
+  "store",
   () => {
     const data = ref<Products[]>([]);
 
@@ -22,6 +22,12 @@ export const useStore = defineStore(
     async function postRemoveCart(username: string, id: string) {
       return await Services.postRemoveCart(username, id);
     }
+    async function postAddRate(
+      data: { username: string; description: string; rate: number },
+      id: string
+    ) {
+      return await Services.postAddRate(data, id);
+    }
 
     return {
       data,
@@ -29,10 +35,12 @@ export const useStore = defineStore(
       getProduct,
       postRemoveCart,
       postAddToCart,
+      postAddRate,
     };
   },
   {
     persist: true,
   }
 );
-if (import.meta.hot) import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot));
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot));
