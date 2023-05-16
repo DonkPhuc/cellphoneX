@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import 'vue3-toastify/dist/index.css';
+import "vue3-toastify/dist/index.css";
 
-import { storeToRefs } from 'pinia';
-import { toast } from 'vue3-toastify';
+import { storeToRefs } from "pinia";
+import { toast } from "vue3-toastify";
 
-import { Customers } from '~/user/dtos/Customers.dto';
-import { useUserStore } from '~/user/stores/user';
+import { Customers } from "~/user/dtos/Customers.dto";
+import { useUserStore } from "~/user/stores/user";
 const userStore = useUserStore();
 const { isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
 const isLogin = ref(true);
-const userName = ref('');
-const userNameLogin = ref('');
-const userFullName = ref('');
-const userEmail = ref('');
-const passwordLogin = ref('');
-const password = ref('');
-const password2 = ref('');
+const userName = ref("");
+const userNameLogin = ref("");
+const userFullName = ref("");
+const userEmail = ref("");
+const passwordLogin = ref("");
+const password = ref("");
+const password2 = ref("");
 const customerList = ref<Customers[]>([]);
 
 watchEffect(async () => {
@@ -60,68 +60,80 @@ function updateFullName(value: string) {
 }
 async function login() {
   const phoneNumberRegex = /^0\d{9}$/;
-  let errorSignUp = '';
+  let errorSignUp = "";
 
-  if (!phoneNumberRegex.test(userNameLogin.value)) errorSignUp = 'SĐT không đúng định dạng';
-  if (!passwordLogin.value) errorSignUp = 'Mật khẩu không được để trống';
-  if (!userNameLogin.value) errorSignUp = 'SĐT không được để trống';
+  if (!phoneNumberRegex.test(userNameLogin.value))
+    errorSignUp = "SĐT không đúng định dạng";
+  if (!passwordLogin.value) errorSignUp = "Mật khẩu không được để trống";
+  if (!userNameLogin.value) errorSignUp = "SĐT không được để trống";
 
-  if (errorSignUp === '') {
-    const findUser = customerList.value.find((obj) => obj.username === userNameLogin.value);
+  if (errorSignUp === "") {
+    const findUser = customerList.value.find(
+      (obj) => obj.username === userNameLogin.value
+    );
     if (findUser !== undefined) {
       if (findUser.password === passwordLogin.value) {
         isLoginSuccess.value = findUser.username;
-        errorSignUp = 'Đăng nhập thành công';
+        errorSignUp = "Đăng nhập thành công";
         customerList.value = (await userStore.getAllCustomers()) as Customers[];
       } else {
-        errorSignUp = 'Mật khẩu không đúng';
+        errorSignUp = "Mật khẩu không đúng";
       }
     } else {
-      errorSignUp = 'Tài khoản/Mật khẩu không đúng';
+      errorSignUp = "Tài khoản/Mật khẩu không đúng";
     }
   }
 
   notifySignUp(errorSignUp);
 }
 async function signUp() {
-  let errorSignUp = 'Đăng ký thành công';
-  let result = '';
-  if (!password.value) errorSignUp = 'Mật khẩu không được để trống';
-  if (!userFullName.value) errorSignUp = 'Họ tên không được để trống';
-  if (!userEmail.value) errorSignUp = 'Email không được để trống';
-  if (!userName.value) errorSignUp = 'SĐT không được để trống';
+  let errorSignUp = "Đăng ký thành công";
+  let result = "";
+  if (!password.value) errorSignUp = "Mật khẩu không được để trống";
+  if (!userFullName.value) errorSignUp = "Họ tên không được để trống";
+  if (!userEmail.value) errorSignUp = "Email không được để trống";
+  if (!userName.value) errorSignUp = "SĐT không được để trống";
 
-  if (errorSignUp === 'Đăng ký thành công') {
+  if (errorSignUp === "Đăng ký thành công") {
     const nameRegex = /^[a-zA-Z]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneNumberRegex = /^0\d{9}$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
-    if (password.value !== password2.value) errorSignUp = 'Mật khẩu xác nhận không chính xác';
-    if (!passwordRegex.test(password.value)) errorSignUp = 'Mật khẩu không đúng định dạng';
-    if (!nameRegex.test(userFullName.value)) errorSignUp = 'Họ tên không được chứa số';
-    if (!emailRegex.test(userEmail.value)) errorSignUp = 'Email không đúng định dạng';
-    if (!phoneNumberRegex.test(userName.value)) errorSignUp = 'SĐT không đúng định dạng';
+    if (password.value !== password2.value)
+      errorSignUp = "Mật khẩu xác nhận không chính xác";
+    if (!passwordRegex.test(password.value))
+      errorSignUp = "Mật khẩu không đúng định dạng";
+    if (!nameRegex.test(userFullName.value))
+      errorSignUp = "Họ tên không được chứa số";
+    if (!emailRegex.test(userEmail.value))
+      errorSignUp = "Email không đúng định dạng";
+    if (!phoneNumberRegex.test(userName.value))
+      errorSignUp = "SĐT không đúng định dạng";
   }
 
-  if (errorSignUp === 'Đăng ký thành công') {
-    result = (await userStore.postSignUp(userName.value, password.value)) as string;
+  if (errorSignUp === "Đăng ký thành công") {
+    result = (await userStore.postSignUp(
+      userName.value,
+      password.value
+    )) as string;
   }
-  if (result !== 'exists account') notifySignUp(errorSignUp);
-  else if (result === 'exists account') notifySignUp('Tài khoản đã tồn tại');
+  if (result !== "exists account") notifySignUp(errorSignUp);
+  else if (result === "exists account") notifySignUp("Tài khoản đã tồn tại");
 
   return errorSignUp;
 }
 
 const notifySignUp = (error?: string) => {
-  if (error !== '') {
+  if (error !== "") {
     toast(`${error}`, {});
-    if (error === 'Đăng ký thành công') {
-      userName.value = '';
-      userEmail.value = '';
-      userFullName.value = '';
-      password.value = '';
-      password2.value = '';
+    if (error === "Đăng ký thành công") {
+      userName.value = "";
+      userEmail.value = "";
+      userFullName.value = "";
+      password.value = "";
+      password2.value = "";
     }
   }
 };
@@ -134,7 +146,10 @@ const notifySignUp = (error?: string) => {
     <div v-if="isLogin" class="flex flex-1 flex-col px-2 py-4">
       <div class="flex flex-1 flex-col gap-4">
         <div class="flex justify-center">
-          <img class="w-[300px]" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
+          <img
+            class="w-[300px]"
+            src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png"
+          />
         </div>
         <div class="flex justify-center">
           <p class="text-lg font-bold">Đăng nhập tài khoản Smember</p>
@@ -153,8 +168,16 @@ const notifySignUp = (error?: string) => {
           :model="passwordLogin"
           @update:model="updatePasswordLogin"
         />
-        <p class="flex cursor-pointer justify-end text-xs font-thin hover:text-main">Quên mật khẩu?</p>
-        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Nhập" @click="login" />
+        <p
+          class="flex cursor-pointer justify-end text-xs font-thin hover:text-main"
+        >
+          Quên mật khẩu?
+        </p>
+        <VButton
+          input-class="!h-10 !bg-main border-none rounded-2xl"
+          label="Đăng Nhập"
+          @click="login"
+        />
         <div class="flex py-4">
           <div class="mt-[9px] !h-[1px] flex-1 border-2"></div>
           <p class="mx-1">Hoặc</p>
@@ -162,7 +185,12 @@ const notifySignUp = (error?: string) => {
         </div>
         <div class="flex justify-center text-slate-500">
           Bạn chưa có tài khoản?
-          <span class="mx-2 cursor-pointer text-main hover:underline" @click="switchMode"> Đăng ký ngay</span>
+          <span
+            class="mx-2 cursor-pointer text-main hover:underline"
+            @click="switchMode"
+          >
+            Đăng ký ngay</span
+          >
         </div>
       </div>
     </div>
@@ -173,7 +201,10 @@ const notifySignUp = (error?: string) => {
           ><VIcon icon="fa-arrow-left" /> Đăng nhập tài khoản</span
         >
         <div class="flex justify-center">
-          <img class="w-[300px]" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
+          <img
+            class="w-[300px]"
+            src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png"
+          />
         </div>
         <div class="flex justify-center">
           <p class="text-lg font-bold">Đăng ký tài khoản Smember</p>
@@ -208,7 +239,8 @@ const notifySignUp = (error?: string) => {
           @update:model="updatePassword"
         />
         <p class="-mt-[14px] flex items-start text-xs font-semibold">
-          Mật khẩu phải nhiều hơn 8 ký tự, ít nhất 1 chữ thường 1 chữ in hoa, 1 chữ số, 1 ký tự đặc biệt
+          Mật khẩu phải nhiều hơn 8 ký tự, ít nhất 1 chữ thường 1 chữ in hoa, 1
+          chữ số, 1 ký tự đặc biệt
         </p>
         <VInput
           :max-length="50"
@@ -218,13 +250,25 @@ const notifySignUp = (error?: string) => {
           :model="password2"
           @update:model="updatePassword2"
         />
-        <VButton input-class="!h-10 !bg-main border-none rounded-2xl" label="Đăng Ký" @click="signUp" />
+        <VButton
+          input-class="!h-10 !bg-main border-none rounded-2xl"
+          label="Đăng Ký"
+          @click="signUp"
+        />
         <div class="flex gap-2 text-xs">
-          <input :checked="true" class="text-main active:bg-main" type="checkbox" />
+          <input
+            :checked="true"
+            class="text-main active:bg-main"
+            type="checkbox"
+          />
           <p>Tôi đồng ý với các điều khoản bảo mật cá nhân</p>
         </div>
         <div class="flex gap-2 text-xs">
-          <input :checked="true" class="text-main active:bg-main" type="checkbox" />
+          <input
+            :checked="true"
+            class="text-main active:bg-main"
+            type="checkbox"
+          />
           <p>Đăng ký nhận bản tin khuyến mãi qua email</p>
         </div>
         <div class="flex py-4">
@@ -234,7 +278,12 @@ const notifySignUp = (error?: string) => {
         </div>
         <div class="flex justify-center text-slate-500">
           Bạn chưa có tài khoản?
-          <span class="mx-2 cursor-pointer text-main hover:underline" @click="switchMode"> Đăng nhập ngay</span>
+          <span
+            class="mx-2 cursor-pointer text-main hover:underline"
+            @click="switchMode"
+          >
+            Đăng nhập ngay</span
+          >
         </div>
       </div>
     </div>
