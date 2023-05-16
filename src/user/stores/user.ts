@@ -1,14 +1,14 @@
-import { plainToInstance } from 'class-transformer';
-import { acceptHMRUpdate, defineStore } from 'pinia';
+import { plainToInstance } from "class-transformer";
+import { acceptHMRUpdate, defineStore } from "pinia";
 
-import { Products } from '~/home/dtos';
+import { Products } from "~/home/dtos";
 
-import customerServices from '../services/user';
+import customerServices from "../services/user";
 
 export const useUserStore = defineStore(
-  'user',
+  "user",
   () => {
-    const isLoginSuccess = ref('');
+    const isLoginSuccess = ref("");
 
     async function getCustomer(params: string) {
       return await customerServices.getCustomer(params);
@@ -31,4 +31,5 @@ export const useUserStore = defineStore(
     persist: true,
   }
 );
-if (import.meta.hot) import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));

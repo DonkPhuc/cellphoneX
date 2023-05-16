@@ -1,9 +1,11 @@
-import { Expose } from 'class-transformer';
+import { Expose } from "class-transformer";
 export class Customers {
   cart = [];
   favorite = [];
-  password = '';
-  username = '';
+  password = "";
+  username = "";
   __v = 0;
-  _id = '';
+  _id = "";
+  role = "";
+  timestamp = Date;
 }

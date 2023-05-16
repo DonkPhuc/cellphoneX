@@ -14,6 +14,7 @@ const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 const selected = ref(0);
 const open = ref(false);
+const data = ref<Customers>();
 const editName = ref(false);
 const editPhoneNo = ref(false);
 
@@ -30,13 +31,18 @@ const listMode = [
     name: "Tài khoản của bạn",
     icon: "fa-user ",
   },
-  {
-    name: "Thoát tài khoản",
-    icon: "fa-sign-out",
-  },
 ];
 
-onMounted(() => {
+onMounted(async () => {
+  const result = (await userStore.getCustomer(
+    isLoginSuccess.value
+  )) as Customers[];
+
+  data.value = result[0];
+  console.log(
+    "🚀 ~ file: account.vue:38 ~ onMounted ~  data.value:",
+    data.value.role
+  );
   if (!isLoginSuccess.value) {
     router.push("/");
   }
@@ -76,6 +82,25 @@ function updateUser() {
             <span class="hidden truncate sm:flex">
               {{ item.name }}
             </span>
+          </div>
+        </div>
+        <div
+          v-if="data?.role === 'admin'"
+          class="cursor-pointer rounded-xl border border-[#f8fbfc] p-2"
+          @click="router.push('/dashboard')"
+        >
+          <div class="flex items-center justify-center gap-2 md:justify-start">
+            <VIcon size="text-xl" icon="fa-dashboard " />
+            <span class="hidden truncate sm:flex">Quản lý </span>
+          </div>
+        </div>
+        <div
+          class="cursor-pointer rounded-xl border border-[#f8fbfc] p-2"
+          @click="open = true"
+        >
+          <div class="flex items-center justify-center gap-2 md:justify-start">
+            <VIcon size="text-xl" icon="fa-sign-out" />
+            <span class="hidden truncate sm:flex">Thoát tài khoản </span>
           </div>
         </div>
       </div>
@@ -269,7 +294,7 @@ function updateUser() {
             <input
               type="text"
               :disabled="true"
-              placeholder="Họ và tên : xxx"
+              :placeholder="`Họ và tên : ${data?.username} `"
               class="w-full rounded-lg border-gray-100 bg-gray-200/30"
             />
             <div class="relative right-8 my-auto cursor-pointer">
@@ -280,7 +305,7 @@ function updateUser() {
             <input
               type="text"
               :disabled="true"
-              placeholder="Số điện thoại : xxx"
+              :placeholder="`Số điện thoại : ${data?.username}`"
               class="w-full rounded-lg border-gray-100 bg-gray-200/30"
             />
             <div class="relative right-8 my-auto cursor-pointer">
@@ -291,7 +316,7 @@ function updateUser() {
             <input
               type="text"
               :disabled="true"
-              placeholder="Ngày tham gia : xxx"
+              :placeholder="`Ngày tham gia : ${data?.timestamp}`"
               class="w-[97.5%] rounded-lg border-gray-100 bg-gray-200/30"
             />
           </div>
