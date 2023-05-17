@@ -32,9 +32,7 @@
         </div>
       </div>
       <div class="flex h-full w-full flex-1 gap-6 bg-black pb-6">
-        <div
-          class="flex h-full flex-1 flex-col gap-6 rounded-md bg-bgBlack p-6"
-        >
+        <div class="flex h-full flex-1 flex-col gap-6 rounded-md bg-bgBlack p-6">
           <div class="flex flex-1 justify-between">
             <span class="font-bold text-white">Recent Salse</span>
           </div>
@@ -42,9 +40,7 @@
             <thead>
               <tr>
                 <th class="border border-black py-2 text-white">Date</th>
-                <th class="border border-black py-2 text-white">
-                  Invoice Customer
-                </th>
+                <th class="border border-black py-2 text-white">Invoice Customer</th>
                 <th class="border border-black py-2 text-white">Amount</th>
                 <th class="border border-black py-2 text-white">Status</th>
                 <th class="border border-black py-2 text-white">Action</th>
@@ -52,21 +48,11 @@
             </thead>
             <tbody>
               <tr>
-                <td class="truncate border border-black p-2 text-textBlack">
-                  Indiana
-                </td>
-                <td class="truncate border border-black p-2 text-textBlack">
-                  Indianapolis
-                </td>
-                <td class="truncate border border-black p-2 text-textBlack">
-                  Indianapolis
-                </td>
-                <td class="truncate border border-black p-2 text-textBlack">
-                  Indianapolis
-                </td>
-                <td class="truncate border border-black p-2 text-textBlack">
-                  Indianapolis
-                </td>
+                <td class="truncate border border-black p-2 text-textBlack">Indiana</td>
+                <td class="truncate border border-black p-2 text-textBlack">Indianapolis</td>
+                <td class="truncate border border-black p-2 text-textBlack">Indianapolis</td>
+                <td class="truncate border border-black p-2 text-textBlack">Indianapolis</td>
+                <td class="truncate border border-black p-2 text-textBlack">Indianapolis</td>
               </tr>
             </tbody>
           </table>

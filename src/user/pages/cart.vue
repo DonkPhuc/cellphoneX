@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { Products } from "~/home/dtos";
-import { useStore } from "~/home/stores/Store";
-import { Customers } from "~/user/dtos/Customers.dto";
+import { Products } from '~/home/dtos';
+import { useStore } from '~/home/stores/Store';
+import { Customers } from '~/user/dtos/Customers.dto';
 
-import { useUserStore } from "../stores/user";
+import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
 const store = useStore();
@@ -13,46 +13,52 @@ const { isLoginSuccess } = storeToRefs(userStore);
 
 const router = useRouter();
 const cart = ref<Products[]>([]);
+const loading = ref(false);
 
 watchEffect(() => {
-  if (isLoginSuccess.value === "") {
+  if (isLoginSuccess.value === '') {
     goHome();
   }
 });
 
 onMounted(async () => {
-  const result = (await userStore.getCustomer(
-    isLoginSuccess.value
-  )) as Customers[];
+  getData();
+  window.scrollTo(0, 0);
+});
+
+async function getData() {
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
   if (result[0]) {
     cart.value = result[0].cart;
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });
+    loading.value = false;
+  } else {
+    loading.value = true;
   }
-  window.scrollTo(0, 0);
-});
+}
 
 async function goHome() {
-  await router.push("/");
+  await router.push('/');
 }
 
 async function goPayment() {
-  await router.push("/payment");
+  await router.push('/payment');
 }
 
 const formatVND = computed(() => (slide: Products) => {
   let result = {
-    price: "",
-    priceRRP: "",
+    price: '',
+    priceRRP: '',
   };
-  result.price = new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
+  result.price = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
   }).format(slide.price * slide.quantity);
-  result.priceRRP = new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
+  result.priceRRP = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
   }).format(slide.priceRRP * slide.quantity);
 
   return result;
@@ -63,9 +69,9 @@ const totalCart = computed(() => {
   cart.value.forEach((e: Products) => {
     total += Number(e.price * e.quantity);
   });
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
   }).format(total);
 });
 
@@ -79,20 +85,19 @@ function minusQuality(index: number) {
 }
 async function remove(id: string) {
   await store.postRemoveCart(isLoginSuccess.value, id);
-  const result = (await userStore.getCustomer(
-    isLoginSuccess.value
-  )) as Customers[];
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
   if (result[0]) {
     cart.value = result[0].cart;
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });
+    getData();
   }
 }
 
 async function go(getId: string) {
   let result = cart.value.find(({ _id }) => _id === getId);
-  if (getId === "/") {
+  if (getId === '/') {
     await goHome();
   } else if (result) {
     await router.push(`products/${result._id}`);
@@ -104,19 +109,14 @@ async function go(getId: string) {
   <main class="flex">
     <div class="hidden flex-1 lg:flex"></div>
 
-    <template v-if="cart.length > 0">
-      <div v-if="cart[0] && !cart[0]._id" class="flex flex-1 flex-col py-4">
+    <template v-if="!loading">
+      <div v-if="cart[0] === undefined" class="flex flex-1 flex-col py-4">
         <div class="flex flex-1 flex-col gap-12">
           <div class="flex">
-            <span
-              class="flex cursor-pointer items-start font-bold text-main"
-              @click="go('/')"
-            >
+            <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')">
               <VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
             </span>
-            <span
-              class="flex flex-1 justify-center text-xl font-bold text-main"
-            >
+            <span class="flex flex-1 justify-center text-xl font-bold text-main">
               <p class="-ml-16">Giỏ hàng</p>
             </span>
           </div>
@@ -126,9 +126,7 @@ async function go(getId: string) {
           </div>
 
           <div class="flex justify-center">
-            <p class="text-xl">
-              Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại
-            </p>
+            <p class="text-xl">Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
           </div>
 
           <div class="flex justify-center">
@@ -144,32 +142,20 @@ async function go(getId: string) {
       <div v-else class="flex flex-1 flex-col py-4">
         <div class="flex flex-1 flex-col gap-12">
           <div class="flex">
-            <span
-              class="flex cursor-pointer items-start font-bold text-main"
-              @click="go('/')"
-            >
+            <span class="flex cursor-pointer items-start font-bold text-main" @click="go('/')">
               <VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
             </span>
-            <span
-              class="flex flex-1 justify-center text-xl font-bold text-main"
-            >
+            <span class="flex flex-1 justify-center text-xl font-bold text-main">
               <p class="-ml-16">Giỏ hàng</p>
             </span>
           </div>
 
-          <div
-            v-for="(item, index) in cart"
-            :key="index"
-            class="flex max-h-[400px] flex-col overflow-y-auto"
-          >
+          <div v-for="(item, index) in cart" :key="index" class="flex max-h-[400px] flex-col overflow-y-auto">
             <div class="flex gap-8 border-b-2 p-4">
               <img class="h-32 w-32" :src="item.imageLink" alt="" />
               <div class="flex flex-1 flex-col gap-2">
                 <div class="flex justify-between">
-                  <p
-                    class="cursor-pointer font-bold hover:underline"
-                    @click="go(item._id)"
-                  >
+                  <p class="cursor-pointer font-bold hover:underline" @click="go(item._id)">
                     {{ item.name }}
                   </p>
                   <div class="cursor-pointer" @click="remove(item._id)">
@@ -198,9 +184,7 @@ async function go(getId: string) {
             </div>
           </div>
 
-          <div
-            class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg"
-          >
+          <div class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
             <div class="flex flex-1 justify-between">
               <span class="font-bold">Tổng tiền tạm tính:</span>
               <span class="font-bold text-main">{{ totalCart }} </span>

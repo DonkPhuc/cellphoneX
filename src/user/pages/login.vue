@@ -7,7 +7,7 @@ import { toast } from 'vue3-toastify';
 import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
-const { isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess, userFullName: getUser } = storeToRefs(userStore);
 
 const router = useRouter();
 const isLogin = ref(true);
@@ -71,6 +71,7 @@ async function login() {
     if (findUser !== undefined) {
       if (findUser.password === passwordLogin.value) {
         isLoginSuccess.value = findUser.username;
+        getUser.value = findUser.userFullName;
         errorSignUp = 'Đăng nhập thành công';
         customerList.value = (await userStore.getAllCustomers()) as Customers[];
       } else {
@@ -105,7 +106,12 @@ async function signUp() {
   }
 
   if (errorSignUp === 'Đăng ký thành công') {
-    result = (await userStore.postSignUp(userName.value, password.value)) as string;
+    result = (await userStore.postSignUp(
+      userName.value,
+      password.value,
+      userFullName.value,
+      userEmail.value
+    )) as string;
     customerList.value = (await userStore.getAllCustomers()) as Customers[];
   }
   if (result !== 'exists account') notifySignUp(errorSignUp);

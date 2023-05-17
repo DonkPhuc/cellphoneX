@@ -11,8 +11,8 @@ class customerServices extends BaseService {
   async getAllCustomers() {
     return await this.performRequest(METHODS.GET, `customer`);
   }
-  async postSignUp(username: string, password: string) {
-    return await this.performRequest(METHODS.POST, 'customer/add', { username, password });
+  async postSignUp(username: string, password: string, userFullName: string, email: string) {
+    return await this.performRequest(METHODS.POST, 'customer/add', { username, password, userFullName, email });
   }
 }
 

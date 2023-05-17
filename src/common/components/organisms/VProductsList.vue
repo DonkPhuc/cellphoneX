@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import "vue3-carousel/dist/carousel.css";
+import 'vue3-carousel/dist/carousel.css';
 
-import { Carousel, Navigation, Slide } from "vue3-carousel";
+import { Carousel, Navigation, Slide } from 'vue3-carousel';
 
-import { Products } from "~/home/dtos";
+import { Products } from '~/home/dtos';
 const router = useRouter();
 interface Props {
   type: string;
@@ -16,20 +16,20 @@ interface Props {
 const props = defineProps<Props>();
 const { title, data, buttonList, type, dataCarousel } = toRefs(props);
 
-const emit = defineEmits(["goDetail"]);
+const emit = defineEmits(['goDetail']);
 
 const formatVND = computed(() => (slide: Products) => {
   let result = {
-    price: "",
-    priceRRP: "",
+    price: '',
+    priceRRP: '',
   };
-  result.price = new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
+  result.price = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
   }).format(slide.price);
-  result.priceRRP = new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
+  result.priceRRP = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
   }).format(slide.priceRRP);
 
   return result;
@@ -40,24 +40,24 @@ const eventButton = async (title: string) => {
 };
 
 function goToProduct(index: number, id: string) {
-  emit("goDetail", index, id);
+  emit('goDetail', index, id);
 }
 const settings = {
   itemsToShow: 1,
-  snapAlign: "start",
+  snapAlign: 'start',
 };
 const breakpoints = {
   486: {
     itemsToShow: 1,
-    align: "start",
+    align: 'start',
   },
   768: {
     itemsToShow: 3,
-    align: "start",
+    align: 'start',
   },
   1624: {
     itemsToShow: 5,
-    align: "start",
+    align: 'start',
   },
 };
 
@@ -76,7 +76,7 @@ const resize = computed(() => {
 });
 
 function addToFav(id: string) {
-  console.log(id)
+  console.log(id);
 }
 </script>
 
@@ -89,23 +89,31 @@ function addToFav(id: string) {
         </div>
         <div class="flex flex-1 justify-end gap-2">
           <VButtonList v-if="buttonList" :data="buttonList" @event-button="eventButton" />
-          <VButton class="!duration-200 hover:!bg-main hover:!text-white"
-            input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600" :label="'Xem tất cả'"
-            @click="eventButton('all')" />
+          <VButton
+            class="!duration-200 hover:!bg-main hover:!text-white"
+            input-class="rounded-xl !border-slate-300 !bg-gray-100 !text-slate-600"
+            :label="'Xem tất cả'"
+            @click="eventButton('all')"
+          />
         </div>
       </div>
 
       <Carousel v-if="data" :breakpoints="breakpoints" :settings="settings">
-        <Slide v-for="(slide, index) in data" :key="index">
-          <div class="rounded-xl border border-slate-200 p-2 shadow-xl">
+        <Slide v-for="(slide, index) in data" :key="index" class="px-2">
+          <div class="rounded-xl border border-slate-200 p-4 shadow-xl">
             <div class="flex w-full flex-col gap-4">
               <div class="flex w-full justify-end">
-                <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block">Giảm
-                  {{ slide.discount + "%" }}</span>
+                <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block"
+                  >Giảm {{ slide.discount + '%' }}</span
+                >
               </div>
-              <img class="mx-auto h-[180px] w-[180px] cursor-pointer" :src="slide.imageLink" alt=""
-                @click="goToProduct(index, slide._id)" />
-              <div @click="goToProduct(index, slide._id)" class="w-full">
+              <img
+                class="mx-auto h-[180px] w-[180px] cursor-pointer"
+                :src="slide.imageLink"
+                alt=""
+                @click="goToProduct(index, slide._id)"
+              />
+              <div class="w-full" @click="goToProduct(index, slide._id)">
                 <span class="h-14 max-w-[180px] text-justify text-sm font-bold md:flex">
                   {{ slide.name }}
                 </span>
@@ -133,8 +141,10 @@ function addToFav(id: string) {
                 <VIcon icon-class="text-yellow-600" icon="fa-star" />
               </div>
 
-              <div @click="addToFav(slide._id)"
-                class="hidden h-[20px] flex-1 items-center justify-end gap-2 md:flex cursor-pointer">
+              <div
+                class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex"
+                @click="addToFav(slide._id)"
+              >
                 <p class="text-xs text-gray-500">Yêu Thích</p>
                 <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
               </div>
@@ -159,8 +169,11 @@ function addToFav(id: string) {
 
     <Carousel v-if="dataCarousel" ref="carousel" v-model="currentSlide" :items-to-show="resize" :wrap-around="false">
       <Slide v-for="(slide, index) in dataCarousel" :key="index">
-        <div :class="index === currentSlide ? 'border-b-4 border-b-main' : ''"
-          class="h-[76px] w-full cursor-pointer rounded-b-xl pt-5 hover:bg-gray-100" @click="slideTo(index)">
+        <div
+          :class="index === currentSlide ? 'border-b-4 border-b-main' : ''"
+          class="h-[76px] w-full cursor-pointer rounded-b-xl pt-5 hover:bg-gray-100"
+          @click="slideTo(index)"
+        >
           <p class="text-center text-xs font-bold">{{ slide.title }}</p>
           <p class="text-center text-xs font-normal">{{ slide.description }}</p>
         </div>
@@ -181,8 +194,12 @@ function addToFav(id: string) {
       <Carousel ref="carousel" v-model="currentSlide" :items-to-show="5" :wrap-around="false">
         <Slide v-for="(slide, index) in dataDetail.imageDetail" :key="index">
           <div class="mx-auto h-16 w-16 cursor-pointer rounded-xl" @click="slideTo(index)">
-            <img class="m-auto h-3/4 w-3/4 rounded-md border" :src="slide" alt=""
-              :class="index === currentSlide ? 'border border-main' : ''" />
+            <img
+              class="m-auto h-3/4 w-3/4 rounded-md border"
+              :src="slide"
+              alt=""
+              :class="index === currentSlide ? 'border border-main' : ''"
+            />
           </div>
         </Slide>
       </Carousel>
@@ -207,7 +224,7 @@ function addToFav(id: string) {
   height: 0;
   border: 12.5px solid transparent;
   position: absolute;
-  content: "";
+  content: '';
   border-top-color: #ff0045;
   right: -26px;
   top: 0px;
@@ -219,7 +236,7 @@ function addToFav(id: string) {
   height: 0;
   border: 13px solid transparent;
   position: absolute;
-  content: "";
+  content: '';
   border-bottom-color: #ff0045;
   right: -25px;
   top: 2px;

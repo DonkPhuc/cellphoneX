@@ -9,7 +9,7 @@ import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
 const store = useStore();
-const { isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess, userFullName } = storeToRefs(userStore);
 
 const router = useRouter();
 const selected = ref(0);
@@ -17,6 +17,8 @@ const open = ref(false);
 const data = ref<Customers>();
 const editName = ref(false);
 const editPhoneNo = ref(false);
+const editedName = ref('');
+const editedPhoneNo = ref('');
 
 const listMode = [
   {
@@ -37,7 +39,6 @@ onMounted(async () => {
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
 
   data.value = result[0];
-  console.log('🚀 ~ file: account.vue:38 ~ onMounted ~  data.value:', data.value.role);
   if (!isLoginSuccess.value) {
     router.push('/');
   }
@@ -50,6 +51,7 @@ function selectedMode(value: number) {
 }
 function logout() {
   isLoginSuccess.value = '';
+  userFullName.value = '';
   router.push(`/`);
 }
 function updateUser() {
@@ -145,7 +147,7 @@ function updateUser() {
                       <div class="flex flex-1 flex-col items-center gap-2 text-center">
                         <span>Hạng thành viên</span>
                         <VIcon size="text-main text-[60px]" icon=" fa-certificate" />
-                        <span>Người dùng</span>
+                        <span>{{ data?.role }}</span>
                       </div>
                       <div class="flex flex-1 flex-col items-center gap-2 text-center">
                         <span>Điểm tích lũy</span>
@@ -232,23 +234,25 @@ function updateUser() {
           <span class="font-bold">{{ isLoginSuccess }}</span>
           <div class="flex w-full">
             <input
+              v-model="editedName"
               type="text"
-              :disabled="true"
-              :placeholder="`Họ và tên : ${data?.username} `"
+              :disabled="!editName"
+              :placeholder="`Họ và tên : ${data?.userFullName} `"
               class="w-full rounded-lg border-gray-100 bg-gray-200/30"
             />
-            <div class="relative right-8 my-auto cursor-pointer">
+            <div class="relative right-8 my-auto cursor-pointer" @click="editName = true">
               <VIcon icon="fa-edit" />
             </div>
           </div>
           <div class="flex w-full">
             <input
+              v-model="editedPhoneNo"
               type="text"
-              :disabled="true"
+              :disabled="!editPhoneNo"
               :placeholder="`Số điện thoại : ${data?.username}`"
               class="w-full rounded-lg border-gray-100 bg-gray-200/30"
             />
-            <div class="relative right-8 my-auto cursor-pointer">
+            <div class="relative right-8 my-auto cursor-pointer" @click="editPhoneNo = true">
               <VIcon icon="fa-edit" />
             </div>
           </div>
@@ -256,7 +260,7 @@ function updateUser() {
             <input
               type="text"
               :disabled="true"
-              :placeholder="`Ngày tham gia : ${data?.timestamp}`"
+              :placeholder="`Ngày tham gia : ${data?.create.substring(0, 10)}`"
               class="w-[97.5%] rounded-lg border-gray-100 bg-gray-200/30"
             />
           </div>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
+import { storeToRefs } from 'pinia';
 
-import { useStore } from "~/home/stores/Store";
-import { useUserStore } from "~/user/stores/user";
+import { useStore } from '~/home/stores/Store';
+import { useUserStore } from '~/user/stores/user';
 
-import { Products } from "../dtos";
+import { Products } from '../dtos';
 const userStore = useUserStore();
 const store = useStore();
 
@@ -26,101 +26,100 @@ async function getData() {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
   });
   itemList.value = result;
-  phoneList.value = itemList.value.filter((e) => e.type === "apple");
-  laptopList.value = itemList.value.filter((e) => e.type === "samsung");
+  phoneList.value = itemList.value.filter((e) => e.type === 'apple');
+  laptopList.value = itemList.value.filter((e) => e.type === 'samsung');
 }
 
 const listFeature = [
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/s20-fe-right-th555.jpg",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/s20-fe-right-th555.jpg',
   },
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-th5-newww1.jpg",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-th5-newww1.jpg',
   },
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-ideapad-3.jpg",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-ideapad-3.jpg',
   },
 ] as Products[];
 const listCarousel = [
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png",
-    title: "Mừng Khai Trương",
-    description: "giảm đến 70%",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png',
+    title: 'Mừng Khai Trương',
+    description: 'giảm đến 70%',
   },
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/apple%20watch%20sliding.png",
-    title: "IPhone 14 Pro",
-    description: "giá tốt bất ngờ",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/apple%20watch%20sliding.png',
+    title: 'IPhone 14 Pro',
+    description: 'giá tốt bất ngờ',
   },
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/seagames-tv-toshiba.png",
-    title: "Redmi Note 12",
-    description: "mở bán giá tốt",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/seagames-tv-toshiba.png',
+    title: 'Redmi Note 12',
+    description: 'mở bán giá tốt',
   },
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12-sliding-0805.jpg",
-    title: "Redmi Note 123",
-    description: "mở bán giá tốt",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12-sliding-0805.jpg',
+    title: 'Redmi Note 123',
+    description: 'mở bán giá tốt',
   },
   {
     imageLink:
-      "https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png",
-    title: "Redmi Note 124",
-    description: "mở bán giá tốt",
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png',
+    title: 'Redmi Note 124',
+    description: 'mở bán giá tốt',
   },
 ] as Products[];
 const buttonList = [
   {
-    title: "Apple",
+    title: 'Apple',
   },
   {
-    title: "Samsung",
+    title: 'Samsung',
   },
 ] as Products[];
 const menuList = [
   {
-    title: "Điện Thoại",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-3.svg",
+    title: 'Điện Thoại',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-3.svg',
   },
   {
-    title: "Laptop",
-    imageLink:
-      "https://cdn2.cellphones.com.vn/x/media/icons/menu/icon-cps-380.svg",
+    title: 'Laptop',
+    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/menu/icon-cps-380.svg',
   },
   {
-    title: "Máy Tính Bảng",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-4.svg",
+    title: 'Máy Tính Bảng',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-4.svg',
   },
   {
-    title: "Âm Thanh",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-220.svg",
+    title: 'Âm Thanh',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-220.svg',
   },
   {
-    title: "Đồng Hồ",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-845.svg",
+    title: 'Đồng Hồ',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-845.svg',
   },
   {
-    title: "Phụ Kiện",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-30.svg",
+    title: 'Phụ Kiện',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-30.svg',
   },
   {
-    title: "PC,Màn Hình",
-    imageLink: "https://cdn2.cellphones.com.vn/x/media/icons/menu/icon_cpu.svg",
+    title: 'PC,Màn Hình',
+    imageLink: 'https://cdn2.cellphones.com.vn/x/media/icons/menu/icon_cpu.svg',
   },
   {
-    title: "Tivi",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-1124.svg",
+    title: 'Tivi',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-1124.svg',
   },
   {
-    title: "Khuyến Mãi",
-    imageLink: "https://cellphones.com.vn/media/icons/menu/icon-cps-tech.svg",
+    title: 'Khuyến Mãi',
+    imageLink: 'https://cellphones.com.vn/media/icons/menu/icon-cps-tech.svg',
   },
 ] as Products[];
 
@@ -165,20 +164,32 @@ async function goDetail(index: number, id: string) {
           </div>
         </div>
 
-        <div class="flex h-[75px]">
+        <div class="flex h-[135px]">
           <img
-            src="https://cdn2.cellphones.com.vn/1200x75,webp,q100/https://dashboard.cellphones.com.vn/storage/banner-special-desktop-pkchaohe.png"
-            alt="" class="w-full rounded-xl" />
+            src="https://cdn2.cellphones.com.vn/595x,webp,q80/https://dashboard.cellphones.com.vn/storage/iphone%2012-cate-th5.png"
+            alt=""
+            class="w-full rounded-xl"
+          />
         </div>
 
         <div v-if="itemList.length > 0" class="flex flex-col gap-4">
           <div class="flex w-full">
-            <VProductsList type="product" :button-list="buttonList" :data="phoneList" title="IPHONE NỔI BẬT NHẤT"
-              @go-detail="goDetail" />
+            <VProductsList
+              type="product"
+              :button-list="buttonList"
+              :data="phoneList"
+              title="IPHONE NỔI BẬT NHẤT"
+              @go-detail="goDetail"
+            />
           </div>
           <div class="flex w-full">
-            <VProductsList type="product" :button-list="buttonList" :data="laptopList" title="SAMSUNG NỔI BẬT NHẤT"
-              @go-detail="goDetail" />
+            <VProductsList
+              type="product"
+              :button-list="buttonList"
+              :data="laptopList"
+              title="SAMSUNG NỔI BẬT NHẤT"
+              @go-detail="goDetail"
+            />
           </div>
         </div>
         <div v-else class="flex w-full items-center justify-center pt-8">
