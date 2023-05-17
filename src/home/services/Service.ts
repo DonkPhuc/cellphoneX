@@ -23,7 +23,7 @@ class Services extends BaseService {
     );
   }
   async postAddRate(
-    data: { username: string; description: string; rate?: number },
+    data: { username: string; description: string; value: number },
     id: string
   ) {
     return await this.performRequest(METHODS.POST, `rate/${id}`, data);

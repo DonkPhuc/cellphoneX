@@ -68,8 +68,6 @@ async function getData() {
       fiveStar.value++;
     }
   }
-
-  console.log(fiveStar.value);
 }
 
 const formatVND = computed(() => (slide: Products) => {
@@ -190,24 +188,24 @@ async function postRating() {
     (e: { username: string }) => e.username === isLoginSuccess.value
   );
   if (rs) {
-    console.log(rs);
     notifySignUp("Bạn đã đánh giá sản phẩm này rồi");
   } else {
-    if (ratingProduct.value > 0) {
+    if (ratingProduct.value > -1) {
       result = await store.postAddRate(
         {
           username: isLoginSuccess.value,
           description: descriptionRate.value,
-          rate: Number(ratingProduct.value + 1),
+          value: Number(ratingProduct.value + 1),
         },
         currentProduct.value._id
       );
+
+      getData();
     } else {
       notifySignUp("Vui lòng đánh giá sản phẩm");
     }
   }
 
-  getData();
   openRate.value = false;
   if (result) {
     notifySignUp("Cảm ơn bạn đã gửi đánh giá");
@@ -295,7 +293,7 @@ async function postRating() {
               "
               icon="fa-star"
             />
-            <span class="hidden truncate md:flex">Rất tệ </span>
+            <span class="hidden truncate md:flex">{{ item.title }} </span>
           </div>
         </div>
       </div>

@@ -71,7 +71,6 @@ const totalCart = computed(() => {
 
 function plusQuality(index: number) {
   cart.value[index].quantity++;
-  console.log(cart.value);
 }
 function minusQuality(index: number) {
   if (cart.value[index].quantity > 1) {
