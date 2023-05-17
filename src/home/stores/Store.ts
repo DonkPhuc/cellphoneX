@@ -22,7 +22,10 @@ export const useStore = defineStore(
     async function postRemoveCart(username: string, id: string) {
       return await Services.postRemoveCart(username, id);
     }
-    async function postAddRate(data: { username: string; description: string; value: number }, id: string) {
+    async function postAddRate(
+      data: { username: string; phoneNo: string; description: string; value: number },
+      id: string
+    ) {
       return await Services.postAddRate(data, id);
     }
     async function postDeleteProduct(id: string) {

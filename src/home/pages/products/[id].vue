@@ -43,7 +43,7 @@ async function getData() {
   currentPriceRRP.value = currentProduct.value.priceRRP;
 
   currentProduct.value.rate.forEach((element: { value: number }) => {
-    averageRate.value = Math.round((averageRate.value + element.value) / currentProduct.value.rate.length);
+    averageRate.value = (averageRate.value + element.value) / currentProduct.value.rate.length;
     console.log('🚀 ~ file: [id].vue:47 ~ currentProduct.value.rate.forEach ~ averageRate.value:', averageRate.value);
   });
 
@@ -65,10 +65,8 @@ async function getData() {
     }
   }
 
-  console.log(currentProduct.value.rate);
   console.log(isLoginSuccess.value);
-  let rs = currentProduct.value.rate.find((e: { username: string }) => e.username === isLoginSuccess.value);
-  console.log(rs);
+  let rs = currentProduct.value.rate.find((e: { phoneNo: string }) => e.phoneNo === isLoginSuccess.value);
 }
 
 const formatVND = computed(() => (slide: Products) => {
@@ -185,12 +183,14 @@ async function postRating() {
     if (ratingProduct.value > -1) {
       result = await store.postAddRate(
         {
+          phoneNo: isLoginSuccess.value,
           username: userFullName.value,
           description: descriptionRate.value,
           value: Number(ratingProduct.value + 1),
         },
         currentProduct.value._id
       );
+      console.log(result);
     } else {
       notifySignUp('Vui lòng đánh giá sản phẩm');
     }
