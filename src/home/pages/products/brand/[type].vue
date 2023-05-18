@@ -27,19 +27,28 @@ watchEffect(() => {
     if (route.params.type === 'all') {
       data.value = dataAll.value;
       filterRange.value = false;
-      // range.value[0] = 0;
-      // range.value[1] = 50000000;
     } else {
       data.value = dataAll.value.filter((e) => e.type === route.params.type);
       filterRange.value = false;
-      // range.value[0] = 0;
-      // range.value[1] = 50000000;
     }
   }
 });
 
 onMounted(() => {
   data.value = dataAll.value;
+  data.value.forEach((e) => {
+    e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    function countRate() {
+      let total = 0;
+      let length = 0;
+      length = e.rate.length;
+      e.rate.forEach((e: { value: number }) => {
+        total += e.value / length;
+      });
+      return total;
+    }
+    e.averageRate = countRate();
+  });
   if (route.query.selloff) {
     data.value.sort((a, b) => b.discount - a.discount);
     selectedSort.value = 'discount';
@@ -317,12 +326,12 @@ function addToFav() {
             {{ item.description }}
           </div>
 
-          <div class="w-full justify-start md:flex">
-            <VIcon icon-class="text-yellow-600" icon="fa-star" />
-            <VIcon icon-class="text-yellow-600" icon="fa-star" />
-            <VIcon icon-class="text-yellow-600" icon="fa-star" />
-            <VIcon icon-class="text-yellow-600" icon="fa-star" />
-            <VIcon icon-class="text-yellow-600" icon="fa-star" />
+          <div class="flex items-center">
+            <VIcon :icon-class="item.averageRate > 0 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
+            <VIcon :icon-class="item.averageRate > 1 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
+            <VIcon :icon-class="item.averageRate > 2 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
+            <VIcon :icon-class="item.averageRate > 3 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
+            <VIcon :icon-class="item.averageRate > 4 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
           </div>
 
           <div class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex" @click="addToFav">

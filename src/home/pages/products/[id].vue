@@ -457,7 +457,9 @@ async function postRating() {
               <div class="flex">
                 <div class="flex flex-1 items-center justify-center border md:flex-[0.7] lg:rounded-l-2xl">
                   <div class="flex flex-col items-center">
-                    <span class="flex justify-center text-2xl font-bold">{{ averageRate.toFixed(1) }}/5</span>
+                    <span class="flex justify-center text-2xl font-bold"
+                      >{{ averageRate < 5 ? averageRate.toFixed(1) : 5.0 }}/5</span
+                    >
                     <div class="flex items-center">
                       <VIcon :icon-class="averageRate > 0 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
                       <VIcon :icon-class="averageRate > 1 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />

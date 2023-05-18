@@ -42,24 +42,6 @@ const eventButton = async (title: string) => {
 function goToProduct(index: number, id: string) {
   emit('goDetail', index, id);
 }
-const settings = {
-  itemsToShow: 1,
-  snapAlign: 'start',
-};
-const breakpoints = {
-  486: {
-    itemsToShow: 1,
-    align: 'start',
-  },
-  768: {
-    itemsToShow: 3,
-    align: 'start',
-  },
-  1624: {
-    itemsToShow: 5,
-    align: 'start',
-  },
-};
 
 const currentSlide = ref(0);
 const slideTo = (index: number) => {
@@ -132,20 +114,20 @@ function addToFav(id: string) {
               </div>
             </div>
 
-            <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
+            <div class="flex w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs">
               {{ slide.description }}
             </div>
 
-            <div class="hidden w-full justify-start md:flex">
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              <VIcon icon-class="text-yellow-600" icon="fa-star" />
+            <div class="flex w-full justify-start">
+              <VIcon :icon-class="slide.averageRate > 0 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
+              <VIcon :icon-class="slide.averageRate > 1 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
+              <VIcon :icon-class="slide.averageRate > 2 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
+              <VIcon :icon-class="slide.averageRate > 3 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
+              <VIcon :icon-class="slide.averageRate > 4 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
             </div>
 
             <div
-              class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex"
+              class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2"
               @click="addToFav(slide._id)"
             >
               <p class="text-xs text-gray-500">Yêu Thích</p>

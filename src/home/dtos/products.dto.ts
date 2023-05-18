@@ -1,4 +1,3 @@
-import { Expose } from 'class-transformer';
 export class Products {
   _id = '';
   name = '';
@@ -15,4 +14,6 @@ export class Products {
   type = '';
   value = 0 || '';
   imageDetail = [];
+  rate = [];
+  averageRate = 0;
 }

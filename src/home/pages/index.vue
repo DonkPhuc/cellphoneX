@@ -24,6 +24,16 @@ async function getData() {
   const result = (await store.getData()) as Products[];
   result.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    function countRate() {
+      let total = 0;
+      let length = 0;
+      length = e.rate.length;
+      e.rate.forEach((e: { value: number }) => {
+        total += e.value / length;
+      });
+      return total;
+    }
+    e.averageRate = countRate();
   });
   itemList.value = result;
   phoneList.value = itemList.value.filter((e) => e.type === 'apple');
