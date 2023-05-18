@@ -1,7 +1,4 @@
-import { plainToInstance } from 'class-transformer';
 import { acceptHMRUpdate, defineStore } from 'pinia';
-
-import { Products } from '~/home/dtos';
 
 import customerServices from '../services/user';
 
@@ -20,6 +17,15 @@ export const useUserStore = defineStore(
     async function postSignUp(username: string, password: string, userFullName: string, email: string) {
       return await customerServices.postSignUp(username, password, userFullName, email);
     }
+    async function postUpdateUser(
+      userFullName?: string,
+      username?: string,
+      email?: string,
+      password?: string,
+      id?: string
+    ) {
+      return await customerServices.postUpdateUser(userFullName, username, email, password, id);
+    }
 
     return {
       isLoginSuccess,
@@ -27,6 +33,7 @@ export const useUserStore = defineStore(
       getCustomer,
       getAllCustomers,
       postSignUp,
+      postUpdateUser,
     };
   },
   {

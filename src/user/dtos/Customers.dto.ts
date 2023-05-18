@@ -1,4 +1,3 @@
-import { Expose } from 'class-transformer';
 export class Customers {
   cart = [];
   favorite = [];
@@ -9,4 +8,5 @@ export class Customers {
   role = '';
   create = '';
   userFullName = '';
+  email = '';
 }

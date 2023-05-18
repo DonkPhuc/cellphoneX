@@ -14,6 +14,14 @@ class customerServices extends BaseService {
   async postSignUp(username: string, password: string, userFullName: string, email: string) {
     return await this.performRequest(METHODS.POST, 'customer/add', { username, password, userFullName, email });
   }
+  async postUpdateUser(userFullName?: string, username?: string, email?: string, password?: string, id?: string) {
+    return await this.performRequest(METHODS.POST, `customer/update/${id}`, {
+      userFullName,
+      username,
+      email,
+      password,
+    });
+  }
 }
 
 export default new customerServices('v1/api');

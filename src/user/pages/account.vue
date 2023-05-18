@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import 'vue3-toastify/dist/index.css';
+
 import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
 
 import { Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
@@ -12,13 +15,19 @@ const store = useStore();
 const { isLoginSuccess, userFullName } = storeToRefs(userStore);
 
 const router = useRouter();
-const selected = ref(0);
-const open = ref(false);
+
 const data = ref<Customers>();
-const editName = ref(false);
+const editPassword = ref(false);
 const editPhoneNo = ref(false);
-const editedName = ref('');
+const editEmail = ref(false);
+const editName = ref(false);
+const showPass = ref(false);
+const open = ref(false);
+const editedPassword = ref('');
 const editedPhoneNo = ref('');
+const editedEmail = ref('');
+const editedName = ref('');
+const selected = ref(0);
 
 const listMode = [
   {
@@ -36,9 +45,7 @@ const listMode = [
 ];
 
 onMounted(async () => {
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
-
-  data.value = result[0];
+  initial();
   if (!isLoginSuccess.value) {
     router.push('/');
   }
@@ -49,13 +56,66 @@ function selectedMode(value: number) {
     open.value = true;
   }
 }
+const notifySignUp = (error?: string) => {
+  if (error !== '') {
+    toast(`${error}`, {});
+  }
+};
 function logout() {
   isLoginSuccess.value = '';
   userFullName.value = '';
   router.push(`/`);
 }
-function updateUser() {
-  console.log('update');
+async function updateUser() {
+  const nameRegex = /^[\p{L}\s'-]+$/u;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+=[\]{}|\\:;"'<>,.?/]{8,}$/;
+
+  let err = '';
+  let rs;
+
+  if (editPassword.value && !passwordRegex.test(editedPassword.value)) err = 'Mật khẩu ít nhất 8 kí tự';
+  if (editName.value && !nameRegex.test(editedName.value)) err = 'Vui lòng nhập tên hợp lệ';
+  if (editEmail.value && !emailRegex.test(editedEmail.value)) err = 'Vui lòng nhập email hợp lệ';
+
+  if (editedName.value === '' && data.value) editedName.value = data.value?.userFullName;
+  if (editedEmail.value === '' && data.value) editedEmail.value = data.value?.email;
+  if (editedPassword.value === '' && data.value) editedPassword.value = data.value?.password;
+
+  notifySignUp(err);
+
+  if (err === '') {
+    rs = await userStore.postUpdateUser(
+      editedName.value,
+      isLoginSuccess.value,
+      editedEmail.value,
+      editedPassword.value,
+      isLoginSuccess.value
+    );
+  }
+
+  if (rs === 'Updated successfully!') {
+    notifySignUp('Cập nhật tài khoản thành công!');
+    initial();
+  } else {
+    notifySignUp('Có lỗi xảy ra!');
+  }
+}
+
+async function initial() {
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
+  data.value = result[0];
+
+  editedPassword.value = '';
+  editedPhoneNo.value = '';
+  editedEmail.value = '';
+  editedName.value = '';
+
+  editPassword.value = false;
+  editPhoneNo.value = false;
+  editEmail.value = false;
+  editName.value = false;
+  showPass.value = false;
 }
 </script>
 
@@ -72,7 +132,7 @@ function updateUser() {
           :class="selected === index ? '!border-main bg-main/10 text-main' : ''"
           @click="selectedMode(index)"
         >
-          <div class="flex items-center justify-center gap-2 md:justify-start">
+          <div class="flex items-center justify-start gap-2">
             <VIcon size="text-xl" :icon="item.icon" />
             <span class="hidden truncate sm:flex">
               {{ item.name }}
@@ -84,13 +144,13 @@ function updateUser() {
           class="cursor-pointer rounded-xl border border-[#f8fbfc] p-2"
           @click="router.push('/dashboard')"
         >
-          <div class="flex items-center justify-center gap-2 md:justify-start">
+          <div class="flex items-center justify-start gap-2">
             <VIcon size="text-xl" icon="fa-dashboard " />
             <span class="hidden truncate sm:flex">Quản lý </span>
           </div>
         </div>
         <div class="cursor-pointer rounded-xl border border-[#f8fbfc] p-2" @click="open = true">
-          <div class="flex items-center justify-center gap-2 md:justify-start">
+          <div class="flex items-center justify-start gap-2">
             <VIcon size="text-xl" icon="fa-sign-out" />
             <span class="hidden truncate sm:flex">Thoát tài khoản </span>
           </div>
@@ -232,48 +292,78 @@ function updateUser() {
         <div class="flex w-full flex-col items-center gap-4 md:pl-4">
           <img class="h-20 w-20" src="https://cellphones.com.vn/smember/_nuxt/img/Shipper_CPS3.0251fdd.png" alt="" />
           <span class="font-bold">{{ isLoginSuccess }}</span>
+
           <div class="flex w-full">
             <input
               v-model="editedName"
               type="text"
               :disabled="!editName"
-              :placeholder="`Họ và tên : ${data?.userFullName} `"
+              :placeholder="`Họ và tên : ${data?.userFullName}`"
               class="w-full rounded-lg border-gray-100 bg-gray-200/30"
+              :class="editName ? 'bg-sky-100' : ''"
             />
             <div class="relative right-8 my-auto cursor-pointer" @click="editName = true">
               <VIcon icon="fa-edit" />
             </div>
           </div>
+
+          <div class="flex w-full">
+            <input
+              v-model="editedEmail"
+              type="text"
+              :disabled="!editEmail"
+              :placeholder="`Email : ${data?.email}`"
+              class="w-full rounded-lg border-gray-100 bg-gray-200/30"
+              :class="editEmail ? 'bg-sky-100' : ''"
+            />
+            <div class="relative right-8 my-auto cursor-pointer" @click="editEmail = true">
+              <VIcon icon="fa-edit" />
+            </div>
+          </div>
+
           <div class="flex w-full">
             <input
               v-model="editedPhoneNo"
               type="text"
               :disabled="!editPhoneNo"
               :placeholder="`Số điện thoại : ${data?.username}`"
-              class="w-full rounded-lg border-gray-100 bg-gray-200/30"
+              class="w-[95%] rounded-lg border-gray-100 bg-gray-200/30 lg:w-[98%]"
+              :class="editPhoneNo ? 'bg-sky-100' : ''"
             />
-            <div class="relative right-8 my-auto cursor-pointer" @click="editPhoneNo = true">
+            <div v-if="editPhoneNo" class="relative right-8 my-auto cursor-pointer" @click="editPhoneNo = true">
               <VIcon icon="fa-edit" />
             </div>
           </div>
+
           <div class="flex w-full">
             <input
               type="text"
               :disabled="true"
               :placeholder="`Ngày tham gia : ${data?.create.substring(0, 10)}`"
-              class="w-[97.5%] rounded-lg border-gray-100 bg-gray-200/30"
-            />
-          </div>
-          <div class="flex w-full" @click="updateUser">
-            <input
-              type="text"
-              :disabled="true"
-              placeholder="Đổi mật khẩu"
-              class="w-[97.5%] cursor-pointer rounded-lg border-gray-100 bg-gray-200/30"
+              class="w-[95%] rounded-lg border-gray-100 bg-gray-200/30 lg:w-[98%]"
             />
           </div>
 
-          <VButton label="Cập Nhật Thông Tin" input-class="rounded-3xl font-bold p-5" />
+          <div class="flex w-full" @click="editPassword = true">
+            <input
+              v-model="editedPassword"
+              :type="showPass ? 'text' : 'password'"
+              :disabled="!editPassword"
+              :class="editPassword ? 'bg-sky-100' : ''"
+              :placeholder="!editPassword ? 'Đổi mật khẩu' : 'Nhập mật khẩu'"
+              class="w-[95%] cursor-pointer rounded-lg border-gray-100 bg-gray-200/30 lg:w-[98%]"
+            />
+            <div v-if="editPassword" class="relative right-8 my-auto cursor-pointer" @click="showPass = !showPass">
+              <VIcon :icon="!showPass ? 'fa-eye' : 'fa-eye-slash'" />
+            </div>
+          </div>
+
+          <VButton
+            :disabled="!editEmail && !editName && !editPassword"
+            label="Cập Nhật Thông Tin"
+            input-class="rounded-3xl font-bold p-5"
+            @click="updateUser"
+          />
         </div>
       </template>
     </div>

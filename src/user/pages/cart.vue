@@ -126,7 +126,7 @@ async function go(getId: string) {
           </div>
 
           <div class="flex justify-center">
-            <p class="text-xl">Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
+            <p class="px-4 text-center text-xl">Không có sản phẩm nào trong giỏ hàng, vui lòng quay lại</p>
           </div>
 
           <div class="flex justify-center">
