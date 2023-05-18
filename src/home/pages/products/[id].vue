@@ -43,9 +43,9 @@ async function getData() {
   currentPriceRRP.value = currentProduct.value.priceRRP;
 
   currentProduct.value.rate.forEach((element: { value: number }) => {
-    averageRate.value = (averageRate.value + element.value) / currentProduct.value.rate.length;
-    console.log('🚀 ~ file: [id].vue:47 ~ currentProduct.value.rate.forEach ~ averageRate.value:', averageRate.value);
+    averageRate.value = averageRate.value + element.value;
   });
+  averageRate.value = averageRate.value / currentProduct.value.rate.length;
 
   for (let i = 0; i < currentProduct.value.rate.length; i++) {
     if (currentProduct.value.rate[i].value === 1) {
@@ -64,9 +64,6 @@ async function getData() {
       fiveStar.value++;
     }
   }
-
-  console.log(isLoginSuccess.value);
-  let rs = currentProduct.value.rate.find((e: { phoneNo: string }) => e.phoneNo === isLoginSuccess.value);
 }
 
 const formatVND = computed(() => (slide: Products) => {
@@ -176,7 +173,7 @@ function handleRate(index: number) {
 }
 async function postRating() {
   let result;
-  let rs = currentProduct.value.rate.find((e: { username: string }) => e.username === isLoginSuccess.value);
+  let rs = currentProduct.value.rate.find((e: { phoneNo: string }) => e.phoneNo === isLoginSuccess.value);
   if (rs) {
     notifySignUp('Bạn đã đánh giá sản phẩm này rồi');
   } else {
@@ -190,7 +187,6 @@ async function postRating() {
         },
         currentProduct.value._id
       );
-      console.log(result);
     } else {
       notifySignUp('Vui lòng đánh giá sản phẩm');
     }
