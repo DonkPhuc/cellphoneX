@@ -10,6 +10,7 @@ const router = useRouter();
 const route = useRoute();
 const open = ref(false);
 const currentPath = ref('');
+const searchKey = ref('');
 
 async function go(url?: string) {
   open.value = false;
@@ -20,6 +21,12 @@ async function go(url?: string) {
     router.go(0);
   }
   currentPath.value = route.path;
+}
+
+function search(event: any) {
+  if (event.key === 'Enter') {
+    router.push(`/products/brand/all?search=${searchKey.value}`);
+  }
 }
 </script>
 
@@ -63,7 +70,13 @@ async function go(url?: string) {
         </div>
 
         <div class="flex flex-[2] items-center justify-center">
-          <VInput input-class="text-gray-700 rounded-xl w-full" placeholder="Bạn cần tìm gì?" />
+          <input
+            v-model="searchKey"
+            type="text"
+            class="w-full rounded-xl border-0 text-gray-700 !ring-0"
+            placeholder="Bạn cần tìm gì?"
+            @keypress="search($event)"
+          />
         </div>
 
         <div class="flex flex-1 gap-2">

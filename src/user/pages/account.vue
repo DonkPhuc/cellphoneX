@@ -116,6 +116,8 @@ async function initial() {
   editEmail.value = false;
   editName.value = false;
   showPass.value = false;
+
+  userFullName.value = data.value.userFullName;
 }
 </script>
 

@@ -99,7 +99,7 @@ function addToFav(id: string) {
               @click="goToProduct(index, slide._id)"
             />
             <div class="w-full" @click="goToProduct(index, slide._id)">
-              <span class="h-14 max-w-[180px] text-justify text-sm font-bold md:flex">
+              <span class="h-14 max-w-[180px] cursor-pointer text-justify text-sm font-bold md:flex">
                 {{ slide.name }}
               </span>
             </div>

@@ -194,12 +194,50 @@ async function postRating() {
 
   openRate.value = false;
   if (result) {
-    getData();
     notifySignUp('Cảm ơn bạn đã gửi đánh giá');
+    getData();
   }
   ratingProduct.value = -1;
   descriptionRate.value = '';
 }
+
+const ratingProd = computed(() => {
+  let startIndex = {
+    one: '',
+    two: '',
+    three: '',
+    four: '',
+    five: '',
+  };
+
+  if (averageRate.value > 0) {
+    startIndex.one = 'text-yellow-600';
+  } else {
+    startIndex.one = 'text-black';
+  }
+  if (averageRate.value > 1) {
+    startIndex.two = 'text-yellow-600';
+  } else {
+    startIndex.two = 'text-black';
+  }
+  if (averageRate.value > 2) {
+    startIndex.three = 'text-yellow-600';
+  } else {
+    startIndex.three = 'text-black';
+  }
+  if (averageRate.value > 3) {
+    startIndex.four = 'text-yellow-600';
+  } else {
+    startIndex.four = 'text-black';
+  }
+  if (averageRate.value > 4) {
+    startIndex.five = 'text-yellow-600';
+  } else {
+    startIndex.five = 'text-black';
+  }
+
+  return startIndex;
+});
 </script>
 
 <template>
@@ -283,11 +321,11 @@ async function postRating() {
           <span class="text-lg font-bold text-black">{{ currentProduct.name }}</span>
           <div class="hidden pl-8 lg:flex">
             <div class="hidden items-center justify-end lg:flex">
-              <VIcon :icon-class="averageRate > 0 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
-              <VIcon :icon-class="averageRate > 1 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
-              <VIcon :icon-class="averageRate > 2 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
-              <VIcon :icon-class="averageRate > 3 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
-              <VIcon :icon-class="averageRate > 4 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
+              <VIcon :icon-class="ratingProd.one" icon="fa-star" />
+              <VIcon :icon-class="ratingProd.two" icon="fa-star" />
+              <VIcon :icon-class="ratingProd.three" icon="fa-star" />
+              <VIcon :icon-class="ratingProd.four" icon="fa-star" />
+              <VIcon :icon-class="ratingProd.five" icon="fa-star" />
             </div>
             <span class="hidden lg:flex">{{ currentProduct.rate.length + ' ' }} đánh giá</span>
           </div>

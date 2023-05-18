@@ -20,6 +20,7 @@ const route = useRoute();
 
 const range = ref([0, 50000000]);
 const filterRange = ref(false);
+const searchKey = ref(false);
 const data = ref<Products[]>([]);
 
 watchEffect(() => {
@@ -31,6 +32,18 @@ watchEffect(() => {
       data.value = dataAll.value.filter((e) => e.type === route.params.type);
       filterRange.value = false;
     }
+  }
+
+  if (route.query.search) {
+    const searchString = route.query.search;
+    const filteredPeople = data.value.filter((person) => {
+      return person.name.toLowerCase().startsWith(searchString.toString().toLowerCase());
+    });
+    data.value = filteredPeople;
+    searchKey.value = true;
+  } else {
+    data.value = dataAll.value;
+    searchKey.value = false;
   }
 });
 
@@ -49,10 +62,12 @@ onMounted(() => {
     }
     e.averageRate = countRate();
   });
+
   if (route.query.selloff) {
     data.value.sort((a, b) => b.discount - a.discount);
     selectedSort.value = 'discount';
   }
+
   if (route.params.type === 'all') {
     data.value = dataAll.value;
   } else {
@@ -124,6 +139,8 @@ function unFilterPrice() {
     range.value[0] = 0;
     range.value[1] = 50000000;
   }
+  // router.push('/products/brand/all');
+  // location.reload();
 }
 function addToFav() {
   console.log('add fav');
@@ -183,7 +200,9 @@ function addToFav() {
               leave-from-class="translate-y-0 opacity-100"
               leave-to-class="translate-y-1 opacity-0"
             >
-              <PopoverPanel class="absolute left-1/2 z-10 mt-3 w-[300px] -translate-x-1/2 transform bg-gray-100 p-4">
+              <PopoverPanel
+                class="absolute left-1/2 z-10 mt-3 w-[300px] -translate-x-1/2 transform rounded-lg border bg-gray-100 p-4"
+              >
                 <div class="flex flex-col gap-4">
                   <div class="flex flex-1 justify-between pb-6">
                     <span class="text-md font-bold text-main">
@@ -203,7 +222,13 @@ function addToFav() {
                       }}
                     </span>
                   </div>
-                  <Slider v-model="range" class="slider-red" :min="0" :max="5000 * 100 * 100" :format="formatRange" />
+                  <Slider
+                    v-model="range"
+                    class="[&_.slider-connect]:!bg-main [&_.slider-tooltip]:!border-0 [&_.slider-tooltip]:!bg-main"
+                    :min="0"
+                    :max="5000 * 100 * 100"
+                    :format="formatRange"
+                  />
                   <div class="flex flex-1 justify-between gap-2">
                     <div class="flex-1">
                       <PopoverButton class="h-8 !w-full rounded border border-main text-main hover:bg-main/20"
@@ -231,12 +256,12 @@ function addToFav() {
         </div>
       </div>
 
-      <template v-if="filterRange">
+      <template v-if="filterRange || searchKey">
         <VTitle title="Đang lọc theo" />
 
         <div class="flex gap-4">
           <div class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main">
-            <VIcon icon="fa-sort-amount-desc" />
+            <VIcon v-if="filterRange" icon="fa-sort-amount-desc" />
             Giá từ
             {{
               new Intl.NumberFormat('vi-VN', {
@@ -251,6 +276,11 @@ function addToFav() {
                 currency: 'VND',
               }).format(range[1])
             }}
+          </div>
+
+          <div class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main">
+            <VIcon v-if="searchKey" icon="fa-sort-amount-desc" />
+            {{ `Search : ${route.query.search}` }}
           </div>
 
           <div
