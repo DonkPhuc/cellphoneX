@@ -12,6 +12,10 @@ const open = ref(false);
 const currentPath = ref('');
 const searchKey = ref('');
 
+watchEffect(() => {
+  currentPath.value = route.path;
+});
+
 async function go(url?: string) {
   open.value = false;
   const currentRoute = router.currentRoute.value.fullPath;
@@ -22,7 +26,6 @@ async function go(url?: string) {
   }
   currentPath.value = route.path;
 }
-
 function search(event: any) {
   if (event.key === 'Enter') {
     router.push(`/products/brand/all?search=${searchKey.value}`);
@@ -43,7 +46,9 @@ function search(event: any) {
       </div>
     </template>
     <template #detail>
-      <p class="w-[350px] text-justify font-bold">Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn</p>
+      <p class="w-[350px] text-center font-bold md:text-justify">
+        Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn
+      </p>
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">
@@ -66,7 +71,6 @@ function search(event: any) {
       <div class="flex w-full gap-2 px-2">
         <div class="flex flex-1 gap-2">
           <div class="flex flex-1 cursor-pointer items-center justify-center" @click="go('home')">CellphoneS</div>
-          <div class="flex flex-1 cursor-pointer items-center justify-center" @click="go('home')">2</div>
         </div>
 
         <div class="flex flex-[2] items-center justify-center">
@@ -79,7 +83,7 @@ function search(event: any) {
           />
         </div>
 
-        <div class="flex flex-1 gap-2">
+        <div class="hidden flex-1 gap-2 sm:flex">
           <div
             :disabled="currentPath === '/login'"
             class="flex flex-1 cursor-pointer items-center justify-center rounded-lg hover:bg-[hsla(0,0%,100%,.2)]"
@@ -106,5 +110,61 @@ function search(event: any) {
       </div>
     </nav>
     <div class="hidden flex-[0.3] lg:flex"></div>
+  </header>
+
+  <header class="fixed bottom-0 z-10 flex w-full bg-white py-2 text-white shadow-md sm:hidden">
+    <nav class="flex h-12 flex-1">
+      <div class="flex w-full gap-2 px-2">
+        <div class="flex flex-1 gap-2">
+          <div class="flex w-full cursor-pointer flex-col items-center" @click="$router.push('/')">
+            <VIcon :size="currentPath === '/' ? '!text-main text-2xl' : 'text-2xl text-gray-600'" icon="fa-home " />
+            <span :class="currentPath === '/' ? '!text-main' : ''" class="text-xs font-bold text-gray-600"
+              >Trang chủ</span
+            >
+          </div>
+          <div class="flex w-full cursor-pointer flex-col items-center" @click="$router.push('/products/brand/all')">
+            <VIcon
+              :size="currentPath === '/products/brand/all' ? '!text-main text-2xl' : 'text-2xl text-gray-600'"
+              icon="fa-bars "
+            />
+            <span
+              :class="currentPath === '/products/brand/all' ? '!text-main' : ''"
+              class="text-xs font-bold text-gray-600"
+              >Danh mục</span
+            >
+          </div>
+          <div
+            class="flex w-full cursor-pointer flex-col items-center"
+            @click="isLoginSuccess ? $router.push('/cart') : (open = true)"
+          >
+            <VIcon
+              :size="currentPath === '/cart' ? '!text-main text-2xl' : 'text-2xl text-gray-600'"
+              icon="fa-shopping-cart "
+            />
+            <span :class="currentPath === '/cart' ? '!text-main' : ''" class="text-xs font-bold text-gray-600"
+              >Giỏ hàng</span
+            >
+          </div>
+          <div
+            class="flex w-full cursor-pointer flex-col items-center"
+            @click="isLoginSuccess ? $router.push('/account') : $router.push('/login')"
+          >
+            <VIcon
+              :size="
+                currentPath === '/login' || currentPath === '/account'
+                  ? '!text-main text-2xl'
+                  : 'text-2xl text-gray-600'
+              "
+              icon="fa-user-o"
+            />
+            <span
+              :class="currentPath === '/login' || currentPath === '/account' ? '!text-main' : ''"
+              class="text-xs font-bold text-gray-600"
+              >{{ isLoginSuccess ? 'Tài khoản' : 'Đăng nhập' }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
   </header>
 </template>

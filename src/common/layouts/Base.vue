@@ -6,8 +6,6 @@
       <RouterView />
     </main>
 
-    <div class="hidden md:flex">
-      <VFooter />
-    </div>
+    <VFooter />
   </div>
 </template>

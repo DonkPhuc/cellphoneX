@@ -31,7 +31,7 @@ const listInfo3rd = [
 </script>
 
 <template>
-  <footer class="w-full border-t-2 pt-10">
+  <footer class="hidden w-full border-t-2 pt-10 lg:flex lg:flex-col">
     <div class="flex">
       <div class="hidden flex-[0.35] lg:flex"></div>
       <div class="flex flex-1">
