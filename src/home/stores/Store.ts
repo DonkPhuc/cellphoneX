@@ -31,6 +31,31 @@ export const useStore = defineStore(
     async function postDeleteProduct(id: string) {
       return await Services.postDeleteProduct(id);
     }
+    async function postUpdateProduct(
+      id: string,
+      data: {
+        imageLink: string;
+        name: string;
+        stock: number;
+        priceRRP: number;
+        discount: number;
+        description: string;
+        type: string;
+      }
+    ) {
+      return await Services.postUpdateProduct(id, data);
+    }
+    async function postAddProduct(data: {
+      imageLink: string;
+      name: string;
+      stock: number;
+      priceRRP: number;
+      discount: number;
+      description: string;
+      type: string;
+    }) {
+      return await Services.postAddProduct(data);
+    }
 
     return {
       data,
@@ -40,6 +65,8 @@ export const useStore = defineStore(
       postAddToCart,
       postAddRate,
       postDeleteProduct,
+      postUpdateProduct,
+      postAddProduct,
     };
   },
   {

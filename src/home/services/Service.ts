@@ -25,5 +25,30 @@ class Services extends BaseService {
   async postDeleteProduct(id: string) {
     return await this.performRequest(METHODS.DELETE, `delete/${id}`);
   }
+  async postUpdateProduct(
+    id: string,
+    data?: {
+      imageLink: string;
+      name: string;
+      stock: number;
+      priceRRP: number;
+      discount: number;
+      description: string;
+      type: string;
+    }
+  ) {
+    return await this.performRequest(METHODS.POST, `update/${id}`, data);
+  }
+  async postAddProduct(data?: {
+    imageLink: string;
+    name: string;
+    stock: number;
+    priceRRP: number;
+    discount: number;
+    description: string;
+    type: string;
+  }) {
+    return await this.performRequest(METHODS.POST, `add`, data);
+  }
 }
 export default new Services('v1/api/product');
