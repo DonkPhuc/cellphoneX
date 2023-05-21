@@ -113,7 +113,7 @@ async function editModel(index: number) {
   <VDialog :is-open="openEdit" @close="openEdit = false">
     <template #title> </template>
     <template #detail>
-      <p class="w-[500px] text-center font-bold">Chỉnh sửa : {{ data[editIndex].name }} ?</p>
+      <p v-if="data[editIndex]" class="w-[500px] text-center font-bold">Chỉnh sửa : {{ data[editIndex].name }} ?</p>
 
       <div class="flex flex-col gap-4 pt-6 [&_>input]:rounded-lg">
         <input v-model="editedImage" type="text" placeholder="image link" />

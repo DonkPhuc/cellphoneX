@@ -14,13 +14,24 @@ class customerServices extends BaseService {
   async postSignUp(username: string, password: string, userFullName: string, email: string) {
     return await this.performRequest(METHODS.POST, 'customer/add', { username, password, userFullName, email });
   }
-  async postUpdateUser(userFullName?: string, username?: string, email?: string, password?: string, id?: string) {
+  async postUpdateUser(
+    userFullName?: string,
+    username?: string,
+    email?: string,
+    password?: string,
+    id?: string,
+    role?: string
+  ) {
     return await this.performRequest(METHODS.POST, `customer/update/${id}`, {
       userFullName,
       username,
       email,
       password,
+      role,
     });
+  }
+  async postDeleteCustomer(id: string) {
+    return await this.performRequest(METHODS.DELETE, `customer/delete/${id}`);
   }
 }
 

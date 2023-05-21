@@ -201,6 +201,24 @@ async function goDetail(index: number, id: string) {
               @go-detail="goDetail"
             />
           </div>
+          <div class="flex w-full">
+            <VProductsList
+              type="product"
+              :button-list="buttonList"
+              :data="phoneList"
+              title="TABLET NỔI BẬT NHẤT"
+              @go-detail="goDetail"
+            />
+          </div>
+          <div class="flex w-full">
+            <VProductsList
+              type="product"
+              :button-list="buttonList"
+              :data="laptopList"
+              title="PHỤ KIỆN NỔI BẬT NHẤT"
+              @go-detail="goDetail"
+            />
+          </div>
         </div>
         <div v-else class="flex w-full items-center justify-center pt-8">
           <VSpinner size="large" />

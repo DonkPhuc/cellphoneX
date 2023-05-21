@@ -22,9 +22,13 @@ export const useUserStore = defineStore(
       username?: string,
       email?: string,
       password?: string,
-      id?: string
+      id?: string,
+      role?: string
     ) {
-      return await customerServices.postUpdateUser(userFullName, username, email, password, id);
+      return await customerServices.postUpdateUser(userFullName, username, email, password, id, role);
+    }
+    async function postDeleteCustomer(id: string) {
+      return await customerServices.postDeleteCustomer(id);
     }
 
     return {
@@ -34,6 +38,7 @@ export const useUserStore = defineStore(
       getAllCustomers,
       postSignUp,
       postUpdateUser,
+      postDeleteCustomer,
     };
   },
   {
