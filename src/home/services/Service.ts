@@ -11,6 +11,9 @@ class Services extends BaseService {
   async getProduct(id: string) {
     return await this.performRequest(METHODS.GET, `${id}`);
   }
+  async getSearchProducts(name: string) {
+    return await this.performRequest(METHODS.GET, `search/${name}`);
+  }
   async postAddToCart(username: string, id: string) {
     return await this.performRequest(METHODS.POST, `cart/${username}`, {
       _id: id,

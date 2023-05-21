@@ -16,6 +16,9 @@ export const useStore = defineStore(
     async function getProduct(id: string) {
       return await Services.getProduct(id);
     }
+    async function getSearchProducts(name: string) {
+      return await Services.getSearchProducts(name);
+    }
     async function postAddToCart(username: string, id: string) {
       return await Services.postAddToCart(username, id);
     }
@@ -61,6 +64,7 @@ export const useStore = defineStore(
       data,
       getData,
       getProduct,
+      getSearchProducts,
       postRemoveCart,
       postAddToCart,
       postAddRate,

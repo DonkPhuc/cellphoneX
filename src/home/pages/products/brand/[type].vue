@@ -46,7 +46,6 @@ onMounted(() => {
     data.value.sort((a, b) => b.discount - a.discount);
     selectedSort.value = 'discount';
   }
-
   if (route.params.type === 'all') {
     data.value = dataAll.value;
   } else {
@@ -54,23 +53,55 @@ onMounted(() => {
   }
   window.scrollTo(0, 0);
 });
-watchEffect(() => {
+watchEffect(async () => {
   if (route.params.type) {
     if (route.params.type === 'all') {
       data.value = dataAll.value;
       filterRange.value = false;
+      range.value[0] = 0;
+      range.value[1] = 50000000;
+      selectedSort.value = '';
     } else {
       data.value = dataAll.value.filter((e) => e.type === route.params.type);
+      filterRange.value = false;
+      range.value[0] = 0;
+      range.value[1] = 50000000;
+      selectedSort.value = '';
     }
   }
-  if (route.query.search) {
-    const searchString = route.query.search;
-    data.value = [];
-    searchKey.value = true;
-  } else {
-    searchKey.value = false;
-  }
 });
+watch(
+  () => route.query.search,
+  async () => {
+    if (route.query.search) {
+      getDataSearch();
+      searchKey.value = true;
+    } else {
+      data.value = dataAll.value;
+      searchKey.value = false;
+    }
+  }
+);
+async function getDataSearch() {
+  let result = [] as Products[];
+  if (route.query.search) {
+    result = (await store.getSearchProducts(route.query.search.toString())) as Products[];
+  }
+  result.forEach((e) => {
+    e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    function countRate() {
+      let total = 0;
+      let length = 0;
+      length = e.rate.length;
+      e.rate.forEach((e: { value: number }) => {
+        total += e.value / length;
+      });
+      return total;
+    }
+    e.averageRate = countRate();
+  });
+  data.value = result;
+}
 const formatVND = computed(() => (slide: Products) => {
   let result = {
     price: '',
@@ -142,15 +173,15 @@ function unFilterPrice() {
   data.value = dataAll.value;
   if (route.params.type === 'all') {
     data.value = dataAll.value;
-    filterRange.value = false;
-    range.value[0] = 0;
-    range.value[1] = 50000000;
+  } else if (route.params.type === 'search') {
+    getDataSearch();
   } else {
     data.value = dataAll.value.filter((e) => e.type === route.params.type);
-    filterRange.value = false;
-    range.value[0] = 0;
-    range.value[1] = 50000000;
   }
+  filterRange.value = false;
+  range.value[0] = 0;
+  range.value[1] = 50000000;
+  selectedSort.value = '';
 }
 function addToFav() {
   console.log('add fav');
@@ -158,7 +189,7 @@ function addToFav() {
 </script>
 
 <template>
-  <div class="flex p-2">
+  <div class="flex !border-none p-2">
     <div class="hidden h-40 lg:flex lg:flex-1"></div>
     <main v-if="loading" class="flex flex-[3] flex-col gap-4">
       <div class="flex flex-col gap-2 py-4 md:flex-row">
