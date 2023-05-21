@@ -7,11 +7,8 @@ import { Products } from '../dtos';
 export const useStore = defineStore(
   'store',
   () => {
-    const data = ref<Products[]>([]);
-
     async function getData() {
-      data.value = (await Services.getData()) as Products[];
-      return data.value;
+      return (await Services.getData()) as Products[];
     }
     async function getProduct(id: string) {
       return await Services.getProduct(id);
@@ -61,7 +58,6 @@ export const useStore = defineStore(
     }
 
     return {
-      data,
       getData,
       getProduct,
       getSearchProducts,

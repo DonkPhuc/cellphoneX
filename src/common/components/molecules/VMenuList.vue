@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Products } from "~/home/dtos";
+import { Products } from '~/home/dtos';
 
 interface Props {
   data: Products[];
@@ -7,25 +7,21 @@ interface Props {
 const props = defineProps<Props>();
 const { data } = toRefs(props);
 
-const emit = defineEmits(["eventMenu"]);
+const emit = defineEmits(['eventMenu']);
 const eventMenu = (title: string) => {
-  emit("eventMenu", title);
+  emit('eventMenu', title);
 };
 const block = computed(() => (title: string) => {
-  let rs = "";
-  if (title !== "Điện Thoại" && title !== "Khuyến Mãi") {
-    rs = "!cursor-not-allowed";
+  let rs = '';
+  if (title !== 'Điện Thoại' && title !== 'Khuyến Mãi') {
+    rs = '!cursor-not-allowed';
   }
   return rs;
 });
 </script>
 
 <template>
-  <div
-    v-for="item in data"
-    :key="item.title"
-    class="flex flex-1 rounded-lg hover:bg-gray-100"
-  >
+  <div v-for="item in data" :key="item.title" class="flex flex-1 rounded-lg hover:bg-gray-100">
     <div
       :class="block(item.title)"
       class="flex flex-1 cursor-pointer justify-between rounded-xl"
