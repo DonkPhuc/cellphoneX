@@ -25,8 +25,9 @@ const dataAll = ref<Products[]>([]);
 const selectedSort = ref('');
 const loading = ref(false);
 
-onMounted(() => {
-  getData();
+onMounted(async () => {
+  data.value = [];
+  await getData();
   data.value = dataAll.value;
   data.value.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
@@ -41,7 +42,6 @@ onMounted(() => {
     }
     e.averageRate = countRate();
   });
-
   if (route.query.selloff) {
     data.value.sort((a, b) => b.discount - a.discount);
     selectedSort.value = 'discount';
@@ -69,18 +69,28 @@ watchEffect(async () => {
       selectedSort.value = '';
     }
   }
+  if (route.query.selloff) {
+    selectedSort.value = 'discount';
+  }
 });
 watch(
   () => route.query.search,
   async () => {
     if (route.query.search) {
-      getDataSearch();
-      searchKey.value = true;
+      loading.value = true;
+      setTimeout(async () => {
+        await getDataSearch();
+      }, 500);
+      setTimeout(() => {
+        searchKey.value = true;
+        loading.value = true;
+      }, 600);
     } else {
       data.value = dataAll.value;
       searchKey.value = false;
     }
-  }
+  },
+  { immediate: true, deep: true }
 );
 async function getDataSearch() {
   let result = [] as Products[];
@@ -365,8 +375,8 @@ function addToFav() {
 
       <div class="flex flex-wrap justify-start gap-4">
         <div
-          v-for="item in data"
-          :key="item._id"
+          v-for="(item, index) in data"
+          :key="index"
           class="mx-auto flex w-full basis-[100%] flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-lg md:basis-[46%] lg:basis-[21%]"
         >
           <div class="flex w-full justify-end">

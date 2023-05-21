@@ -21,6 +21,9 @@ onMounted(() => {
 function selectedMode(value: number) {
   selected.value = value;
 }
+watchEffect(() => {
+  console.log(selected.value);
+});
 </script>
 
 <template>
@@ -32,7 +35,6 @@ function selectedMode(value: number) {
           @click="$router.push('/')"
           >CellPhoneX</span
         >
-
         <div class="mt-6 flex flex-col gap-6 px-6">
           <form class="flex items-center space-x-6">
             <span
@@ -98,51 +100,12 @@ function selectedMode(value: number) {
     </div>
 
     <div class="flex flex-1 flex-col">
-      <div class="flex h-20 w-full bg-bgBlack">
-        <div class="flex flex-1 items-center text-textBlack">
-          <div class="flex">
-            <div class="group hidden w-72 md:w-80 lg:w-96">
-              <label
-                for="4"
-                class="inline-block w-full text-sm font-medium text-gray-500 transition-all duration-200 ease-in-out group-focus-within:text-main"
-                >Outline icon inline prefix</label
-              >
-              <div class="relative flex items-center">
-                <input
-                  id="4"
-                  type="text"
-                  class="peer relative h-10 w-full rounded-md bg-gray-50 pl-10 pr-4 font-thin outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-main focus:drop-shadow-lg"
-                />
-                <span
-                  class="material-symbols-outlined absolute left-2 transition-all duration-200 ease-in-out group-focus-within:text-main"
-                  >mail</span
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-1 items-center text-textBlack"></div>
-        <div class="flex flex-1 items-center text-textBlack"></div>
-        <div class="flex flex-1 items-center text-textBlack"></div>
-        <div class="flex flex-1 items-center text-textBlack"></div>
-        <div class="flex flex-1 items-center text-textBlack"></div>
-        <div class="flex flex-1 items-center text-textBlack">Message</div>
-        <div class="flex flex-1 items-center text-textBlack">Notifications</div>
-        <div class="flex flex-1 items-center text-textBlack">John Doe</div>
-      </div>
+      <div class="flex h-20 w-full bg-bgBlack"></div>
 
-      <template v-if="selected === 0">
-        <VDashboard />
-      </template>
-      <template v-if="selected === 1">
-        <VProducts />
-      </template>
-      <template v-if="selected === 2">
-        <VUser />
-      </template>
-      <template v-if="selected === 3">
-        <VCharts />
-      </template>
+      <template v-if="selected === 0"> <VDashboard /> </template>
+      <template v-if="selected === 1"> <VProducts /> </template>
+      <template v-if="selected === 2"> <VUser /> </template>
+      <template v-if="selected === 3"> <VCharts /> </template>
     </div>
   </div>
 </template>

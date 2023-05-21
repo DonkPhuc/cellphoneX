@@ -16,4 +16,6 @@ export class Products {
   imageDetail = [];
   rate = [];
   averageRate = 0;
+  stock = 0;
+  create = Date;
 }

@@ -10,7 +10,8 @@ const store = useStore();
 
 const router = useRouter();
 
-const data = ref();
+const loading = ref(false);
+const data = ref<Products[]>([]);
 const openEdit = ref(false);
 const openDel = ref(false);
 const editIndex = ref(0);
@@ -25,8 +26,9 @@ const editedCate = ref('');
 const openAdd = ref(false);
 
 onMounted(async () => {
-  data.value = [];
+  loading.value = true;
   data.value = await store.getData();
+  loading.value = false;
 });
 const notifySignUp = (error?: string) => {
   if (error !== '') {
@@ -213,7 +215,7 @@ async function editModel(index: number) {
             <div class="overflow-y-scroll"></div>
           </div>
 
-          <div v-if="data.length > -1" class="max-h-[700px] overflow-y-scroll">
+          <div v-if="!loading" class="max-h-[700px] overflow-y-scroll">
             <div v-for="(item, index) in data" :key="index" class="flex">
               <div class="flex w-full border-b border-textBlack">
                 <div class="flex flex-[0.2] items-center justify-center truncate p-2">
@@ -233,7 +235,7 @@ async function editModel(index: number) {
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">
                   <div class="truncate text-textBlack">
-                    <span>{{ item.create.substring(0, 10) }}</span>
+                    <span>{{ item.create.toString().substring(0, 10) }}</span>
                   </div>
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">
@@ -265,7 +267,7 @@ async function editModel(index: number) {
               </div>
             </div>
           </div>
-          <div v-else class="flex w-full justify-center">
+          <div v-else class="flex w-full justify-center pt-8">
             <VSpinner />
           </div>
         </div>
