@@ -213,7 +213,7 @@ async function editModel(index: number) {
             <div class="overflow-y-scroll"></div>
           </div>
 
-          <div class="max-h-[700px] overflow-y-scroll">
+          <div v-if="data.length > -1" class="max-h-[700px] overflow-y-scroll">
             <div v-for="(item, index) in data" :key="index" class="flex">
               <div class="flex w-full border-b border-textBlack">
                 <div class="flex flex-[0.2] items-center justify-center truncate p-2">
@@ -264,6 +264,9 @@ async function editModel(index: number) {
                 </div>
               </div>
             </div>
+          </div>
+          <div v-else class="flex w-full justify-center">
+            <VSpinner />
           </div>
         </div>
       </div>

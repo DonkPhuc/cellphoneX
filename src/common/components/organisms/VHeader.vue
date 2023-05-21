@@ -15,7 +15,6 @@ const searchKey = ref('');
 watchEffect(() => {
   currentPath.value = route.path;
 });
-
 async function go(url?: string) {
   open.value = false;
   const currentRoute = router.currentRoute.value.fullPath;
@@ -26,9 +25,15 @@ async function go(url?: string) {
   }
   currentPath.value = route.path;
 }
-function search(event: any) {
-  if (event.key === 'Enter') {
-    router.push(`/products/brand/all?search=${searchKey.value}`);
+function search(event?: Event) {
+  if (event) {
+    if ((event as KeyboardEvent).key === 'Enter') {
+      router.push(`/products/brand/search?search=${searchKey.value}`);
+      searchKey.value = '';
+    }
+  } else {
+    router.push(`/products/brand/search?search=${searchKey.value}`);
+    searchKey.value = '';
   }
 }
 </script>
@@ -81,6 +86,9 @@ function search(event: any) {
             placeholder="Bạn cần tìm gì?"
             @keypress="search($event)"
           />
+          <div class="cursor-pointer" @click="search()">
+            <VIcon icon="fa-search" />
+          </div>
         </div>
 
         <div class="hidden flex-1 gap-2 sm:flex">

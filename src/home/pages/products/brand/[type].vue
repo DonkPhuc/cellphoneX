@@ -13,7 +13,6 @@ import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
 const { isLoginSuccess } = storeToRefs(userStore);
-const { data: dataAll } = storeToRefs(store);
 
 const router = useRouter();
 const route = useRoute();
@@ -22,32 +21,12 @@ const range = ref([0, 50000000]);
 const filterRange = ref(false);
 const searchKey = ref(false);
 const data = ref<Products[]>([]);
-
-watchEffect(() => {
-  if (route.params.type) {
-    if (route.params.type === 'all') {
-      data.value = dataAll.value;
-      filterRange.value = false;
-    } else {
-      data.value = dataAll.value.filter((e) => e.type === route.params.type);
-      filterRange.value = false;
-    }
-  }
-
-  if (route.query.search) {
-    const searchString = route.query.search;
-    const filteredPeople = data.value.filter((person) => {
-      return person.name.toLowerCase().startsWith(searchString.toString().toLowerCase());
-    });
-    data.value = filteredPeople;
-    searchKey.value = true;
-  } else {
-    data.value = dataAll.value;
-    searchKey.value = false;
-  }
-});
+const dataAll = ref<Products[]>([]);
+const selectedSort = ref('');
+const loading = ref(false);
 
 onMounted(() => {
+  getData();
   data.value = dataAll.value;
   data.value.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
@@ -75,7 +54,23 @@ onMounted(() => {
   }
   window.scrollTo(0, 0);
 });
-
+watchEffect(() => {
+  if (route.params.type) {
+    if (route.params.type === 'all') {
+      data.value = dataAll.value;
+      filterRange.value = false;
+    } else {
+      data.value = dataAll.value.filter((e) => e.type === route.params.type);
+    }
+  }
+  if (route.query.search) {
+    const searchString = route.query.search;
+    data.value = [];
+    searchKey.value = true;
+  } else {
+    searchKey.value = false;
+  }
+});
 const formatVND = computed(() => (slide: Products) => {
   let result = {
     price: '',
@@ -98,13 +93,30 @@ const formatRange = computed(() => (slide: number) => {
     currency: 'VND',
   }).format(slide);
 });
-
-const notifySignUp = (error?: string) => {
+async function getData() {
+  loading.value = false;
+  const result = (await store.getData()) as Products[];
+  result.forEach((e) => {
+    e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
+    function countRate() {
+      let total = 0;
+      let length = 0;
+      length = e.rate.length;
+      e.rate.forEach((e: { value: number }) => {
+        total += e.value / length;
+      });
+      return total;
+    }
+    e.averageRate = countRate();
+  });
+  dataAll.value = result;
+  loading.value = true;
+}
+function notifySignUp(error?: string) {
   if (error !== '') {
     toast(`${error}`, {});
   }
-};
-const selectedSort = ref('');
+}
 function sortPrice(type: string) {
   if (type === 'lowToHigh') {
     data.value.sort((a, b) => a.price - b.price);
@@ -139,8 +151,6 @@ function unFilterPrice() {
     range.value[0] = 0;
     range.value[1] = 50000000;
   }
-  // router.push('/products/brand/all');
-  // location.reload();
 }
 function addToFav() {
   console.log('add fav');
@@ -150,7 +160,7 @@ function addToFav() {
 <template>
   <div class="flex p-2">
     <div class="hidden h-40 lg:flex lg:flex-1"></div>
-    <main v-if="data" class="flex flex-[3] flex-col gap-4">
+    <main v-if="loading" class="flex flex-[3] flex-col gap-4">
       <div class="flex flex-col gap-2 py-4 md:flex-row">
         <div class="flex-1">
           <img
@@ -246,6 +256,12 @@ function addToFav() {
             </transition>
           </Popover>
         </div>
+
+        <div v-if="searchKey" class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main">
+          <VIcon icon="fa-sort-amount-desc" />
+          {{ `Search : ${route.query.search}` }}
+        </div>
+
         <div
           class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
           :class="route.params.type === 'all' ? 'border-main bg-[#fef2f2] text-main' : ''"
@@ -256,7 +272,7 @@ function addToFav() {
         </div>
       </div>
 
-      <template v-if="filterRange || searchKey">
+      <template v-if="filterRange">
         <VTitle title="Đang lọc theo" />
 
         <div class="flex gap-4">
@@ -276,11 +292,6 @@ function addToFav() {
                 currency: 'VND',
               }).format(range[1])
             }}
-          </div>
-
-          <div class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main">
-            <VIcon v-if="searchKey" icon="fa-sort-amount-desc" />
-            {{ `Search : ${route.query.search}` }}
           </div>
 
           <div
@@ -368,6 +379,10 @@ function addToFav() {
             <p class="text-xs text-gray-500">Yêu Thích</p>
             <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
           </div>
+        </div>
+        <div v-if="data.length === 0 && searchKey" class="flex w-full flex-col items-center justify-center gap-2 py-8">
+          <VIcon size="text-4xl" icon="fa-meh-o"></VIcon>
+          <span class="font-bold"> Không tìm thấy sản phẩm phù hợp</span>
         </div>
       </div>
     </main>
