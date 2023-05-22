@@ -136,65 +136,6 @@ function addToFav(id: string) {
           </div>
         </div>
       </div>
-
-      <!-- 
-      <Carousel v-if="data" :breakpoints="breakpoints" :settings="settings">
-        <Slide v-for="(slide, index) in data" :key="index" class="px-2">
-          <div class="rounded-xl border border-slate-200 p-4 shadow-xl">
-            <div class="flex w-full flex-col gap-4">
-              <div class="flex w-full justify-end">
-                <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block"
-                  >Giảm {{ slide.discount + '%' }}</span
-                >
-              </div>
-              <img
-                class="mx-auto h-[180px] w-[180px] cursor-pointer"
-                :src="slide.imageLink"
-                alt=""
-                @click="goToProduct(index, slide._id)"
-              />
-              <div class="w-full" @click="goToProduct(index, slide._id)">
-                <span class="h-14 max-w-[180px] text-justify text-sm font-bold md:flex">
-                  {{ slide.name }}
-                </span>
-              </div>
-              <div class="w-full">
-                <div class="flex gap-2">
-                  <p class="font-bold text-red-500">
-                    {{ formatVND(slide).price }}
-                  </p>
-                  <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
-                    {{ formatVND(slide).priceRRP }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="hidden w-full rounded-lg border border-gray-300 bg-gray-100 p-2 text-xs md:flex">
-                {{ slide.description }}
-              </div>
-
-              <div class="hidden w-full justify-start md:flex">
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-                <VIcon icon-class="text-yellow-600" icon="fa-star" />
-              </div>
-
-              <div
-                class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex"
-                @click="addToFav(slide._id)"
-              >
-                <p class="text-xs text-gray-500">Yêu Thích</p>
-                <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
-              </div>
-            </div>
-          </div>
-        </Slide>
-        <template #addons>
-          <Navigation />
-        </template>
-      </Carousel> -->
     </div>
   </template>
 

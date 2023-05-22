@@ -22,8 +22,11 @@ const editedStock = ref(0);
 const editedPrice = ref(0);
 const editedDiscount = ref(0);
 const editedDescription = ref('');
+const editedImageGroup = ref([]);
 const editedCate = ref('');
 const openAdd = ref(false);
+
+const categoryList = [{ name: 'apple' }, { name: 'samsung' }, { name: 'tablet' }, { name: 'accessory' }];
 
 onMounted(async () => {
   loading.value = true;
@@ -40,7 +43,7 @@ async function deleteProduct() {
   if (rs === 'Deleted successfully!') {
     data.value = [];
     data.value = await store.getData();
-    notifySignUp(`Xóa thành công ${data.value[delIndex.value].name}`);
+    notifySignUp(`Xóa thành công`);
   } else {
     notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
   }
@@ -56,6 +59,7 @@ async function editProduct(add: boolean) {
       discount: editedDiscount.value,
       description: editedDescription.value,
       type: editedCate.value,
+      imageDetail: editedImageGroup.value as [],
     };
 
     const rs = await store.postUpdateProduct(data.value[editIndex.value]._id, params);
@@ -75,6 +79,7 @@ async function editProduct(add: boolean) {
       discount: editedDiscount.value,
       description: editedDescription.value,
       type: editedCate.value,
+      imageDetail: editedImageGroup.value as [],
     };
     const rs = await store.postAddProduct(params);
     if (rs) {
@@ -104,6 +109,11 @@ async function editModel(index: number) {
   editedDiscount.value = data.value[index].discount;
   editedDescription.value = data.value[index].description;
   editedCate.value = data.value[index].type;
+  editedImageGroup.value[0] = data.value[index].imageDetail[0];
+  editedImageGroup.value[1] = data.value[index].imageDetail[1];
+  editedImageGroup.value[2] = data.value[index].imageDetail[2];
+  editedImageGroup.value[3] = data.value[index].imageDetail[3];
+  editedImageGroup.value[4] = data.value[index].imageDetail[4];
 
   editIndex.value = index;
 }
@@ -115,19 +125,26 @@ async function editModel(index: number) {
     <template #detail>
       <p v-if="data[editIndex]" class="w-[500px] text-center font-bold">Chỉnh sửa : {{ data[editIndex].name }} ?</p>
 
-      <div class="flex flex-col gap-4 pt-6 [&_>input]:rounded-lg">
-        <input v-model="editedImage" type="text" placeholder="image link" />
-        <input v-model="editedName" type="text" placeholder="name" />
-        <input v-model="editedStock" type="number" placeholder="stock" />
-        <input v-model="editedPrice" type="number" placeholder="price" />
-        <input v-model="editedDiscount" type="number" placeholder="discount" />
-        <input v-model="editedDescription" type="text" placeholder="description" />
-        <select id="category" v-model="editedCate" class="w-full appearance-none rounded-lg bg-white p-2 !ring-0">
-          <option :value="editedCate">{{ editedCate }}</option>
-          <option :value="editedCate === 'apple' ? 'samsung' : 'apple'">
-            {{ editedCate === 'apple' ? 'samsung' : 'apple' }}
-          </option>
-        </select>
+      <div class="flex w-full gap-4">
+        <div class="flex w-full flex-col gap-4 pt-6 [&_>input]:rounded-lg">
+          <input v-model="editedImage" type="text" placeholder="image link" />
+          <input v-model="editedName" type="text" placeholder="name" />
+          <input v-model="editedStock" type="number" placeholder="stock" />
+          <input v-model="editedPrice" type="number" placeholder="price" />
+          <input v-model="editedDiscount" type="number" placeholder="discount" />
+          <input v-model="editedDescription" type="text" placeholder="description" />
+          <select id="category" v-model="editedCate" class="w-full appearance-none rounded-lg bg-white p-2 !ring-0">
+            <option v-for="item in categoryList" :key="item.name" :value="item.name">{{ item.name }}</option>
+          </select>
+        </div>
+
+        <div class="flex w-full flex-col gap-4 pt-6 [&_>input]:rounded-lg">
+          <input v-model="editedImageGroup[0]" type="text" placeholder="image link" />
+          <input v-model="editedImageGroup[1]" type="text" placeholder="image link" />
+          <input v-model="editedImageGroup[2]" type="text" placeholder="image link" />
+          <input v-model="editedImageGroup[3]" type="text" placeholder="image link" />
+          <input v-model="editedImageGroup[4]" type="text" placeholder="image link" />
+        </div>
       </div>
     </template>
     <template #action>

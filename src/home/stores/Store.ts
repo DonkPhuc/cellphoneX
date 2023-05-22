@@ -41,6 +41,7 @@ export const useStore = defineStore(
         discount: number;
         description: string;
         type: string;
+        imageDetail: [];
       }
     ) {
       return await Services.postUpdateProduct(id, data);
@@ -53,6 +54,7 @@ export const useStore = defineStore(
       discount: number;
       description: string;
       type: string;
+      imageDetail: [];
     }) {
       return await Services.postAddProduct(data);
     }

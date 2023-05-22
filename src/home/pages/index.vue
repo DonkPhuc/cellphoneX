@@ -13,6 +13,8 @@ const router = useRouter();
 const itemList = ref<Products[]>([]);
 const phoneList = ref<Products[]>([]);
 const laptopList = ref<Products[]>([]);
+const tablet = ref<Products[]>([]);
+const accessory = ref<Products[]>([]);
 
 onMounted(() => {
   getData();
@@ -38,6 +40,8 @@ async function getData() {
   itemList.value = result;
   phoneList.value = itemList.value.filter((e) => e.type === 'apple');
   laptopList.value = itemList.value.filter((e) => e.type === 'samsung');
+  tablet.value = itemList.value.filter((e) => e.type === 'tablet');
+  accessory.value = itemList.value.filter((e) => e.type === 'accessory');
 }
 
 const listFeature = [
@@ -87,12 +91,10 @@ const listCarousel = [
   },
 ] as Products[];
 const buttonList = [
-  {
-    title: 'Apple',
-  },
-  {
-    title: 'Samsung',
-  },
+  { title: 'Apple' },
+  { title: 'Samsung' },
+  { title: 'Tablet' },
+  { title: 'Accessory' },
 ] as Products[];
 const menuList = [
   {
@@ -182,9 +184,10 @@ async function goDetail(index: number, id: string) {
           />
         </div>
 
-        <div v-if="itemList.length > 0" class="flex flex-col gap-4">
+        <div v-if="itemList.length" class="flex flex-col gap-4">
           <div class="flex w-full">
             <VProductsList
+              v-if="phoneList[0] && phoneList[0]._id"
               type="product"
               :button-list="buttonList"
               :data="phoneList"
@@ -194,6 +197,7 @@ async function goDetail(index: number, id: string) {
           </div>
           <div class="flex w-full">
             <VProductsList
+              v-if="laptopList[0] && laptopList[0]._id"
               type="product"
               :button-list="buttonList"
               :data="laptopList"
@@ -203,18 +207,20 @@ async function goDetail(index: number, id: string) {
           </div>
           <div class="flex w-full">
             <VProductsList
+              v-if="tablet[0] && tablet[0]._id"
               type="product"
               :button-list="buttonList"
-              :data="phoneList"
+              :data="tablet"
               title="TABLET NỔI BẬT NHẤT"
               @go-detail="goDetail"
             />
           </div>
           <div class="flex w-full">
             <VProductsList
+              v-if="accessory[0] && accessory[0]._id"
               type="product"
               :button-list="buttonList"
-              :data="laptopList"
+              :data="accessory"
               title="PHỤ KIỆN NỔI BẬT NHẤT"
               @go-detail="goDetail"
             />

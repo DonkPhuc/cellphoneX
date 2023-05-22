@@ -38,6 +38,7 @@ class Services extends BaseService {
       discount: number;
       description: string;
       type: string;
+      imageDetail: [];
     }
   ) {
     return await this.performRequest(METHODS.POST, `update/${id}`, data);
@@ -50,6 +51,7 @@ class Services extends BaseService {
     discount: number;
     description: string;
     type: string;
+    imageDetail: [];
   }) {
     return await this.performRequest(METHODS.POST, `add`, data);
   }

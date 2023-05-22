@@ -31,12 +31,15 @@ const selectedRom = ref(1);
 const selectedColor = ref(1);
 
 onMounted(async () => {
-  getData();
   window.scrollTo(0, 0);
+  await getData();
+  await getCountRate();
 });
-
 async function getData() {
+  currentProduct.value = [];
+
   currentProduct.value = (await store.getProduct(route.params.id.toString())) as Products;
+
   currentProduct.value.price =
     currentProduct.value.priceRRP - (currentProduct.value.priceRRP * currentProduct.value.discount) / 100;
   currentPrice.value = currentProduct.value.price;
@@ -47,6 +50,15 @@ async function getData() {
     averageRate.value = averageRate.value + element.value;
   });
   averageRate.value = Number(averageRate.value / currentProduct.value.rate.length);
+
+  await getCountRate();
+}
+async function getCountRate() {
+  oneStar.value = 0;
+  twoStar.value = 0;
+  threeStar.value = 0;
+  fourStar.value = 0;
+  fiveStar.value = 0;
 
   for (let i = 0; i < currentProduct.value.rate.length; i++) {
     if (currentProduct.value.rate[i].value === 1) {
@@ -66,7 +78,6 @@ async function getData() {
     }
   }
 }
-
 const formatVND = computed(() => (slide: Products) => {
   let result = {
     price: '',
@@ -98,7 +109,6 @@ async function addToCart(action: string) {
     }
   }
 }
-
 function selectedOptionRom(value: number) {
   selectedRom.value = value;
   currentProduct.value.price = currentPrice.value * selectedColor.value * selectedRom.value;
@@ -109,13 +119,11 @@ function selectedOptionColor(value: number) {
   currentProduct.value.price = currentPrice.value * selectedColor.value * selectedRom.value;
   currentProduct.value.priceRRP = currentPrice.value * selectedColor.value * selectedRom.value;
 }
-
 const notifySignUp = (error?: string) => {
   if (error !== '') {
     toast(`${error}`, {});
   }
 };
-
 const listRom = [
   {
     rom: '128GB',
@@ -145,23 +153,12 @@ const listColor = [
   },
 ];
 const rateList = [
-  {
-    title: 'Rất tệ',
-  },
-  {
-    title: 'Tệ',
-  },
-  {
-    title: 'Bình thường',
-  },
-  {
-    title: 'Tốt',
-  },
-  {
-    title: 'Rất tốt',
-  },
+  { title: 'Rất tệ' },
+  { title: 'Tệ' },
+  { title: 'Bình thường' },
+  { title: 'Tốt' },
+  { title: 'Rất tốt' },
 ];
-
 function rating() {
   if (!isLoginSuccess.value) {
     open.value = true;
@@ -316,7 +313,7 @@ const ratingProd = computed(() => {
   </VDialog>
   <div class="flex">
     <div class="hidden flex-[0.3] lg:flex"></div>
-    <main v-if="currentProduct" class="flex-1 py-4">
+    <main v-if="currentProduct && currentProduct.name" class="flex-1 py-4">
       <div class="flex flex-col gap-4">
         <div class="flex w-full items-center gap-4 border-b-2 px-4 py-2">
           <span class="text-lg font-bold text-black">{{ currentProduct.name }}</span>

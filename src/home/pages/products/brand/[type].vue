@@ -186,6 +186,12 @@ function unFilterPrice() {
 function addToFav() {
   console.log('add fav');
 }
+const buttonList = [
+  { title: 'Apple' },
+  { title: 'Samsung' },
+  { title: 'Tablet' },
+  { title: 'Accessory' },
+] as Products[];
 </script>
 
 <template>
@@ -211,19 +217,15 @@ function addToFav() {
 
       <div class="flex gap-4">
         <div
+          v-for="item in buttonList"
+          :key="item.title"
           class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
-          :class="route.params.type === 'apple' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/apple`), unFilterPrice()"
+          :class="route.params.type === `${item.title.toLowerCase()}` ? 'border-main bg-[#fef2f2] text-main' : ''"
+          @click="router.push(`/products/brand/${item.title.toLowerCase()}`), unFilterPrice()"
         >
-          <VIcon icon="fa-apple" /> Apple
+          <VIcon :icon="item.title === 'Apple' ? 'fa-apple' : ''" /> {{ item.title }}
         </div>
-        <div
-          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
-          :class="route.params.type === 'samsung' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/samsung`), unFilterPrice()"
-        >
-          <VIcon icon="fa-money" /> Samsung
-        </div>
+
         <div class="flex">
           <Popover v-slot="{ open: openPrice }" class="relative !ring-0">
             <PopoverButton

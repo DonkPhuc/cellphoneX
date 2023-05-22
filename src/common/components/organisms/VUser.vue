@@ -39,7 +39,7 @@ async function deleteProduct() {
   if (rs === 'Deleted successfully!') {
     data.value = [];
     data.value = (await userStore.getAllCustomers()) as Customers[];
-    notifySignUp(`Xóa thành công ${data.value[delIndex.value].username}`);
+    notifySignUp(`Xóa thành công`);
   } else {
     notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
   }
