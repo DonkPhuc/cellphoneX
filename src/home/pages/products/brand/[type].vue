@@ -163,7 +163,6 @@ function sortPrice(type: string) {
   }
 }
 function filterPriceRange() {
-  data.value = dataAll.value;
   const rs = data.value.filter((e) => e.price >= range.value[0] && e.price < range.value[1]);
   data.value = [];
   data.value = rs;
