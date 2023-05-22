@@ -18,6 +18,7 @@ onMounted(async () => {
   if (result[0].role !== 'admin') {
     router.push('/');
   }
+  window.scrollTo(0, 0);
 });
 function selectedMode(value: number) {
   selected.value = value;
@@ -95,7 +96,7 @@ watchEffect(() => {
           <div class="flex h-10 w-10 items-center justify-center rounded-full bg-black">
             <VIcon icon="fa-bar-chart " />
           </div>
-          <span class="text-xl text-textBlack">Charts</span>
+          <span class="text-xl text-textBlack">Orders</span>
         </div>
       </div>
     </div>

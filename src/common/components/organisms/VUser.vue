@@ -64,7 +64,7 @@ async function editProduct() {
   if (rs === 'Updated successfully!') {
     data.value = [];
     data.value = (await userStore.getAllCustomers()) as Customers[];
-    notifySignUp(`Chỉnh sửa thành công ${data.value[editIndex.value].username}`);
+    notifySignUp(`Chỉnh sửa thành công`);
   } else {
     notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
   }

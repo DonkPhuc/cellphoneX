@@ -6,27 +6,37 @@ class Services extends BaseService {
   }
 
   async getData() {
-    return await this.performRequest(METHODS.GET, '');
+    return await this.performRequest(METHODS.GET, 'product');
   }
   async getProduct(id: string) {
-    return await this.performRequest(METHODS.GET, `${id}`);
+    return await this.performRequest(METHODS.GET, `product/${id}`);
+  }
+  async getOrders(id?: string) {
+    if (id) {
+      return await this.performRequest(METHODS.GET, `order/${id}`);
+    } else {
+      return await this.performRequest(METHODS.GET, `order`);
+    }
   }
   async getSearchProducts(name: string) {
-    return await this.performRequest(METHODS.GET, `search/${name}`);
+    return await this.performRequest(METHODS.GET, `product/search/${name}`);
   }
   async postAddToCart(username: string, id: string) {
-    return await this.performRequest(METHODS.POST, `cart/${username}`, {
+    return await this.performRequest(METHODS.POST, `product/cart/${username}`, {
       _id: id,
     });
   }
   async postRemoveCart(username: string, id: string) {
-    return await this.performRequest(METHODS.DELETE, `cart/delete/${username}/${id}`);
+    return await this.performRequest(METHODS.DELETE, `product/cart/delete/${username}/${id}`);
   }
   async postAddRate(data: { username: string; phoneNo: string; description: string; value: number }, id: string) {
-    return await this.performRequest(METHODS.POST, `rate/${id}`, data);
+    return await this.performRequest(METHODS.POST, `product/rate/${id}`, data);
+  }
+  async postDeleteOrder(id: string) {
+    return await this.performRequest(METHODS.DELETE, `order/delete/${id}`);
   }
   async postDeleteProduct(id: string) {
-    return await this.performRequest(METHODS.DELETE, `delete/${id}`);
+    return await this.performRequest(METHODS.DELETE, `product/delete/${id}`);
   }
   async postUpdateProduct(
     id: string,
@@ -41,7 +51,7 @@ class Services extends BaseService {
       imageDetail: [];
     }
   ) {
-    return await this.performRequest(METHODS.POST, `update/${id}`, data);
+    return await this.performRequest(METHODS.POST, `product/update/${id}`, data);
   }
   async postAddProduct(data?: {
     imageLink: string;
@@ -53,7 +63,7 @@ class Services extends BaseService {
     type: string;
     imageDetail: [];
   }) {
-    return await this.performRequest(METHODS.POST, `add`, data);
+    return await this.performRequest(METHODS.POST, `product/add`, data);
   }
 }
-export default new Services('v1/api/product');
+export default new Services('v1/api');

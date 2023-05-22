@@ -10,21 +10,26 @@ const store = useStore();
 
 const router = useRouter();
 
-const loading = ref(false);
+const editedImageGroup = ref([]);
 const data = ref<Products[]>([]);
+
+const sortColumn = ref(0);
+const sortState = ref(false);
 const openEdit = ref(false);
 const openDel = ref(false);
-const editIndex = ref(0);
-const delIndex = ref(0);
-const editedImage = ref('');
-const editedName = ref('');
+const openAdd = ref(false);
+const loading = ref(false);
+
+const editedDiscount = ref(0);
 const editedStock = ref(0);
 const editedPrice = ref(0);
-const editedDiscount = ref(0);
+const delIndex = ref(0);
+const editIndex = ref(0);
+
 const editedDescription = ref('');
-const editedImageGroup = ref([]);
+const editedImage = ref('');
+const editedName = ref('');
 const editedCate = ref('');
-const openAdd = ref(false);
 
 const categoryList = [{ name: 'apple' }, { name: 'samsung' }, { name: 'tablet' }, { name: 'accessory' }];
 
@@ -61,12 +66,11 @@ async function editProduct(add: boolean) {
       type: editedCate.value,
       imageDetail: editedImageGroup.value as [],
     };
-
     const rs = await store.postUpdateProduct(data.value[editIndex.value]._id, params);
     if (rs === 'Updated successfully!') {
       data.value = [];
       data.value = await store.getData();
-      notifySignUp(`Chỉnh sửa thành công ${data.value[editIndex.value].name}`);
+      notifySignUp(`Chỉnh sửa thành công`);
     } else {
       notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
     }
@@ -90,13 +94,11 @@ async function editProduct(add: boolean) {
       notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
     }
   }
-
   openEdit.value = false;
   openAdd.value = false;
 }
 function deleteModel(index: number) {
   openDel.value = true;
-
   delIndex.value = index;
 }
 async function editModel(index: number) {
@@ -117,13 +119,55 @@ async function editModel(index: number) {
 
   editIndex.value = index;
 }
+function handleSort(value: number, property: 'name' | 'type') {
+  if (sortColumn.value === value) {
+    sortState.value = !sortState.value;
+  }
+  sortColumn.value = value;
+  if (sortState.value) {
+    data.value.sort((a, b) => a[property].toString().localeCompare(b[property].toString()));
+  } else {
+    data.value.sort((a, b) => b[property].toString().localeCompare(a[property].toString()));
+  }
+}
+function handleSortNumber(value: number, property: 'stock' | 'priceRRP' | 'discount') {
+  if (sortColumn.value === value) {
+    sortState.value = !sortState.value;
+  }
+  sortColumn.value = value;
+
+  if (sortState.value) {
+    data.value.sort((a, b) => a[property] - b[property]);
+  } else {
+    data.value.sort((a, b) => b[property] - a[property]);
+  }
+}
+const formatVND = computed(() => (slide: number) => {
+  let result = {
+    price: '',
+    priceRRP: '',
+  };
+  result.price = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(slide);
+  result.priceRRP = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(slide);
+
+  return result;
+});
 </script>
 
 <template>
-  <VDialog :is-open="openEdit" @close="openEdit = false">
+  <VDialog :is-open="openEdit" @close="(openEdit = false), (openAdd = false)">
     <template #title> </template>
     <template #detail>
-      <p v-if="data[editIndex]" class="w-[500px] text-center font-bold">Chỉnh sửa : {{ data[editIndex].name }} ?</p>
+      <p v-if="data[editIndex] && !openAdd" class="w-[500px] text-center font-bold">
+        Chỉnh sửa : {{ data[editIndex].name }} ?
+      </p>
+      <p v-else class="w-[500px] text-center font-bold">Thêm sản phẩm ?</p>
 
       <div class="flex w-full gap-4">
         <div class="flex w-full flex-col gap-4 pt-6 [&_>input]:rounded-lg">
@@ -205,22 +249,37 @@ async function editModel(index: number) {
             <div class="flex flex-[0.5] items-center justify-center truncate p-2">
               <VTitle title="Product" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <div
+              class="flex flex-1 cursor-pointer items-center justify-center truncate p-2"
+              @click="handleSort(0, 'name')"
+            >
               <VTitle title="Name" class="text-white" />
             </div>
             <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="Date" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <div
+              class="flex flex-1 cursor-pointer items-center justify-center truncate p-2"
+              @click="handleSortNumber(2, 'stock')"
+            >
               <VTitle title="Stock" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <div
+              class="flex flex-1 cursor-pointer items-center justify-center truncate p-2"
+              @click="handleSortNumber(3, 'priceRRP')"
+            >
               <VTitle title="Price" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <div
+              class="flex flex-1 cursor-pointer items-center justify-center truncate p-2"
+              @click="handleSortNumber(4, 'discount')"
+            >
               <VTitle title="Discount" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <div
+              class="flex flex-1 cursor-pointer items-center justify-center truncate p-2"
+              @click="handleSort(5, 'type')"
+            >
               <VTitle title="Category" class="text-white" />
             </div>
             <div class="flex flex-1 items-center justify-center truncate p-2">
@@ -262,7 +321,7 @@ async function editModel(index: number) {
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">
                   <div class="truncate text-textBlack">
-                    <span>{{ item.priceRRP }}</span>
+                    <span>{{ formatVND(item.priceRRP).priceRRP }}</span>
                   </div>
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">

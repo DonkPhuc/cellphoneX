@@ -49,6 +49,7 @@ onMounted(async () => {
   if (!isLoginSuccess.value) {
     router.push('/');
   }
+  window.scrollTo(0, 0);
 });
 function selectedMode(value: number) {
   selected.value = value;

@@ -13,6 +13,12 @@ export const useStore = defineStore(
     async function getProduct(id: string) {
       return await Services.getProduct(id);
     }
+    async function getOrders(id?: string) {
+      return await Services.getOrders(id);
+    }
+    async function postDeleteOrder(id: string) {
+      return await Services.postDeleteOrder(id);
+    }
     async function getSearchProducts(name: string) {
       return await Services.getSearchProducts(name);
     }
@@ -62,6 +68,7 @@ export const useStore = defineStore(
     return {
       getData,
       getProduct,
+      getOrders,
       getSearchProducts,
       postRemoveCart,
       postAddToCart,
@@ -69,6 +76,7 @@ export const useStore = defineStore(
       postDeleteProduct,
       postUpdateProduct,
       postAddProduct,
+      postDeleteOrder,
     };
   },
   {
