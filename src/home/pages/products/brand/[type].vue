@@ -57,16 +57,8 @@ watchEffect(async () => {
   if (route.params.type) {
     if (route.params.type === 'all') {
       data.value = dataAll.value;
-      filterRange.value = false;
-      range.value[0] = 0;
-      range.value[1] = 50000000;
-      selectedSort.value = '';
     } else {
       data.value = dataAll.value.filter((e) => e.type === route.params.type);
-      filterRange.value = false;
-      range.value[0] = 0;
-      range.value[1] = 50000000;
-      selectedSort.value = '';
     }
   }
   if (route.query.selloff) {
@@ -221,14 +213,14 @@ function addToFav() {
         <div
           class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
           :class="route.params.type === 'apple' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/apple`)"
+          @click="router.push(`/products/brand/apple`), unFilterPrice()"
         >
           <VIcon icon="fa-apple" /> Apple
         </div>
         <div
           class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
           :class="route.params.type === 'samsung' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/samsung`)"
+          @click="router.push(`/products/brand/samsung`), unFilterPrice()"
         >
           <VIcon icon="fa-money" /> Samsung
         </div>
@@ -304,7 +296,7 @@ function addToFav() {
         <div
           class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
           :class="route.params.type === 'all' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/all`)"
+          @click="router.push(`/products/brand/all`), unFilterPrice()"
         >
           <VIcon icon="fa-align-justify" />
           Tất cả
