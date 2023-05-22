@@ -42,10 +42,11 @@ async function getData() {
   currentPrice.value = currentProduct.value.price;
   currentPriceRRP.value = currentProduct.value.priceRRP;
 
+  averageRate.value = 0;
   currentProduct.value.rate.forEach((element: { value: number }) => {
     averageRate.value = averageRate.value + element.value;
   });
-  averageRate.value = averageRate.value / currentProduct.value.rate.length;
+  averageRate.value = Number(averageRate.value / currentProduct.value.rate.length);
 
   for (let i = 0; i < currentProduct.value.rate.length; i++) {
     if (currentProduct.value.rate[i].value === 1) {
@@ -194,8 +195,8 @@ async function postRating() {
 
   openRate.value = false;
   if (result) {
+    await getData();
     notifySignUp('Cảm ơn bạn đã gửi đánh giá');
-    getData();
   }
   ratingProduct.value = -1;
   descriptionRate.value = '';
@@ -495,10 +496,10 @@ const ratingProd = computed(() => {
               <div class="flex">
                 <div class="flex flex-1 items-center justify-center border md:flex-[0.7] lg:rounded-l-2xl">
                   <div class="flex flex-col items-center">
-                    <span class="flex justify-center text-2xl font-bold"
+                    <span :key="averageRate" class="flex justify-center text-2xl font-bold"
                       >{{ averageRate < 5 ? averageRate.toFixed(1) : 5.0 }}/5</span
                     >
-                    <div class="flex items-center">
+                    <div :key="averageRate" class="flex items-center">
                       <VIcon :icon-class="averageRate > 0 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
                       <VIcon :icon-class="averageRate > 1 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
                       <VIcon :icon-class="averageRate > 2 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
