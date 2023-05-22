@@ -23,7 +23,6 @@ const editedEmail = ref('');
 const editedUserName = ref('');
 const editedRole = ref('');
 const editedPassword = ref('');
-const openAdd = ref(false);
 
 onMounted(async () => {
   loading.value = true;
@@ -46,51 +45,31 @@ async function deleteProduct() {
   }
   openDel.value = false;
 }
-async function editProduct(add: boolean) {
-  if (!add) {
-    const params = {
-      userFullName: editedDisplayName.value,
-      username: editedUserName.value,
-      email: editedEmail.value,
-      password: editedPassword.value,
-      role: editedRole.value,
-    };
-
-    const rs = await userStore.postUpdateUser(
-      params.userFullName,
-      params.username,
-      params.email,
-      editedPassword.value,
-      data.value[editIndex.value].username,
-      params.role
-    );
-    if (rs === 'Updated successfully!') {
-      data.value = [];
-      data.value = (await userStore.getAllCustomers()) as Customers[];
-      notifySignUp(`Chỉnh sửa thành công ${data.value[editIndex.value].username}`);
-    } else {
-      notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
-    }
+async function editProduct() {
+  const params = {
+    userFullName: editedDisplayName.value,
+    username: editedUserName.value,
+    email: editedEmail.value,
+    password: editedPassword.value,
+    role: editedRole.value,
+  };
+  const rs = await userStore.postUpdateUser(
+    params.userFullName,
+    params.username,
+    params.email,
+    editedPassword.value,
+    data.value[editIndex.value].username,
+    params.role
+  );
+  if (rs === 'Updated successfully!') {
+    data.value = [];
+    data.value = (await userStore.getAllCustomers()) as Customers[];
+    notifySignUp(`Chỉnh sửa thành công ${data.value[editIndex.value].username}`);
   } else {
-    // const params = {
-    //   userFullName: editedDisplayName.value,
-    //   username: editedUserName.value,
-    //   email: editedEmail.value,
-    //   password: '1',
-    //   role: editedRole.value,
-    // };
-    // const rs = await userStore.postSignUp(params);
-    // if (rs) {
-    //   data.value = [];
-    //   data.value = (await userStore.getAllCustomers()) as Customers[];
-    //   notifySignUp(`Thêm thành công`);
-    // } else {
-    //   notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
-    // }
+    notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
   }
 
   openEdit.value = false;
-  openAdd.value = false;
 }
 function deleteModel(index: number) {
   openDel.value = true;
@@ -120,7 +99,7 @@ async function editModel(index: number) {
         <input v-model="editedUserName" :disabled="true" type="text" placeholder="User Name" />
         <select id="category" v-model="editedRole" class="w-full appearance-none rounded-lg bg-white p-2 !ring-0">
           <option :value="editedRole">{{ editedRole }}</option>
-          <option :value="editedRole === 'admin' ? 'customer' : 'apple'">
+          <option :value="editedRole === 'admin' ? 'customer' : 'admin'">
             {{ editedRole === 'admin' ? 'customer' : 'admin' }}
           </option>
         </select>
@@ -128,7 +107,7 @@ async function editModel(index: number) {
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">
-        <VButton input-class="w-36 !ring-0" size="large" label="Đồng ý" @click="editProduct(openAdd)" />
+        <VButton input-class="w-36 !ring-0" size="large" label="Đồng ý" @click="editProduct" />
         <VButton
           input-class="w-36 !ring-0"
           size="large"
@@ -172,7 +151,6 @@ async function editModel(index: number) {
     <div class="flex flex-col gap-6 bg-bgBlack p-6">
       <div class="flex justify-between">
         <span class="font-bold text-white">Recent Customer</span>
-        <VButton label="New Customer" @click="(openEdit = true), (openAdd = true)" />
       </div>
 
       <div class="flex h-1 flex-1">

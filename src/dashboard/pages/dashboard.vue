@@ -7,14 +7,14 @@ import { useStore } from '~/home/stores/Store';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
-const { isLoginSuccess, userFullName } = storeToRefs(userStore);
+const { isLoginSuccess, userFullName, roleCustomer } = storeToRefs(userStore);
 const router = useRouter();
 const route = useRoute();
 
 const selected = ref(0);
 
 onMounted(() => {
-  if (isLoginSuccess.value !== '0888888888') {
+  if (roleCustomer.value !== 'admin') {
     router.push('/');
   }
 });
@@ -105,7 +105,7 @@ watchEffect(() => {
       <template v-if="selected === 0"> <VDashboard /> </template>
       <template v-if="selected === 1"> <VProducts /> </template>
       <template v-if="selected === 2"> <VUser /> </template>
-      <template v-if="selected === 3"> <VCharts /> </template>
+      <template v-if="selected === 3"> <VOrders /> </template>
     </div>
   </div>
 </template>
