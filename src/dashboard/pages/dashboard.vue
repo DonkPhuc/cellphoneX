@@ -4,17 +4,18 @@ import { routerKey } from 'vue-router';
 import { toast } from 'vue3-toastify';
 
 import { useStore } from '~/home/stores/Store';
+import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
-const { isLoginSuccess, userFullName, roleCustomer } = storeToRefs(userStore);
+const { isLoginSuccess, userFullName } = storeToRefs(userStore);
 const router = useRouter();
-const route = useRoute();
 
 const selected = ref(0);
 
-onMounted(() => {
-  if (roleCustomer.value !== 'admin') {
+onMounted(async () => {
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
+  if (result[0].role !== 'admin') {
     router.push('/');
   }
 });

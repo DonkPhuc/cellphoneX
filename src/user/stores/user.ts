@@ -7,7 +7,6 @@ export const useUserStore = defineStore(
   () => {
     const isLoginSuccess = ref('');
     const userFullName = ref('');
-    const roleCustomer = ref('');
 
     async function getCustomer(params: string) {
       return await customerServices.getCustomer(params);
@@ -35,7 +34,6 @@ export const useUserStore = defineStore(
     return {
       isLoginSuccess,
       userFullName,
-      roleCustomer,
       getCustomer,
       getAllCustomers,
       postSignUp,

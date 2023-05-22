@@ -27,11 +27,13 @@ async function go(url?: string) {
 }
 function search(event?: Event) {
   if (event) {
-    if (searchKey.value === '') {
-      router.push(`/products/brand/all`);
-    } else if ((event as KeyboardEvent).key === 'Enter') {
-      router.push(`/products/brand/search?search=${searchKey.value}`);
-      searchKey.value = '';
+    if ((event as KeyboardEvent).key === 'Enter') {
+      if (searchKey.value === '') {
+        router.push(`/products/brand/all`);
+      } else {
+        router.push(`/products/brand/search?search=${searchKey.value}`);
+        searchKey.value = '';
+      }
     }
   } else {
     if (searchKey.value === '') {
