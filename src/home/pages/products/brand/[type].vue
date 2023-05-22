@@ -99,16 +99,14 @@ async function getDataSearch() {
   }
   result.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
-    function countRate() {
+    const countRate = computed(() => {
       let total = 0;
       let length = 0;
-      length = e.rate.length;
-      e.rate.forEach((e: { value: number }) => {
-        total += e.value / length;
-      });
+      length = Number(e.rate.length);
+      e.rate.forEach((e: { value: number }) => (total = (total + e.value) / length));
       return total;
-    }
-    e.averageRate = countRate();
+    });
+    e.averageRate = countRate.value;
   });
   data.value = result;
 }
