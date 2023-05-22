@@ -222,7 +222,8 @@ const buttonList = [
           :class="route.params.type === `${item.title.toLowerCase()}` ? 'border-main bg-[#fef2f2] text-main' : ''"
           @click="router.push(`/products/brand/${item.title.toLowerCase()}`), unFilterPrice()"
         >
-          <VIcon :icon="item.title === 'Apple' ? 'fa-apple' : ''" /> {{ item.title }}
+          <VIcon :icon="item.title === 'Apple' ? 'fa-apple' : 'fa-tablet'" />
+          {{ item.title }}
         </div>
 
         <div class="flex">
