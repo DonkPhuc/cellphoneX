@@ -27,9 +27,9 @@ onMounted(async () => {
 });
 
 async function getData() {
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
-  if (result[0]) {
-    cart.value = result[0].cart;
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  if (result) {
+    cart.value = result.cart;
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });
@@ -85,9 +85,9 @@ function minusQuality(index: number) {
 }
 async function remove(id: string) {
   await store.postRemoveCart(isLoginSuccess.value, id);
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
-  if (result[0]) {
-    cart.value = result[0].cart;
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  if (result) {
+    cart.value = result.cart;
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });

@@ -6,6 +6,7 @@ import { toast } from 'vue3-toastify';
 
 import { Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
+import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
@@ -99,13 +100,31 @@ async function addToCart(action: string) {
   if (!isLoginSuccess.value) {
     open.value = true;
   } else {
-    const rs = await store.postAddToCart(isLoginSuccess.value, route.params.id.toString());
+    const params = {
+      _id: route.params.id.toString(),
+      imageLink: currentProduct.value.imageLink,
+      priceRRP: currentProduct.value.priceRRP,
+      discount: currentProduct.value.discount,
+      quantity: currentProduct.value.quantity,
+      name: currentProduct.value.name,
+    };
+    const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+    const find = result.cart.findIndex((e: Customers) => e._id === route.params.id.toString());
     if (action === 'buy') {
-      await router.push(`/cart`);
-    } else if (rs === 'successfully') {
-      notifySignUp('Đã thêm vào giỏ hàng');
+      if (find !== undefined && find > -1) {
+        await router.push(`/cart`);
+      }
+      if (find === undefined || find === -1) {
+        await store.postAddToCart(isLoginSuccess.value, params);
+        await router.push(`/cart`);
+      }
     } else {
-      notifySignUp('Sản phẩm đã có trong giỏ hàng');
+      const rs = await store.postAddToCart(isLoginSuccess.value, params);
+      if (rs === 'successfully') {
+        notifySignUp('Đã thêm vào giỏ hàng', 'success');
+      } else {
+        notifySignUp('Sản phẩm đã có trong giỏ hàng', 'success');
+      }
     }
   }
 }
@@ -119,9 +138,15 @@ function selectedOptionColor(value: number) {
   currentProduct.value.price = currentPrice.value * selectedColor.value * selectedRom.value;
   currentProduct.value.priceRRP = currentPrice.value * selectedColor.value * selectedRom.value;
 }
-const notifySignUp = (error?: string) => {
-  if (error !== '') {
-    toast(`${error}`, {});
+const notifySignUp = (error?: string, type?: string) => {
+  if (type && type === 'success') {
+    if (error !== '') {
+      toast.success(`${error}`, {});
+    }
+  } else {
+    if (error !== '') {
+      toast.error(`${error}`, {});
+    }
   }
 };
 const listRom = [
@@ -193,7 +218,7 @@ async function postRating() {
   openRate.value = false;
   if (result) {
     await getData();
-    notifySignUp('Cảm ơn bạn đã gửi đánh giá');
+    notifySignUp('Cảm ơn bạn đã gửi đánh giá', 'success');
   }
   ratingProduct.value = -1;
   descriptionRate.value = '';

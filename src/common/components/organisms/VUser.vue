@@ -29,9 +29,15 @@ onMounted(async () => {
   data.value = (await userStore.getAllCustomers()) as Customers[];
   loading.value = false;
 });
-const notifySignUp = (error?: string) => {
-  if (error !== '') {
-    toast(`${error}`, {});
+const notifySignUp = (error?: string, type?: string) => {
+  if (type && type === 'success') {
+    if (error !== '') {
+      toast.success(`${error}`, {});
+    }
+  } else {
+    if (error !== '') {
+      toast.error(`${error}`, {});
+    }
   }
 };
 async function deleteProduct() {
@@ -39,7 +45,7 @@ async function deleteProduct() {
   if (rs === 'Deleted successfully!') {
     data.value = [];
     data.value = (await userStore.getAllCustomers()) as Customers[];
-    notifySignUp(`Xóa thành công`);
+    notifySignUp(`Xóa thành công`, 'success');
   } else {
     notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
   }
@@ -64,7 +70,7 @@ async function editProduct() {
   if (rs === 'Updated successfully!') {
     data.value = [];
     data.value = (await userStore.getAllCustomers()) as Customers[];
-    notifySignUp(`Chỉnh sửa thành công`);
+    notifySignUp(`Chỉnh sửa thành công`, 'success');
   } else {
     notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
   }

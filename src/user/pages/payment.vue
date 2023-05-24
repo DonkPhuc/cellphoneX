@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { toast } from "vue3-toastify";
+import 'vue3-toastify/dist/index.css';
 
-import { Products } from "~/home/dtos";
-import { useStore } from "~/home/stores/Store";
-import { Customers } from "~/user/dtos/Customers.dto";
+import { storeToRefs } from 'pinia';
+import { toast } from 'vue3-toastify';
 
-import { useUserStore } from "../stores/user";
+import { Products } from '~/home/dtos';
+import { useStore } from '~/home/stores/Store';
+import { Customers } from '~/user/dtos/Customers.dto';
+
+import { useUserStore } from '../stores/user';
 const userStore = useUserStore();
 const store = useStore();
 const { isLoginSuccess } = storeToRefs(userStore);
@@ -14,135 +16,148 @@ const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 
 const cart = ref<Products[]>([]);
-const deliveryMode = ref("pickup");
+const deliveryMode = ref('pickup');
 const company = ref(false);
 const step = ref(0);
 const selectedPayment = ref(0);
 const selectedPhoneNo = ref(0);
-const selectedName = ref("");
-const selectedEmail = ref("");
-const selectedCity = ref("");
-const selectedDistrict = ref("");
-const selectedStore = ref("");
-const selectedDeliveryAddress = ref("");
-const orderNo = ref("");
+const selectedName = ref('');
+const selectedEmail = ref('');
+const selectedCity = ref('');
+const selectedDistrict = ref('');
+const selectedStore = ref('');
+const selectedDeliveryAddress = ref('');
+const orderNo = ref('');
 let total = 0;
 
 const cityList = [
   {
-    label: "Hồ Chí Minh",
+    label: 'Hồ Chí Minh',
     value: 0,
   },
 ];
 const storeList = [
   {
-    label: "134 Nguyễn Thái Học, P. Phạm Ngũ Lão, Quận 1",
+    label: '134 Nguyễn Thái Học, P. Phạm Ngũ Lão, Quận 1',
     value: 1,
   },
   {
-    label: "218-221 Trần Quang Khải, Phường Tân Định, Quận 1",
+    label: '218-221 Trần Quang Khải, Phường Tân Định, Quận 1',
     value: 1,
   },
   {
-    label: "157-159 Nguyễn Thị Minh Khai, P. Phạm Ngũ Lão, Quận 1",
+    label: '157-159 Nguyễn Thị Minh Khai, P. Phạm Ngũ Lão, Quận 1',
     value: 1,
   },
   {
-    label: "55B Trần Quang Khải, P. Tân Định, Quận 1",
+    label: '55B Trần Quang Khải, P. Tân Định, Quận 1',
     value: 1,
   },
 ];
 const districtList = [
   {
-    label: "Quận 1",
+    label: 'Quận 1',
     value: 1,
   },
   {
-    label: "Quận 2",
+    label: 'Quận 2',
     value: 2,
   },
   {
-    label: "Quận 3",
+    label: 'Quận 3',
     value: 3,
   },
   {
-    label: "Quận 4",
+    label: 'Quận 4',
     value: 4,
   },
   {
-    label: "Quận 5",
+    label: 'Quận 5',
     value: 5,
   },
   {
-    label: "Quận 6",
+    label: 'Quận 6',
     value: 6,
   },
   {
-    label: "Quận 7",
+    label: 'Quận 7',
     value: 7,
   },
   {
-    label: "Quận 8",
+    label: 'Quận 8',
     value: 8,
   },
   {
-    label: "Quận 9",
+    label: 'Quận 9',
     value: 9,
   },
   {
-    label: "Quận 10",
+    label: 'Quận 10',
     value: 10,
   },
   {
-    label: "Quận 11",
+    label: 'Quận 11',
     value: 11,
   },
   {
-    label: "Quận 12",
+    label: 'Quận 12',
     value: 12,
   },
   {
-    label: "Gò Vấp",
+    label: 'Gò Vấp',
     value: 13,
   },
   {
-    label: "Tân Phú",
+    label: 'Tân Phú',
     value: 14,
   },
   {
-    label: "Phú Nhuận",
+    label: 'Phú Nhuận',
     value: 15,
   },
   {
-    label: "Tân Bình",
+    label: 'Tân Bình',
     value: 16,
   },
   {
-    label: "Bình Tân",
+    label: 'Bình Tân',
     value: 17,
   },
 ];
 onMounted(async () => {
-  const result = (await userStore.getCustomer(
-    isLoginSuccess.value
-  )) as Customers[];
-  if (result[0]) {
-    cart.value = result[0].cart;
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  if (result) {
+    cart.value = result.cart;
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });
-    if (totalCart.value === "0 ₫") {
+
+    selectedEmail.value = result.email;
+    selectedPhoneNo.value = Number(result.username);
+    selectedName.value = result.userFullName;
+
+    if (totalCart.value === '0 ₫') {
       router.push(`/`);
     }
   }
   window.scrollTo(0, 0);
 });
-
+const notifySignUp = (error?: string, type?: string) => {
+  if (type && type === 'success') {
+    if (error !== '') {
+      toast.success(`${error}`, {});
+    }
+  } else {
+    if (error !== '') {
+      toast.error(`${error}`, {});
+    }
+  }
+};
 const styleSelectedPayment = computed(() => (index: number) => {
   if (selectedPayment.value === index) {
-    return "border-main border";
+    return 'border-main border';
   }
-  return "";
+  return '';
 });
 
 const filterDistrict = computed(() => {
@@ -158,9 +173,9 @@ const totalCart = computed(() => {
   cart.value.forEach((element) => {
     total += Number(element.price * element.quantity);
   });
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
   }).format(total);
 });
 
@@ -168,26 +183,21 @@ async function goCart(go: string) {
   await router.push(`/${go}`);
 }
 
-function nextStep() {
-  let errorMessage = "";
+async function nextStep() {
+  let errorMessage = '';
 
   if (step.value === 0) {
     generateRandomString(10);
-    if (deliveryMode.value === "delivery" && !selectedDeliveryAddress.value)
-      errorMessage = "Vui lòng chọn địa chỉ";
-    if (deliveryMode.value === "pickup" && !selectedStore.value)
-      errorMessage = "Vui lòng chọn địa chỉ";
-    if (!selectedDistrict.value) errorMessage = "Vui lòng chọn quận,huyện";
-    if (!selectedCity.value) errorMessage = "Vui lòng chọn thành phố";
-    if (!validateName(selectedName.value))
-      errorMessage = "Sai định dạng họ tên";
-    if (!validateEmail(selectedEmail.value))
-      errorMessage = "Sai định dạng email";
-    if (!validatePhoneNumber(selectedPhoneNo.value))
-      errorMessage = "Sai định dạng SĐT";
-    if (!selectedPhoneNo.value) errorMessage = "Vui lòng nhập SĐT";
-    if (!selectedName.value) errorMessage = "Vui lòng nhập họ tên";
-    if (errorMessage === "") {
+    if (deliveryMode.value === 'delivery' && !selectedDeliveryAddress.value) errorMessage = 'Vui lòng chọn địa chỉ';
+    if (deliveryMode.value === 'pickup' && !selectedStore.value) errorMessage = 'Vui lòng chọn địa chỉ';
+    if (!selectedDistrict.value) errorMessage = 'Vui lòng chọn quận,huyện';
+    if (!selectedCity.value) errorMessage = 'Vui lòng chọn thành phố';
+    if (!validateName(selectedName.value)) errorMessage = 'Sai định dạng họ tên';
+    if (!validateEmail(selectedEmail.value)) errorMessage = 'Sai định dạng email';
+    if (!validatePhoneNumber(selectedPhoneNo.value)) errorMessage = 'Sai định dạng SĐT';
+    if (!selectedPhoneNo.value) errorMessage = 'Vui lòng nhập SĐT';
+    if (!selectedName.value) errorMessage = 'Vui lòng nhập họ tên';
+    if (errorMessage === '') {
       step.value = 1;
     }
     notifySignUp(errorMessage);
@@ -195,9 +205,26 @@ function nextStep() {
 
   if (step.value === 1) {
     if (selectedPayment.value === 0) {
-      notifySignUp("Vui lòng chọn phương thức thanh toán");
+      notifySignUp('Vui lòng chọn phương thức thanh toán');
     } else {
       step.value = 2;
+
+      const params = {
+        orderNumber: orderNo.value,
+        orderDelivery: deliveryMode.value,
+        customerName: selectedName.value,
+        customerUserName: isLoginSuccess.value,
+        orderAddress: `${
+          (selectedDeliveryAddress.value || selectedStore.value, selectedDistrict.value, selectedCity.value)
+        }`,
+        orderTotal: total,
+        status: 'unpaid',
+        items: cart.value,
+      };
+
+      console.log(params);
+
+      await store.postAddOrder(params);
     }
   }
 }
@@ -226,13 +253,10 @@ function updateDeliveryAddress(address: string) {
   selectedDeliveryAddress.value = address;
 }
 function generateRandomString(length: number) {
-  orderNo.value = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  orderNo.value = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   for (let i = 0; i < length; i++) {
-    orderNo.value += characters.charAt(
-      Math.floor(Math.random() * characters.length)
-    );
+    orderNo.value += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 }
 function validatePhoneNumber(phoneNumber: number): boolean {
@@ -247,11 +271,6 @@ function validateName(name: string): boolean {
   const regex = /[\w]{2,}/g;
   return regex.test(name);
 }
-const notifySignUp = (error?: string) => {
-  if (error !== "") {
-    toast(`${error}`, {});
-  }
-};
 </script>
 
 <template>
@@ -261,9 +280,7 @@ const notifySignUp = (error?: string) => {
     <div class="flex flex-1 flex-col px-2 py-4">
       <div class="flex flex-1 flex-col gap-12">
         <div class="flex">
-          <span
-            class="flex cursor-pointer items-start font-bold text-main"
-            @click="goCart('cart')"
+          <span class="flex cursor-pointer items-start font-bold text-main" @click="goCart('cart')"
             ><VIcon size="text-[20px]" icon="fa-angle-left" /> Trở về
           </span>
           <span class="flex flex-1 justify-center text-xl font-bold text-main">
@@ -294,12 +311,7 @@ const notifySignUp = (error?: string) => {
                 <p class="text-center text-xs text-main">Thông tin đặt hàng</p>
               </div>
             </div>
-            <div
-              class="flex flex-[0.2] items-center"
-              :class="step > 0 ? 'text-main' : ''"
-            >
-              ---
-            </div>
+            <div class="flex flex-[0.2] items-center" :class="step > 0 ? 'text-main' : ''">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
@@ -308,20 +320,10 @@ const notifySignUp = (error?: string) => {
                 >
                   <VIcon icon="fa-credit-card-alt" />
                 </div>
-                <p
-                  :class="step > 0 ? 'text-main' : ''"
-                  class="text-center text-xs"
-                >
-                  Thanh toán
-                </p>
+                <p :class="step > 0 ? 'text-main' : ''" class="text-center text-xs">Thanh toán</p>
               </div>
             </div>
-            <div
-              class="flex flex-[0.2] items-center"
-              :class="step > 1 ? 'text-main' : ''"
-            >
-              ---
-            </div>
+            <div class="flex flex-[0.2] items-center" :class="step > 1 ? 'text-main' : ''">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
@@ -330,20 +332,12 @@ const notifySignUp = (error?: string) => {
                 >
                   <VIcon icon="fa-archive" />
                 </div>
-                <p
-                  class="text-center text-xs"
-                  :class="step > 1 ? 'text-main' : ''"
-                >
-                  Hoàn tất đặt hàng
-                </p>
+                <p class="text-center text-xs" :class="step > 1 ? 'text-main' : ''">Hoàn tất đặt hàng</p>
               </div>
             </div>
           </div>
 
-          <div
-            v-if="step === 0"
-            class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl"
-          >
+          <div v-if="step === 0" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
             <VTitle title="Thông tin khách hàng" />
             <VInput
               :model="selectedName"
@@ -426,42 +420,21 @@ const notifySignUp = (error?: string) => {
             </div>
             <VInput placeholder="Yêu cầu khác" input-class="rounded-lg !h-10" />
             <div class="flex items-center gap-2">
-              <input
-                id="company"
-                v-model="company"
-                class="text-main"
-                type="checkbox"
-              />
+              <input id="company" v-model="company" class="text-main" type="checkbox" />
               <label class="cursor-pointer" for="company">
-                Yêu cầu xuất hóa đơn công ty (Vui lòng điền email để nhận hoá
-                đơn VAT)</label
+                Yêu cầu xuất hóa đơn công ty (Vui lòng điền email để nhận hoá đơn VAT)</label
               >
             </div>
             <p class="italic text-main/70">
-              (Với đơn hàng trên 20 triệu vui lòng thanh toán chuyển khoản từ
-              tài khoản công ty khi cần xuất VAT cho công ty)
+              (Với đơn hàng trên 20 triệu vui lòng thanh toán chuyển khoản từ tài khoản công ty khi cần xuất VAT cho
+              công ty)
             </p>
-            <VInput
-              v-if="company"
-              placeholder="Tên công ty"
-              input-class="rounded-lg !h-10"
-            />
-            <VInput
-              v-if="company"
-              placeholder="Địa chỉ công ty"
-              input-class="rounded-lg !h-10"
-            />
-            <VInput
-              v-if="company"
-              placeholder="Mã số thuế"
-              input-class="rounded-lg !h-10"
-            />
+            <VInput v-if="company" placeholder="Tên công ty" input-class="rounded-lg !h-10" />
+            <VInput v-if="company" placeholder="Địa chỉ công ty" input-class="rounded-lg !h-10" />
+            <VInput v-if="company" placeholder="Mã số thuế" input-class="rounded-lg !h-10" />
           </div>
 
-          <div
-            v-if="step === 1"
-            class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl"
-          >
+          <div v-if="step === 1" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
             <div class="flex flex-col gap-3 rounded-2xl border p-3 shadow-xl">
               <div class="flex justify-center">
                 <VTitle title="THÔNG TIN ĐẶT HÀNG" />
@@ -484,11 +457,8 @@ const notifySignUp = (error?: string) => {
               </div>
               <div class="flex gap-3">
                 <p>
-                  <span class="font-bold">Nhận Sản Phẩm Tại: </span
-                  >{{ selectedDeliveryAddress || selectedStore }}
-                  <span v-if="deliveryMode !== 'pickup'">{{
-                    ", " + selectedDistrict + ", " + selectedCity
-                  }}</span>
+                  <span class="font-bold">Nhận Sản Phẩm Tại: </span>{{ selectedDeliveryAddress || selectedStore }}
+                  <span v-if="deliveryMode !== 'pickup'">{{ ', ' + selectedDistrict + ', ' + selectedCity }}</span>
                 </p>
               </div>
               <div class="flex gap-3">
@@ -509,9 +479,7 @@ const notifySignUp = (error?: string) => {
                   @click="choosePayment(1)"
                 >
                   <div class="flex-col">
-                    <span class="text-xs font-bold"
-                      >Thanh toán tại cửa hàng</span
-                    >
+                    <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
                     <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
@@ -521,9 +489,7 @@ const notifySignUp = (error?: string) => {
                   @click="choosePayment(2)"
                 >
                   <div class="flex-col">
-                    <span class="text-xs font-bold"
-                      >Thanh toán chuyển khoản</span
-                    >
+                    <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
                     <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
@@ -536,9 +502,7 @@ const notifySignUp = (error?: string) => {
                   @click="choosePayment(3)"
                 >
                   <div class="flex-col">
-                    <span class="text-xs font-bold"
-                      >Thanh toán tại cửa hàng</span
-                    >
+                    <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
                     <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
@@ -548,9 +512,7 @@ const notifySignUp = (error?: string) => {
                   @click="choosePayment(4)"
                 >
                   <div class="flex-col">
-                    <span class="text-xs font-bold"
-                      >Thanh toán chuyển khoản</span
-                    >
+                    <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
                     <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
@@ -563,9 +525,7 @@ const notifySignUp = (error?: string) => {
                   @click="choosePayment(5)"
                 >
                   <div class="flex-col">
-                    <span class="text-xs font-bold"
-                      >Thanh toán tại cửa hàng</span
-                    >
+                    <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
                     <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
@@ -575,9 +535,7 @@ const notifySignUp = (error?: string) => {
                   @click="choosePayment(6)"
                 >
                   <div class="flex-col">
-                    <span class="text-xs font-bold"
-                      >Thanh toán chuyển khoản</span
-                    >
+                    <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
                     <img class="mx-auto" src="" alt="" />
                   </div>
                 </div>
@@ -585,27 +543,20 @@ const notifySignUp = (error?: string) => {
             </div>
           </div>
 
-          <div
-            v-if="step === 2"
-            class="z-1 flex flex-col gap-6 rounded-2xl border bg-white p-2 shadow-xl"
-          >
+          <div v-if="step === 2" class="z-1 flex flex-col gap-6 rounded-2xl border bg-white p-2 shadow-xl">
             <div class="flex">
               <p>
-                Cảm ơn Quý khách hàng đã chọn mua hàng tại CellphoneS. Trong 15
-                phút, CellphoneS sẽ SMS hoặc gọi để xác nhận đơn hàng.
+                Cảm ơn Quý khách hàng đã chọn mua hàng tại CellphoneS. Trong 15 phút, CellphoneS sẽ SMS hoặc gọi để xác
+                nhận đơn hàng.
                 <br />
-                * Các đơn hàng từ 21h30 tối tới 8h sáng hôm sau. CellphoneS sẽ
-                liên hệ với Quý khách trước 10h trưa cùng ngày
+                * Các đơn hàng từ 21h30 tối tới 8h sáng hôm sau. CellphoneS sẽ liên hệ với Quý khách trước 10h trưa cùng
+                ngày
               </p>
             </div>
-            <div
-              class="flex flex-col gap-3 rounded-2xl border bg-[#E4EDDA] p-3 shadow-xl"
-            >
+            <div class="flex flex-col gap-3 rounded-2xl border bg-[#E4EDDA] p-3 shadow-xl">
               <div class="flex flex-col gap-2 text-lg">
                 <div class="flex justify-center">
-                  <span class="!text-lg font-bold !text-[#155724]"
-                    >ĐẶT HÀNG THÀNH CÔNG</span
-                  >
+                  <span class="!text-lg font-bold !text-[#155724]">ĐẶT HÀNG THÀNH CÔNG</span>
                 </div>
                 <span>
                   Mã Đơn Hàng:<span class="!text-lg font-bold !text-[#155724]">
@@ -625,22 +576,12 @@ const notifySignUp = (error?: string) => {
                   </span></span
                 >
                 <span>
-                  Nhận Sản Phẩm Tại:<span
-                    class="!text-lg font-bold !text-[#155724]"
-                  >
-                    {{
-                      `${
-                        (selectedDeliveryAddress || selectedStore,
-                        selectedDistrict,
-                        selectedCity)
-                      }`
-                    }}
+                  Nhận Sản Phẩm Tại:<span class="!text-lg font-bold !text-[#155724]">
+                    {{ `${(selectedDeliveryAddress || selectedStore, selectedDistrict, selectedCity)}` }}
                   </span></span
                 >
                 <span>
-                  Hình Thức Thanh Toán:<span
-                    class="!text-lg font-bold !text-[#155724]"
-                  >
+                  Hình Thức Thanh Toán:<span class="!text-lg font-bold !text-[#155724]">
                     {{ selectedPayment }}
                   </span></span
                 >
@@ -652,29 +593,17 @@ const notifySignUp = (error?: string) => {
                 >
               </div>
             </div>
-            <div
-              class="flex flex-col gap-3 rounded-2xl border px-5 py-3 shadow-xl"
-            >
-              <div
-                v-for="item in cart"
-                :key="item._id"
-                class="flex gap-4 border-b-2"
-              >
+            <div class="flex flex-col gap-3 rounded-2xl border px-5 py-3 shadow-xl">
+              <div v-for="item in cart" :key="item._id" class="flex gap-4 border-b-2">
                 <img :src="item.imageLink" class="h-24 w-24" alt="" />
                 <div class="flex flex-col">
                   <p class="text-lg font-bold">{{ item.name }}</p>
                   <span class="flex gap-1">
                     Giá:
                     <span class="font-bold"
-                      >{{
-                        Math.round(
-                          item.priceRRP - (item.priceRRP * item.discount) / 100
-                        )
-                      }}₫</span
+                      >{{ Math.round(item.priceRRP - (item.priceRRP * item.discount) / 100) }}₫</span
                     >
-                    <span class="font-gray-400 line-through"
-                      >{{ item.priceRRP }}₫</span
-                    >
+                    <span class="font-gray-400 line-through">{{ item.priceRRP }}₫</span>
                   </span>
                   <p class="">
                     Số lượng: <span class="font-bold">{{ item.quantity }}</span>
@@ -682,13 +611,7 @@ const notifySignUp = (error?: string) => {
                   <p class="">
                     Tổng tiền:
                     <span class="font-bold">
-                      {{
-                        Math.round(
-                          (item.priceRRP -
-                            (item.priceRRP * item.discount) / 100) *
-                            item.quantity
-                        )
-                      }}
+                      {{ Math.round((item.priceRRP - (item.priceRRP * item.discount) / 100) * item.quantity) }}
                       ₫
                     </span>
                   </p>
@@ -717,10 +640,7 @@ const notifySignUp = (error?: string) => {
           </div>
         </div>
 
-        <div
-          v-if="step !== 2"
-          class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg"
-        >
+        <div v-if="step !== 2" class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
           <div class="flex flex-1 justify-between">
             <span class="font-bold">Tổng tiền tạm tính:</span>
             <span class="font-bold text-main">{{ totalCart }} </span>

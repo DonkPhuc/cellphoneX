@@ -14,8 +14,8 @@ const router = useRouter();
 const selected = ref(0);
 
 onMounted(async () => {
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
-  if (result[0].role !== 'admin') {
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  if (result.role !== 'admin') {
     router.push('/');
   }
   window.scrollTo(0, 0);

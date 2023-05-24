@@ -57,9 +57,15 @@ function selectedMode(value: number) {
     open.value = true;
   }
 }
-const notifySignUp = (error?: string) => {
-  if (error !== '') {
-    toast(`${error}`, {});
+const notifySignUp = (error?: string, type?: string) => {
+  if (type && type === 'success') {
+    if (error !== '') {
+      toast.success(`${error}`, {});
+    }
+  } else {
+    if (error !== '') {
+      toast.error(`${error}`, {});
+    }
   }
 };
 function logout() {
@@ -96,7 +102,7 @@ async function updateUser() {
   }
 
   if (rs === 'Updated successfully!') {
-    notifySignUp('Cập nhật tài khoản thành công!');
+    notifySignUp('Cập nhật tài khoản thành công!', 'success');
     initial();
   } else {
     notifySignUp('Có lỗi xảy ra!');
@@ -104,8 +110,8 @@ async function updateUser() {
 }
 
 async function initial() {
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers[];
-  data.value = result[0];
+  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  data.value = result;
 
   editedPassword.value = '';
   editedPhoneNo.value = '';

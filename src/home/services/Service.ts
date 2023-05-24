@@ -21,10 +21,11 @@ class Services extends BaseService {
   async getSearchProducts(name: string) {
     return await this.performRequest(METHODS.GET, `product/search/${name}`);
   }
-  async postAddToCart(username: string, id: string) {
-    return await this.performRequest(METHODS.POST, `product/cart/${username}`, {
-      _id: id,
-    });
+  async postAddToCart(
+    username: string,
+    data: { _id: string; imageLink: string; priceRRP: number; discount: number; quantity: number }
+  ) {
+    return await this.performRequest(METHODS.POST, `product/cart/${username}`, data);
   }
   async postRemoveCart(username: string, id: string) {
     return await this.performRequest(METHODS.DELETE, `product/cart/delete/${username}/${id}`);
@@ -64,6 +65,18 @@ class Services extends BaseService {
     imageDetail: [];
   }) {
     return await this.performRequest(METHODS.POST, `product/add`, data);
+  }
+  async postAddOrder(data?: {
+    item: [];
+    status: string;
+    orderTotal: number;
+    orderAddress: string;
+    customerUsername: string;
+    customerName: string;
+    orderDelivery: string;
+    orderNumber: string;
+  }) {
+    return await this.performRequest(METHODS.POST, `order/add`, data);
   }
 }
 export default new Services('v1/api');

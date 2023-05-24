@@ -22,8 +22,11 @@ export const useStore = defineStore(
     async function getSearchProducts(name: string) {
       return await Services.getSearchProducts(name);
     }
-    async function postAddToCart(username: string, id: string) {
-      return await Services.postAddToCart(username, id);
+    async function postAddToCart(
+      username: string,
+      data: { _id: string; imageLink: string; priceRRP: number; discount: number; quantity: number }
+    ) {
+      return await Services.postAddToCart(username, data);
     }
     async function postRemoveCart(username: string, id: string) {
       return await Services.postRemoveCart(username, id);
@@ -64,6 +67,18 @@ export const useStore = defineStore(
     }) {
       return await Services.postAddProduct(data);
     }
+    async function postAddOrder(data: {
+      item: [];
+      status: string;
+      orderTotal: number;
+      orderAddress: string;
+      customerUsername: string;
+      customerName: string;
+      orderDelivery: string;
+      orderNumber: string;
+    }) {
+      return await Services.postAddOrder(data);
+    }
 
     return {
       getData,
@@ -77,6 +92,7 @@ export const useStore = defineStore(
       postUpdateProduct,
       postAddProduct,
       postDeleteOrder,
+      postAddOrder,
     };
   },
   {

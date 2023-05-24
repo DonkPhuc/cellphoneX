@@ -82,7 +82,7 @@ async function login() {
     }
   }
 
-  notifySignUp(errorSignUp);
+  notifySignUp(errorSignUp, `${errorSignUp === 'Đăng nhập thành công' ? 'success' : ''}`);
 }
 async function signUp() {
   let errorSignUp = 'Đăng ký thành công';
@@ -114,21 +114,34 @@ async function signUp() {
     )) as string;
     customerList.value = (await userStore.getAllCustomers()) as Customers[];
   }
-  if (result !== 'exists account') notifySignUp(errorSignUp);
+  if (result !== 'exists account') notifySignUp(errorSignUp, 'success');
   else if (result === 'exists account') notifySignUp('Tài khoản đã tồn tại');
 
   return errorSignUp;
 }
 
-const notifySignUp = (error?: string) => {
-  if (error !== '') {
-    toast(`${error}`, {});
-    if (error === 'Đăng ký thành công') {
-      userName.value = '';
-      userEmail.value = '';
-      userFullName.value = '';
-      password.value = '';
-      password2.value = '';
+const notifySignUp = (error?: string, type?: string) => {
+  if (type && type === 'success') {
+    if (error !== '') {
+      toast(`${error}`, {});
+      if (error === 'Đăng ký thành công') {
+        userName.value = '';
+        userEmail.value = '';
+        userFullName.value = '';
+        password.value = '';
+        password2.value = '';
+      }
+    }
+  } else {
+    if (error !== '') {
+      toast(`${error}`, {});
+      if (error === 'Đăng ký thành công') {
+        userName.value = '';
+        userEmail.value = '';
+        userFullName.value = '';
+        password.value = '';
+        password2.value = '';
+      }
     }
   }
 };

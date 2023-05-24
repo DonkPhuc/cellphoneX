@@ -38,9 +38,15 @@ onMounted(async () => {
   data.value = await store.getData();
   loading.value = false;
 });
-const notifySignUp = (error?: string) => {
-  if (error !== '') {
-    toast(`${error}`, {});
+const notifySignUp = (error?: string, type?: string) => {
+  if (type && type === 'success') {
+    if (error !== '') {
+      toast.success(`${error}`, {});
+    }
+  } else {
+    if (error !== '') {
+      toast.error(`${error}`, {});
+    }
   }
 };
 async function deleteProduct() {
@@ -48,9 +54,9 @@ async function deleteProduct() {
   if (rs === 'Deleted successfully!') {
     data.value = [];
     data.value = await store.getData();
-    notifySignUp(`Xóa thành công`);
+    notifySignUp(`Xóa thành công`, 'success');
   } else {
-    notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
+    notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`, '0');
   }
   openDel.value = false;
 }
@@ -70,9 +76,9 @@ async function editProduct(add: boolean) {
     if (rs === 'Updated successfully!') {
       data.value = [];
       data.value = await store.getData();
-      notifySignUp(`Chỉnh sửa thành công`);
+      notifySignUp(`Chỉnh sửa thành công`, 'success');
     } else {
-      notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
+      notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`, '0');
     }
   } else {
     const params = {
@@ -89,9 +95,9 @@ async function editProduct(add: boolean) {
     if (rs) {
       data.value = [];
       data.value = await store.getData();
-      notifySignUp(`Thêm thành công`);
+      notifySignUp(`Thêm thành công`, 'success');
     } else {
-      notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
+      notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`, '0');
     }
   }
   openEdit.value = false;
