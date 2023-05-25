@@ -17,6 +17,7 @@ const { isLoginSuccess, userFullName } = storeToRefs(userStore);
 const router = useRouter();
 const route = useRoute();
 
+const loading = ref(false);
 const data = ref<Customers>();
 const dataOrders = ref<any[]>([]);
 const dataOrder = ref<any>();
@@ -149,6 +150,8 @@ async function updateUser() {
 }
 
 async function initial() {
+  loading.value = true;
+
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
 
   dataOrders.value = (await store.getOrders()) as [];
@@ -171,6 +174,8 @@ async function initial() {
   showPass.value = false;
 
   userFullName.value = data.value.userFullName;
+
+  loading.value = false;
 }
 
 function selectedStatusOrders(index: number) {
@@ -179,6 +184,10 @@ function selectedStatusOrders(index: number) {
 </script>
 
 <template>
+  <div v-if="loading" class="fixed flex h-full w-full items-center justify-center bg-main/10">
+    <VSpinner size="large" />
+  </div>
+
   <main class="flex">
     <div class="hidden flex-1 lg:flex"></div>
 
@@ -563,7 +572,7 @@ function selectedStatusOrders(index: number) {
               </div> -->
             </div>
 
-            <div class="flex flex-col rounded-2xl border gap-2 p-4">
+            <div class="flex flex-col gap-2 rounded-2xl border p-4">
               <div class="flex items-center gap-4">
                 <img
                   class="h-8 w-8"

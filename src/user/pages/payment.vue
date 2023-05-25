@@ -20,7 +20,7 @@ const deliveryMode = ref('pickup');
 const company = ref(false);
 const step = ref(0);
 const selectedPayment = ref(0);
-const selectedPhoneNo = ref(0);
+const selectedPhoneNo = ref('');
 const selectedName = ref('');
 const selectedEmail = ref('');
 const selectedCity = ref('');
@@ -158,7 +158,7 @@ onMounted(async () => {
     });
 
     selectedEmail.value = result.email;
-    selectedPhoneNo.value = Number(result.username);
+    selectedPhoneNo.value = result.username;
     selectedName.value = result.userFullName;
 
     if (totalCart.value === '0 ₫') {
@@ -258,12 +258,12 @@ async function nextStep() {
   }
 }
 function choosePayment(index: number) {
-  selectedPayment.value = index;
+  selectedPayment.value = index + 1;
 }
 function updateName(name: string) {
   selectedName.value = name;
 }
-function updatePhoneNo(phoneNo: number) {
+function updatePhoneNo(phoneNo: string) {
   selectedPhoneNo.value = phoneNo;
 }
 function updateEmail(email: string) {
@@ -288,7 +288,7 @@ function generateRandomString(length: number) {
     orderNo.value += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 }
-function validatePhoneNumber(phoneNumber: number): boolean {
+function validatePhoneNumber(phoneNumber: string): boolean {
   const regex = /^0\d{9}$/;
   return regex.test(phoneNumber.toString());
 }
@@ -506,7 +506,7 @@ function validateName(name: string): boolean {
                 :key="index"
                 :disabled="item.disable"
                 class="flex basis-[99%] cursor-pointer justify-center rounded-xl border p-4 shadow-lg sm:basis-[49%]"
-                :class="styleSelectedPayment(index)"
+                :class="styleSelectedPayment(index + 1)"
                 @click="choosePayment(index)"
               >
                 <VIcon :icon="item.icon" />

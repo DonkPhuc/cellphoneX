@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { DatePicker } from '~/types';
-
 interface VInputProps {
   model?: string | number;
   type?: 'text' | 'password' | 'number' | 'date';
   size?: 'small' | 'medium' | 'large';
-  format?: DatePicker;
   max?: number;
   disabled?: boolean;
   readOnly?: boolean;
@@ -68,19 +65,6 @@ const localInputClass = computed(() => {
   return classes.join(' ');
 });
 
-const dataMask = computed(() => {
-  if (type.value === 'date' && format.value) {
-    switch (format.value) {
-      case 'date':
-        return '####-##-##'; // YYYY-MM-DD
-      case 'time':
-        return '##:##:##'; // HH:MM:SS
-      default:
-        return '####-##-## ##:##:##'; // YYYY-MM-DD HH:MM:SS
-    }
-  }
-});
-
 watchEffect(() => {
   if (inputRef.value) {
     if (model?.value) {
@@ -92,64 +76,6 @@ watchEffect(() => {
     }
   }
 });
-/**
- * Handle for input event
- * @param event Event
- */
-function handleInput(event: Event) {
-  const target = event.target as HTMLInputElement;
-  const value = getDataFormat(target.value);
-  if (!value) {
-    canClear.value = false;
-    emit('update:model', undefined);
-  } else {
-    canClear.value = true;
-    emit('update:model', value);
-  }
-}
-
-/**
- * Get data format
- * @param value string
- * @returns string
- */
-function getDataFormat(value: string) {
-  switch (type.value) {
-    case 'number':
-      return formatNumber(value);
-    default:
-      return value;
-  }
-}
-
-/**
- * Format number
- * @param value string
- * @returns string
- */
-function formatNumber(value: string) {
-  let formattedValue = value.replace(FILTER_PAG_REGEX, '');
-  if (inputRef.value) {
-    if (type.value === 'number') {
-      if (formattedValue) {
-        let result = Number(formattedValue);
-        if (max?.value && result > max?.value) {
-          inputRef.value.value = currentValue.value.toString();
-          result = currentValue.value;
-        } else {
-          currentValue.value = result;
-        }
-        return result.toString();
-      }
-
-      inputRef.value.value = '';
-      return '';
-    } else {
-      inputRef.value.value = formattedValue;
-      return formattedValue;
-    }
-  }
-}
 
 /**
  * Clear input text
@@ -161,6 +87,21 @@ function clear() {
   }
   canClear.value = false;
   inputRef.value?.focus();
+}
+/**
+ * Handle for input event
+ * @param event Event
+ */
+function handleInput(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+  if (!value) {
+    canClear.value = false;
+    emit('update:model', undefined);
+  } else {
+    canClear.value = true;
+    emit('update:model', value);
+  }
 }
 </script>
 

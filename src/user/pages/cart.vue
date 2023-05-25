@@ -22,21 +22,23 @@ watchEffect(() => {
 });
 
 onMounted(async () => {
-  getData();
   window.scrollTo(0, 0);
+  getData();
 });
 
 async function getData() {
+  loading.value = true;
+  console.log('🚀 ~ file: cart.vue:31 ~ loading.value:', loading.value);
+
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
   if (result) {
     cart.value = result.cart;
     cart.value.forEach((e) => {
       e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     });
-    loading.value = false;
-  } else {
-    loading.value = true;
   }
+  loading.value = false;
+  console.log('🚀 ~ file: c', loading.value);
 }
 
 async function goHome() {
