@@ -61,7 +61,7 @@ const listFeature = [
 const listCarousel = [
   {
     imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png',
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12s-004-sliding.png',
     title: 'Mừng Khai Trương',
     description: 'giảm đến 70%',
   },
@@ -73,7 +73,7 @@ const listCarousel = [
   },
   {
     imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/seagames-tv-toshiba.png',
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12s-004-sliding.png',
     title: 'Redmi Note 12',
     description: 'mở bán giá tốt',
   },
@@ -85,7 +85,7 @@ const listCarousel = [
   },
   {
     imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/s23-ultra-sliding-th5.png',
+      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12s-004-sliding.png',
     title: 'Redmi Note 124',
     description: 'mở bán giá tốt',
   },

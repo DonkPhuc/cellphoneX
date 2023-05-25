@@ -29,7 +29,32 @@ const selectedStore = ref('');
 const selectedDeliveryAddress = ref('');
 const orderNo = ref('');
 let total = 0;
-
+const paymentList = [
+  {
+    label: 'Thanh toán tại cửa hàng',
+    value: 1,
+    icon: 'fa-home',
+    disable: false,
+  },
+  {
+    label: 'Chuyển khoản',
+    value: 3,
+    icon: 'fa-bank',
+    disable: true,
+  },
+  {
+    label: 'Thanh toán VISA',
+    value: 4,
+    icon: 'fa-cc-visa',
+    disable: true,
+  },
+  {
+    label: 'Thanh toán Paypal',
+    value: 5,
+    icon: 'fa-cc-paypal',
+    disable: true,
+  },
+];
 const cityList = [
   {
     label: 'Hồ Chí Minh',
@@ -155,7 +180,7 @@ const notifySignUp = (error?: string, type?: string) => {
 };
 const styleSelectedPayment = computed(() => (index: number) => {
   if (selectedPayment.value === index) {
-    return 'border-main border';
+    return 'border-main border text-main';
   }
   return '';
 });
@@ -210,21 +235,25 @@ async function nextStep() {
       step.value = 2;
 
       const params = {
-        orderNumber: orderNo.value,
-        orderDelivery: deliveryMode.value,
-        customerName: selectedName.value,
-        customerUserName: isLoginSuccess.value,
+        items: cart.value as [],
+        status: 'unpaid',
+        orderTotal: total,
         orderAddress: `${
           (selectedDeliveryAddress.value || selectedStore.value, selectedDistrict.value, selectedCity.value)
-        }`,
-        orderTotal: total,
-        status: 'unpaid',
-        items: cart.value,
+        }` as string,
+        customerUserName: isLoginSuccess.value,
+        orderDelivery: deliveryMode.value,
+        customerName: selectedName.value,
+        orderNumber: orderNo.value,
       };
 
-      console.log(params);
+      const rs = await store.postAddOrder(params);
 
-      await store.postAddOrder(params);
+      if (rs === 'successfully') {
+        notifySignUp('Đơn hàng thành công!', 'success');
+      } else {
+        notifySignUp('Có lỗi xảy ra,vui lòng thử lại');
+      }
     }
   }
 }
@@ -471,74 +500,17 @@ function validateName(name: string): boolean {
               <VTitle title="Chọn hình thức thanh toán" />
             </div>
 
-            <div class="flex flex-col gap-3">
-              <div class="flex gap-2">
-                <div
-                  class="flex flex-1 cursor-pointer justify-center rounded-xl border p-4 shadow-lg"
-                  :class="styleSelectedPayment(1)"
-                  @click="choosePayment(1)"
-                >
-                  <div class="flex-col">
-                    <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
-                    <img class="mx-auto" src="" alt="" />
-                  </div>
-                </div>
-                <div
-                  class="flex flex-1 cursor-pointer justify-center rounded-xl border p-4 shadow-lg"
-                  :class="styleSelectedPayment(2)"
-                  @click="choosePayment(2)"
-                >
-                  <div class="flex-col">
-                    <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
-                    <img class="mx-auto" src="" alt="" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex gap-2">
-                <div
-                  class="flex flex-1 cursor-pointer justify-center rounded-xl border p-4 shadow-lg"
-                  :class="styleSelectedPayment(3)"
-                  @click="choosePayment(3)"
-                >
-                  <div class="flex-col">
-                    <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
-                    <img class="mx-auto" src="" alt="" />
-                  </div>
-                </div>
-                <div
-                  class="flex flex-1 cursor-pointer justify-center rounded-xl border p-4 shadow-lg"
-                  :class="styleSelectedPayment(4)"
-                  @click="choosePayment(4)"
-                >
-                  <div class="flex-col">
-                    <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
-                    <img class="mx-auto" src="" alt="" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex gap-2">
-                <div
-                  class="flex flex-1 cursor-pointer justify-center rounded-xl border p-4 shadow-lg"
-                  :class="styleSelectedPayment(5)"
-                  @click="choosePayment(5)"
-                >
-                  <div class="flex-col">
-                    <span class="text-xs font-bold">Thanh toán tại cửa hàng</span>
-                    <img class="mx-auto" src="" alt="" />
-                  </div>
-                </div>
-                <div
-                  class="flex flex-1 cursor-pointer justify-center rounded-xl border p-4 shadow-lg"
-                  :class="styleSelectedPayment(6)"
-                  @click="choosePayment(6)"
-                >
-                  <div class="flex-col">
-                    <span class="text-xs font-bold">Thanh toán chuyển khoản</span>
-                    <img class="mx-auto" src="" alt="" />
-                  </div>
-                </div>
+            <div class="flex flex-wrap gap-2">
+              <div
+                v-for="(item, index) in paymentList"
+                :key="index"
+                :disabled="item.disable"
+                class="flex basis-[99%] cursor-pointer justify-center rounded-xl border p-4 shadow-lg sm:basis-[49%]"
+                :class="styleSelectedPayment(index)"
+                @click="choosePayment(index)"
+              >
+                <VIcon :icon="item.icon" />
+                <span class="text-xs font-bold">{{ item.label }}</span>
               </div>
             </div>
           </div>
@@ -582,7 +554,7 @@ function validateName(name: string): boolean {
                 >
                 <span>
                   Hình Thức Thanh Toán:<span class="!text-lg font-bold !text-[#155724]">
-                    {{ selectedPayment }}
+                    {{ paymentList[selectedPayment - 1].label }}
                   </span></span
                 >
                 <span>
@@ -624,6 +596,7 @@ function validateName(name: string): boolean {
                 <VButton
                   input-class="!h-16 w-full !font-bold !bg-[#007BFF] !text-white border-none !rounded-xl text-[16px] !font-bold"
                   label="Kiểm tra đơn hàng "
+                  @click="$router.push('/account?order=true')"
                 />
                 <VButton
                   input-class="!h-16 w-full !font-bold !border-main !text-white !rounded-xl !bg-main"

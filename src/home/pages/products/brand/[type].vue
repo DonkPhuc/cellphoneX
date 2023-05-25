@@ -214,7 +214,7 @@ const buttonList = [
 
       <VTitle title="Chọn theo tiêu chí" />
 
-      <div class="flex gap-4">
+      <div class="flex flex-wrap gap-4">
         <div
           v-for="item in buttonList"
           :key="item.title"
@@ -226,7 +226,16 @@ const buttonList = [
           {{ item.title }}
         </div>
 
-        <div class="flex">
+        <div
+          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
+          :class="route.params.type === 'all' ? 'border-main bg-[#fef2f2] text-main' : ''"
+          @click="router.push(`/products/brand/all`), unFilterPrice()"
+        >
+          <VIcon icon="fa-align-justify" />
+          Tất cả
+        </div>
+
+        <div class="flex flex-1 justify-center md:justify-start">
           <Popover v-slot="{ open: openPrice }" class="relative !ring-0">
             <PopoverButton
               :class="openPrice ? 'border-main bg-[#fef2f2] text-main' : ''"
@@ -293,15 +302,6 @@ const buttonList = [
         <div v-if="searchKey" class="cursor-pointer rounded-xl border border-main bg-[#fef2f2] p-2 text-xs text-main">
           <VIcon icon="fa-sort-amount-desc" />
           {{ `Search : ${route.query.search}` }}
-        </div>
-
-        <div
-          class="cursor-pointer rounded-xl border bg-[#f3f4f6] p-2 text-xs"
-          :class="route.params.type === 'all' ? 'border-main bg-[#fef2f2] text-main' : ''"
-          @click="router.push(`/products/brand/all`), unFilterPrice()"
-        >
-          <VIcon icon="fa-align-justify" />
-          Tất cả
         </div>
       </div>
 
