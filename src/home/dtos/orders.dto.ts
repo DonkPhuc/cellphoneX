@@ -1,3 +1,4 @@
+import { Products } from '~/home/dtos';
 export class Orders {
   _id = '';
   orderNumber = '';
@@ -6,7 +7,7 @@ export class Orders {
   orderAddress = '';
   orderTotal = 0;
   status = '';
-  items = [];
   orderDate = Date;
+  items: Products[] = [];
   __v = 0;
 }

@@ -59,9 +59,7 @@ function search(event?: Event) {
       </div>
     </template>
     <template #detail>
-      <p class="w-[350px] text-center font-bold md:text-justify">
-        Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn
-      </p>
+      <p class="w-[300px] text-center font-bold">Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn</p>
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">

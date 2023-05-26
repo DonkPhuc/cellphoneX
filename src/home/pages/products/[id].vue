@@ -153,28 +153,34 @@ const listRom = [
   {
     rom: '128GB',
     value: 1,
+    disabled: false,
   },
   {
     rom: '256GB',
     value: 1.1,
+    disabled: true,
   },
   {
     rom: '512GB',
     value: 1.2,
+    disabled: true,
   },
 ];
 const listColor = [
   {
     color: 'Đen',
     value: 1,
+    disabled: false,
   },
   {
     color: 'Xám',
     value: 1.1,
+    disabled: true,
   },
   {
     color: 'Tím',
     value: 1.2,
+    disabled: true,
   },
 ];
 const rateList = [
@@ -276,7 +282,7 @@ const ratingProd = computed(() => {
       </div>
     </template>
     <template #detail>
-      <p class="w-[350px] text-justify font-bold">Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn</p>
+      <p class="w-[300px] text-center font-bold">Vui lòng đăng nhập tài khoản Smember để thao tác dễ dàng hơn</p>
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">

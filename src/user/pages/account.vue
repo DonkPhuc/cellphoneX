@@ -4,7 +4,7 @@ import 'vue3-toastify/dist/index.css';
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
-import { Products } from '~/home/dtos';
+import { Orders, Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 
@@ -19,8 +19,8 @@ const route = useRoute();
 
 const loading = ref(false);
 const data = ref<Customers>();
-const dataOrders = ref<any[]>([]);
-const dataOrder = ref<any>();
+const dataOrders = ref<Orders[]>([]);
+const dataOrder = ref<Orders>();
 const editPassword = ref(false);
 const editPhoneNo = ref(false);
 const editEmail = ref(false);
@@ -35,6 +35,7 @@ const selected = ref(0);
 const selectedStatus = ref(0);
 const totalDataOrders = ref(0);
 const totalOrder = ref(0);
+const totalOrderDiscount = ref(0);
 
 const listMode = [
   {
@@ -48,10 +49,6 @@ const listMode = [
   {
     name: 'Tài khoản của bạn',
     icon: 'fa-user ',
-  },
-  {
-    name: 'Danh sách yêu thích',
-    icon: 'fa-heart',
   },
 ];
 const listStatusOrders = ['Tất cả', 'Chờ xác nhận', 'Đã xác nhận', 'Đang vận chuyển', 'Đã nhận hàng', 'Đã huỷ'];
@@ -77,19 +74,29 @@ watchEffect(async () => {
     if (route.query.order) {
       id = route.query.order.toString();
     }
-    dataOrder.value = await store.getOrders(id);
+    dataOrder.value = (await store.getOrders(id)) as Orders;
 
     totalOrder.value = 0;
+    totalOrderDiscount.value = 0;
 
-    dataOrder.value.items.forEach((element: any) => {
+    dataOrder.value.items.forEach((element: Products) => {
       let total;
+      let totalDis;
       total = (element.priceRRP - (element.priceRRP * element.discount) / 100) * element.quantity;
+      totalDis = element.priceRRP * element.quantity;
       totalOrder.value += total;
+      totalOrderDiscount.value += totalDis;
     });
+
+    totalOrderDiscount.value = totalOrderDiscount.value - totalOrder.value;
+
+    window.scrollTo(0, 0);
   }
 });
 async function selectedMode(value: number) {
   selected.value = value;
+
+  window.scrollTo(0, 0);
   if (selected.value === 1) {
     console.log('1');
   }
@@ -547,10 +554,14 @@ function selectedStatusOrders(index: number) {
               <VTitle title="Chi tiết đơn hàng" />
             </div>
             <span class="font-bold">Mã đơn hàng: {{ dataOrder.orderNumber }} - {{ dataOrder.status }}</span>
-            <span>{{ dataOrder.create }}</span>
+            <span>{{ dataOrder.orderDate.toString().substring(0, 10) }}</span>
 
             <div class="flex flex-col rounded-2xl border p-4">
-              <div v-for="(item, index) in dataOrder.items" :key="index" class="flex gap-4 border-b py-4">
+              <div
+                v-for="(item, index) in dataOrder.items"
+                :key="index"
+                class="flex flex-col gap-4 border-b py-4 md:flex-row"
+              >
                 <img class="h-28 w-28" :src="item.imageLink" alt="" />
                 <div class="flex flex-col justify-between">
                   <div class="flex flex-col">
@@ -583,19 +594,19 @@ function selectedStatusOrders(index: number) {
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Tổng tiền sản phẩm:</p>
-                <p>Tổng tiền sản phẩm:</p>
+                <p class="text-right font-bold text-main">{{ totalCart(totalOrder) }}</p>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Tổng giảm giá:</p>
-                <p>Tổng giảm giá:</p>
+                <p class="text-right font-bold text-main">{{ totalCart(totalOrderDiscount) }}</p>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Phí vận chuyển:</p>
-                <p>Phí vận chuyển:</p>
+                <p class="text-right font-bold text-main">Miễn phí</p>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Đã thanh toán:</p>
-                <p>Đã thanh toán:</p>
+                <p class="text-right font-bold text-main">Chưa thanh toán</p>
               </div>
             </div>
           </div>
