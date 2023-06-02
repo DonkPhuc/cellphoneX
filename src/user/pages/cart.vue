@@ -28,7 +28,6 @@ onMounted(async () => {
 
 async function getData() {
   loading.value = true;
-  console.log('🚀 ~ file: cart.vue:31 ~ loading.value:', loading.value);
 
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
   if (result) {
@@ -38,7 +37,6 @@ async function getData() {
     });
   }
   loading.value = false;
-  console.log('🚀 ~ file: c', loading.value);
 }
 
 async function goHome() {
@@ -46,6 +44,21 @@ async function goHome() {
 }
 
 async function goPayment() {
+  loading.value = true;
+
+  let params: { id: string; quantity: number }[] = [];
+
+  cart.value.forEach((element) => {
+    let item = [{ id: element._id, quantity: element.quantity }];
+    params.push(...item);
+  });
+
+  console.log(params[0]);
+
+  await store.postUpdateToCart(isLoginSuccess.value, params);
+
+  loading.value = false;
+
   await router.push('/payment');
 }
 

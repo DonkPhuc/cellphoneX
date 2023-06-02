@@ -55,6 +55,15 @@ export const useStore = defineStore(
     ) {
       return await Services.postUpdateProduct(id, data);
     }
+    async function postUpdateToCart(
+      id: string,
+      data: {
+        id: string;
+        quantity: number;
+      }[]
+    ) {
+      return await Services.postUpdateToCart(id, data);
+    }
     async function postAddProduct(data: {
       imageLink: string;
       name: string;
@@ -93,6 +102,7 @@ export const useStore = defineStore(
       postAddProduct,
       postDeleteOrder,
       postAddOrder,
+      postUpdateToCart,
     };
   },
   {

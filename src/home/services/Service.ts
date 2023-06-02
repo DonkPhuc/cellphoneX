@@ -27,6 +27,9 @@ class Services extends BaseService {
   ) {
     return await this.performRequest(METHODS.POST, `product/cart/${username}`, data);
   }
+  async postUpdateToCart(username: string, data: { id: string; quantity: number }[]) {
+    return await this.performRequest(METHODS.POST, `product/update/quantity/${username}`, data);
+  }
   async postRemoveCart(username: string, id: string) {
     return await this.performRequest(METHODS.DELETE, `product/cart/delete/${username}/${id}`);
   }
