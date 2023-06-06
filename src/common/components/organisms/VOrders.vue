@@ -94,9 +94,6 @@ async function editModel(index: number) {
 
   editIndex.value = index;
 }
-function detailMode(index: number) {
-  console.log('detail', index);
-}
 </script>
 
 <template>

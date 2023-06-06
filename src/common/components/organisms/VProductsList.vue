@@ -56,10 +56,6 @@ const resize = computed(() => {
   }
   return itemShow;
 });
-
-function addToFav(id: string) {
-  console.log(id);
-}
 </script>
 
 <template>
@@ -126,10 +122,7 @@ function addToFav(id: string) {
               <VIcon :icon-class="slide.averageRate > 4 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
             </div>
 
-            <div
-              class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2"
-              @click="addToFav(slide._id)"
-            >
+            <div class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2">
               <p class="text-xs text-gray-500">Yêu Thích</p>
               <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
             </div>

@@ -23,9 +23,6 @@ onMounted(async () => {
 function selectedMode(value: number) {
   selected.value = value;
 }
-watchEffect(() => {
-  console.log(selected.value);
-});
 </script>
 
 <template>

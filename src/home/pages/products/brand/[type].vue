@@ -182,9 +182,7 @@ function unFilterPrice() {
   range.value[1] = 50000000;
   selectedSort.value = '';
 }
-function addToFav() {
-  console.log('add fav');
-}
+
 const buttonList = [
   { title: 'Apple' },
   { title: 'Samsung' },
@@ -408,7 +406,7 @@ const buttonList = [
             <VIcon :icon-class="item.averageRate > 4 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
           </div>
 
-          <div class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex" @click="addToFav">
+          <div class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex">
             <p class="text-xs text-gray-500">Yêu Thích</p>
             <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
           </div>

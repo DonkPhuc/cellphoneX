@@ -4,7 +4,7 @@ import 'vue3-toastify/dist/index.css';
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
-import { Products } from '~/home/dtos';
+import { Orders, Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 
@@ -64,7 +64,7 @@ const cityList = [
 const storeList = [
   {
     label: '134 Nguyễn Thái Học, P. Phạm Ngũ Lão, Quận 1',
-    value: 1,
+    value: 0,
   },
   {
     label: '218-221 Trần Quang Khải, Phường Tân Định, Quận 1',
@@ -72,11 +72,11 @@ const storeList = [
   },
   {
     label: '157-159 Nguyễn Thị Minh Khai, P. Phạm Ngũ Lão, Quận 1',
-    value: 1,
+    value: 2,
   },
   {
     label: '55B Trần Quang Khải, P. Tân Định, Quận 1',
-    value: 1,
+    value: 3,
   },
 ];
 const districtList = [
@@ -186,12 +186,7 @@ const styleSelectedPayment = computed(() => (index: number) => {
 });
 
 const filterDistrict = computed(() => {
-  let value = 0;
-  for (let index = 0; index < districtList.length; index++) {
-    if (selectedDistrict.value === `Quận ${index}`) value = index;
-  }
-  const filtered = storeList.filter((item) => item.value === value);
-  return filtered;
+  if (selectedDistrict.value === `Quận 1`) return storeList;
 });
 
 const totalCart = computed(() => {
@@ -238,24 +233,34 @@ async function nextStep() {
         items: cart.value as [],
         status: 'unpaid',
         orderTotal: total,
-        orderAddress: `${
-          (selectedDeliveryAddress.value || selectedStore.value, selectedDistrict.value, selectedCity.value)
-        }` as string,
+        orderAddress:
+          deliveryMode.value !== 'pickup'
+            ? selectedDeliveryAddress.value + ', ' + selectedDistrict.value + ' ,' + selectedCity.value
+            : selectedStore.value + ', ' + selectedCity.value,
         customerUserName: isLoginSuccess.value,
         orderDelivery: deliveryMode.value,
         customerName: selectedName.value,
         orderNumber: orderNo.value,
-      };
+      } as any;
 
-      const rs = await store.postAddOrder(params);
-
-      if (rs === 'successfully') {
-        notifySignUp('Đơn hàng thành công!', 'success');
+      if (total > 0) {
+        const rs = await store.postAddOrder(params);
+        if (rs === 'successfully') {
+          notifySignUp('Đơn hàng thành công!', 'success');
+          cart.value.forEach((element) => {
+            remove(element._id);
+          });
+        } else {
+          notifySignUp('Có lỗi xảy ra,vui lòng thử lại');
+        }
       } else {
         notifySignUp('Có lỗi xảy ra,vui lòng thử lại');
       }
     }
   }
+}
+async function remove(id: string) {
+  await store.postRemoveCart(isLoginSuccess.value, id);
 }
 function choosePayment(index: number) {
   selectedPayment.value = index + 1;
@@ -270,6 +275,8 @@ function updateEmail(email: string) {
   selectedEmail.value = email;
 }
 function updateCity(city: number) {
+  console.log(city);
+
   selectedCity.value = cityList[city].label;
 }
 function updateDistrict(district: number) {
@@ -505,7 +512,7 @@ function validateName(name: string): boolean {
                 v-for="(item, index) in paymentList"
                 :key="index"
                 :disabled="item.disable"
-                class="flex basis-[99%] cursor-pointer justify-center rounded-xl border p-4 shadow-lg sm:basis-[49%]"
+                class="flex basis-[99%] cursor-pointer justify-center gap-2 rounded-xl border p-4 shadow-lg sm:basis-[49%]"
                 :class="styleSelectedPayment(index + 1)"
                 @click="choosePayment(index)"
               >
@@ -548,8 +555,13 @@ function validateName(name: string): boolean {
                   </span></span
                 >
                 <span>
-                  Nhận Sản Phẩm Tại:<span class="!text-lg font-bold !text-[#155724]">
-                    {{ `${(selectedDeliveryAddress || selectedStore, selectedDistrict, selectedCity)}` }}
+                  Nhận Sản Phẩm Tại:
+                  <span class="!text-lg font-bold !text-[#155724]">
+                    {{
+                      deliveryMode !== 'pickup'
+                        ? selectedDeliveryAddress + ', ' + selectedDistrict + ', ' + selectedCity
+                        : selectedStore + ', ' + selectedCity
+                    }}
                   </span></span
                 >
                 <span>

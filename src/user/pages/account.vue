@@ -97,9 +97,7 @@ async function selectedMode(value: number) {
   selected.value = value;
 
   window.scrollTo(0, 0);
-  if (selected.value === 1) {
-    console.log('1');
-  }
+
   if (value === 3) {
     open.value = true;
   }
@@ -162,7 +160,6 @@ async function initial() {
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
 
   dataOrders.value = result.orders;
-  console.log('🚀 ~ file: account.vue:165 ~ dataOrders.value:', dataOrders.value);
 
   dataOrders.value.forEach((element) => {
     totalDataOrders.value += element.orderTotal;
@@ -594,16 +591,28 @@ function selectedStatusOrders(index: number) {
                 <VTitle title="Thông tin đơn hàng" />
               </div>
               <div class="flex items-center justify-between gap-4">
-                <p>Tổng tiền sản phẩm:</p>
-                <p class="text-right font-bold text-main">{{ totalCart(totalOrder) }}</p>
+                <p>Địa chỉ giao hàng:</p>
+                <p class="text-right font-bold text-main">
+                  {{
+                    dataOrder.orderDelivery === 'pickup'
+                      ? 'Store (Pickup) : ' + dataOrder.orderAddress
+                      : dataOrder.orderAddress
+                  }}
+                </p>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <p>Tổng tiền đã giảm:</p>
-                <p class="text-right font-bold text-main">{{ totalCart(totalOrderDiscount) }}</p>
+                <p>Tổng tiền đơn hàng:</p>
+                <p class="text-right font-bold text-main">{{ totalCart(totalOrder + totalOrderDiscount) }}</p>
+              </div>
+              <div class="flex items-center justify-between gap-4">
+                <p>Tổng giảm giá:</p>
+                <p class="text-right font-bold text-main line-through">{{ totalCart(totalOrderDiscount) }}</p>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Phí vận chuyển:</p>
-                <p class="text-right font-bold text-main">{{ totalCart(30000) }}</p>
+                <p class="text-right font-bold text-main">
+                  {{ dataOrder.orderDelivery === 'pickup' ? 'Miễn Phí' : totalCart(30000) }}
+                </p>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Tổng tiền :</p>

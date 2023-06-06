@@ -53,8 +53,6 @@ async function goPayment() {
     params.push(...item);
   });
 
-  console.log(params[0]);
-
   await store.postUpdateToCart(isLoginSuccess.value, params);
 
   loading.value = false;
