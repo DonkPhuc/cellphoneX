@@ -275,8 +275,6 @@ function updateEmail(email: string) {
   selectedEmail.value = email;
 }
 function updateCity(city: number) {
-  console.log(city);
-
   selectedCity.value = cityList[city].label;
 }
 function updateDistrict(district: number) {
