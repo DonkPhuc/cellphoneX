@@ -1,4 +1,5 @@
 export class Customers {
+  orders = [];
   cart = [];
   favorite = [];
   password = '';

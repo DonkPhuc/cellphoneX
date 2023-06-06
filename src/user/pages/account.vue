@@ -161,7 +161,8 @@ async function initial() {
 
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
 
-  dataOrders.value = (await store.getOrders()) as [];
+  dataOrders.value = result.orders;
+  console.log('🚀 ~ file: account.vue:165 ~ dataOrders.value:', dataOrders.value);
 
   dataOrders.value.forEach((element) => {
     totalDataOrders.value += element.orderTotal;
@@ -597,16 +598,16 @@ function selectedStatusOrders(index: number) {
                 <p class="text-right font-bold text-main">{{ totalCart(totalOrder) }}</p>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <p>Tổng giảm giá:</p>
+                <p>Tổng tiền đã giảm:</p>
                 <p class="text-right font-bold text-main">{{ totalCart(totalOrderDiscount) }}</p>
               </div>
               <div class="flex items-center justify-between gap-4">
                 <p>Phí vận chuyển:</p>
-                <p class="text-right font-bold text-main">Miễn phí</p>
+                <p class="text-right font-bold text-main">{{ totalCart(30000) }}</p>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <p>Đã thanh toán:</p>
-                <p class="text-right font-bold text-main">Chưa thanh toán</p>
+                <p>Tổng tiền :</p>
+                <p class="text-right font-bold text-main">{{ totalCart(totalOrder + 30000) }}</p>
               </div>
             </div>
           </div>
