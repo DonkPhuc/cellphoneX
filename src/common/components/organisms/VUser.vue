@@ -156,7 +156,7 @@ async function editModel(index: number) {
   <main class="h-full flex-[1] bg-black p-6">
     <div class="flex flex-col gap-6 bg-bgBlack p-6">
       <div class="flex justify-between">
-        <span class="font-bold text-white">Recent Customer</span>
+        <span class="font-bold text-white">Recent Customer ({{ data.length }})</span>
       </div>
 
       <div class="flex h-1 flex-1">

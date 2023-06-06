@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full">
+  <div class="h-full w-full overflow-y-scroll">
     <VHeader />
 
     <main class="overflow-y-hidden pb-10 pt-14">

@@ -242,7 +242,7 @@ const formatVND = computed(() => (slide: number) => {
   <main class="h-full flex-[1] bg-black p-6">
     <div class="flex flex-col gap-6 bg-bgBlack p-6">
       <div class="flex justify-between">
-        <span class="font-bold text-white">Recent Products</span>
+        <span class="font-bold text-white">Recent Products ({{ data.length }})</span>
         <VButton label="New Product" @click="(openEdit = true), (openAdd = true)" />
       </div>
 

@@ -146,7 +146,7 @@ function detailMode(index: number) {
       </div>
     </template>
     <template #detail>
-      <p class="w-[350px] text-center font-bold">Bạn có chắc muốn xóa sản phẩm này?</p>
+      <p class="w-[350px] text-center font-bold">Bạn có chắc muốn xóa đơn hàng này?</p>
     </template>
     <template #action>
       <div class="mb-5 flex justify-between gap-2">
@@ -166,7 +166,7 @@ function detailMode(index: number) {
   <main class="h-full flex-[1] bg-black p-6">
     <div class="flex flex-col gap-6 bg-bgBlack p-6">
       <div class="flex justify-between">
-        <span class="font-bold text-white">Recent Orders</span>
+        <span class="font-bold text-white">Recent Orders ({{ data.length }})</span>
       </div>
 
       <div class="flex h-1 flex-1">
@@ -196,12 +196,12 @@ function detailMode(index: number) {
             <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="order Date" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <!-- <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="Detail" class="text-white" />
             </div>
             <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="Edit" class="text-white" />
-            </div>
+            </div> -->
             <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="Delete" class="text-white" />
             </div>
@@ -251,12 +251,12 @@ function detailMode(index: number) {
                     <span>{{ `${item.orderDate}` }}</span>
                   </div>
                 </div>
-                <div class="flex flex-1 items-center justify-center truncate p-2">
+                <!-- <div class="flex flex-1 items-center justify-center truncate p-2">
                   <VButton label="Edit" @click="detailMode(index)" />
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">
                   <VButton label="Edit" @click="editModel(index)" />
-                </div>
+                </div> -->
                 <div class="flex flex-1 items-center justify-center truncate p-2">
                   <VButton label="Delete" @click="deleteModel(index)" />
                 </div>
