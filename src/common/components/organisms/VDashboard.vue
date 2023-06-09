@@ -6,6 +6,13 @@ import { Orders, Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
+
+interface Item {
+  type: string;
+  quantity: number;
+  total: number;
+}
+
 const userStore = useUserStore();
 const store = useStore();
 
@@ -14,11 +21,11 @@ const router = useRouter();
 const data = ref<Orders[]>([]);
 const dataMonth = ref<Orders[][]>([[]]);
 const dataTotalMonth = ref<number[]>([]);
-const dataCategoryMonth = ref<{ type: string; quantity: number }[][]>([]);
-const totalIphone = ref<{ type: string; quantity: number }[]>([]);
-const totalSamsung = ref<{ type: string; quantity: number }[]>([]);
-const totalAccessory = ref<{ type: string; quantity: number }[]>([]);
-const totalTablet = ref<{ type: string; quantity: number }[]>([]);
+const dataCategoryMonth = ref<Item[][]>([]);
+const totalAccessory = ref<Item[]>([]);
+const totalSamsung = ref<Item[]>([]);
+const totalIphone = ref<Item[]>([]);
+const totalTablet = ref<Item[]>([]);
 
 const loading = ref(false);
 
@@ -50,6 +57,10 @@ onMounted(async () => {
 
   loading.value = false;
 });
+let accessoryTotal = 0;
+let samsungTotal = 0;
+let tabletTotal = 0;
+let appleTotal = 0;
 const dataByMonth = (data: Orders[]) => {
   const dataByMonths: Orders[][] = [];
   for (let i = 1; i <= 12; i++) {
@@ -59,15 +70,19 @@ const dataByMonth = (data: Orders[]) => {
     const orderMonth = new Date(element.orderDate.toString()).getMonth() + 1;
     dataByMonths[orderMonth].push(element);
   }
-  let dataCategoryMonths: { type: string; quantity: number }[][] = [];
+  let dataCategoryMonths: Item[][] = [];
   dataByMonths.forEach((element) => {
     let total = 0;
-    let totalCategory: { type: string; quantity: number }[] = [];
+    let totalCategory: Item[] = [];
     element.forEach((element) => {
       total += element.orderTotal;
       element.items.forEach((element) => {
         if (element.type) {
-          totalCategory.push({ type: element.type, quantity: element.quantity });
+          totalCategory.push({
+            type: element.type,
+            quantity: element.quantity,
+            total: (element.priceRRP - (element.priceRRP * element.discount) / 100) * element.quantity,
+          });
         }
       });
     });
@@ -75,9 +90,9 @@ const dataByMonth = (data: Orders[]) => {
     dataCategoryMonths.push(totalCategory);
   });
   dataCategoryMonths.forEach((element) => {
-    const output: { type: string; quantity: number }[] = Object.values(
-      element.reduce((acc: { [key: string]: { type: string; quantity: number } }, { type, quantity }) => {
-        acc[type] = { type, quantity: (acc[type]?.quantity ?? 0) + quantity };
+    const output: Item[] = Object.values(
+      element.reduce((acc: { [key: string]: Item }, { type, quantity, total }) => {
+        acc[type] = { type, quantity: (acc[type]?.quantity ?? 0) + quantity, total: (acc[type]?.total ?? 0) + total };
         return acc;
       }, {})
     );
@@ -86,12 +101,12 @@ const dataByMonth = (data: Orders[]) => {
 
   totalIphone.value = [];
 
-  const getTotalByType = (element: { type: string; quantity: number }[], type: string) => {
+  const getTotalByType = (element: Item[], type: string) => {
     const filtered = element.filter((obj) => obj.type === type);
     if (filtered[0] !== undefined) {
       return filtered[0];
     } else {
-      return { type, quantity: 0 };
+      return { type, quantity: 0, total: 0 };
     }
   };
 
@@ -101,6 +116,25 @@ const dataByMonth = (data: Orders[]) => {
     totalAccessory.value.push(getTotalByType(element, 'accessory'));
     totalTablet.value.push(getTotalByType(element, 'tablet'));
   });
+
+  dataCategoryMonth.value.forEach((arr: Item[]) => {
+    arr.forEach((item: Item) => {
+      if (item.type === 'samsung') {
+        samsungTotal += item.total;
+      } else if (item.type === 'apple') {
+        appleTotal += item.total;
+      } else if (item.type === 'accessory') {
+        accessoryTotal += item.total;
+      } else {
+        tabletTotal += item.total;
+      }
+    });
+  });
+
+  console.log(`Samsung Total: ${samsungTotal}`);
+  console.log(`Apple Total: ${appleTotal}`);
+  console.log(`accessoryTotal Total: ${accessoryTotal}`);
+  console.log(`tabletTotal Total: ${tabletTotal}`);
 
   return dataByMonths;
 };
@@ -121,22 +155,29 @@ const dataByMonth = (data: Orders[]) => {
           <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Phone Sale</span>
-              <span class="font-bold text-white">{{ totalCart(totalSales) }}</span>
+              <span class="text-textBlack">Total Accessory Sale</span>
+              <span class="font-bold text-white">{{ totalCart(accessoryTotal) }}</span>
             </div>
           </div>
           <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Accessory Sale</span>
-              <span class="font-bold text-white">{{ totalCart(totalSales) }}</span>
+              <span class="text-textBlack">Total Samsung Sale</span>
+              <span class="font-bold text-white">{{ totalCart(samsungTotal) }}</span>
             </div>
           </div>
           <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
               <span class="text-textBlack">Total Tablet Sale</span>
-              <span class="font-bold text-white">{{ totalCart(totalSales) }}</span>
+              <span class="font-bold text-white">{{ totalCart(tabletTotal) }}</span>
+            </div>
+          </div>
+          <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
+            <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
+            <div class="flex flex-col">
+              <span class="text-textBlack">Total Apple Sale</span>
+              <span class="font-bold text-white">{{ totalCart(appleTotal) }}</span>
             </div>
           </div>
         </div>
