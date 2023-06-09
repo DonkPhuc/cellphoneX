@@ -106,6 +106,7 @@ async function addToCart(action: string) {
       priceRRP: currentProduct.value.priceRRP,
       discount: currentProduct.value.discount,
       quantity: currentProduct.value.quantity,
+      type: currentProduct.value.type,
       name: currentProduct.value.name,
     };
     const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;

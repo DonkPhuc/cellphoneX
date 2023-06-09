@@ -13,6 +13,9 @@ const router = useRouter();
 
 const data = ref<Orders[]>([]);
 const dataMonth = ref<Orders[][]>([[]]);
+const dataTotalMonth = ref<number[]>([]);
+const dataCategoryMonth = ref<{ type: string; quantity: number }[][]>([]);
+const totalIphone = ref<{ type: string; quantity: number }[]>([]);
 
 const loading = ref(false);
 
@@ -35,20 +38,8 @@ onMounted(async () => {
   totalPhoneSales.value = 0;
   totalSales.value = 0;
 
-  dataMonth.value = dataByMonth(data.value);
+  dataMonth.value = await dataByMonth(data.value);
   dataMonth.value.splice(0, 1);
-
-  if (dataMonth.value) {
-    for (let i = 0; i <= 12; i++) {
-      const lengthOfOrderList = dataMonth.value[i].length;
-      console.log('🚀 ~ file: VDashboard.vue:44 ~ lengthOfOrderList:', lengthOfOrderList);
-      let x = [];
-
-      for (let index = 0; index < lengthOfOrderList; index++) {
-        total += dataMonth.value[i][index].orderTotal;
-      }
-    }
-  }
 
   data.value.forEach((element) => {
     totalSales.value += element.orderTotal;
@@ -65,6 +56,41 @@ const dataByMonth = (data: Orders[]) => {
     const orderMonth = new Date(element.orderDate.toString()).getMonth() + 1;
     dataByMonths[orderMonth].push(element);
   }
+  let dataCategoryMonths: { type: string; quantity: number }[][] = [];
+  dataByMonths.forEach((element) => {
+    let total = 0;
+    let totalCategory: { type: string; quantity: number }[] = [];
+    element.forEach((element) => {
+      total += element.orderTotal;
+      element.items.forEach((element) => {
+        if (element.type) {
+          totalCategory.push({ type: element.type, quantity: element.quantity });
+        }
+      });
+    });
+    dataTotalMonth.value.push(total);
+    dataCategoryMonths.push(totalCategory);
+  });
+  dataCategoryMonths.forEach((element) => {
+    const output: { type: string; quantity: number }[] = Object.values(
+      element.reduce((acc, { type, quantity }) => {
+        acc[type] = { type, quantity: (acc[type]?.quantity ?? 0) + quantity };
+        return acc;
+      }, {})
+    );
+    dataCategoryMonth.value.push(output);
+  });
+
+  totalIphone.value = [];
+  dataCategoryMonth.value.forEach((element) => {
+    const filtered = element.filter((obj) => obj.type === 'apple');
+    if (filtered[0] !== undefined) {
+      totalIphone.value.push(filtered[0]);
+    } else {
+      totalIphone.value.push({ type: 'apple', quantity: 0 });
+    }
+  });
+
   return dataByMonths;
 };
 </script>
@@ -109,24 +135,28 @@ const dataByMonth = (data: Orders[]) => {
               <span class="font-bold text-white">Recent Salse ({{ data.length }} orders)</span>
             </div>
 
-            <!-- <div v-for="(item, index) in dataMonth" :key="index">
-              <span class="text-white">da ban {{ item.length }} trong thang {{ index + 1 }} </span>
-            </div> -->
-
             <table class="w-full overflow-auto border border-black">
               <thead>
                 <tr>
                   <th class="border border-black py-2 text-white">Month</th>
                   <th class="border border-black py-2 text-white">Orders sold</th>
                   <th class="border border-black py-2 text-white">Total</th>
-                  <th class="border border-black py-2 text-white">Status</th>
-                  <th class="border border-black py-2 text-white">Action</th>
+                  <th class="border border-black py-2 text-white">Iphone sold</th>
+                  <th class="border border-black py-2 text-white">Samsung sold</th>
+                  <th class="border border-black py-2 text-white">Accessory sold</th>
+                  <th class="border border-black py-2 text-white">Tablet sold</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(item, index) in dataMonth" :key="index">
                   <td class="truncate border border-black p-2 text-center text-textBlack">{{ index + 1 }}</td>
                   <td class="truncate border border-black p-2 text-center text-textBlack">{{ item.length }}</td>
+                  <td class="truncate border border-black p-2 text-center text-textBlack">
+                    {{ dataTotalMonth[index] > 0 ? totalCart(dataTotalMonth[index]) : '0 đ' }}
+                  </td>
+                  <td class="truncate border border-black p-2 text-center text-textBlack">
+                    {{ totalIphone[index] }}
+                  </td>
                   <td class="truncate border border-black p-2 text-center text-textBlack">1</td>
                   <td class="truncate border border-black p-2 text-center text-textBlack">1</td>
                   <td class="truncate border border-black p-2 text-center text-textBlack">1</td>
