@@ -94,6 +94,12 @@ async function editModel(index: number) {
 
   editIndex.value = index;
 }
+const totalCart = computed(() => (total: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(total);
+});
 </script>
 
 <template>
@@ -190,7 +196,7 @@ async function editModel(index: number) {
             <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="status" class="text-white" />
             </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
+            <div class="flex flex-[2] items-center justify-center truncate p-2">
               <VTitle title="order Date" class="text-white" />
             </div>
             <!-- <div class="flex flex-1 items-center justify-center truncate p-2">
@@ -235,7 +241,7 @@ async function editModel(index: number) {
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">
                   <div class="truncate text-textBlack">
-                    <span>{{ `${item.orderTotal}` }}</span>
+                    <span>{{ totalCart(item.orderTotal) }}</span>
                   </div>
                 </div>
                 <div class="flex flex-1 items-center justify-center truncate p-2">
@@ -243,9 +249,9 @@ async function editModel(index: number) {
                     <span>{{ `${item.status}` }}</span>
                   </div>
                 </div>
-                <div class="flex flex-1 items-center justify-center truncate p-2">
+                <div class="flex flex-[2] items-center justify-center truncate p-2">
                   <div class="truncate text-textBlack">
-                    <span>{{ `${item.orderDate}` }}</span>
+                    <span>{{ `${item.orderDate.toString().replaceAll('T', ' ').substring(0, 19)}` }}</span>
                   </div>
                 </div>
                 <!-- <div class="flex flex-1 items-center justify-center truncate p-2">

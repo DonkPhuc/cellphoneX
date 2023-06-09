@@ -16,6 +16,9 @@ const dataMonth = ref<Orders[][]>([[]]);
 const dataTotalMonth = ref<number[]>([]);
 const dataCategoryMonth = ref<{ type: string; quantity: number }[][]>([]);
 const totalIphone = ref<{ type: string; quantity: number }[]>([]);
+const totalSamsung = ref<{ type: string; quantity: number }[]>([]);
+const totalAccessory = ref<{ type: string; quantity: number }[]>([]);
+const totalTablet = ref<{ type: string; quantity: number }[]>([]);
 
 const loading = ref(false);
 
@@ -73,7 +76,7 @@ const dataByMonth = (data: Orders[]) => {
   });
   dataCategoryMonths.forEach((element) => {
     const output: { type: string; quantity: number }[] = Object.values(
-      element.reduce((acc, { type, quantity }) => {
+      element.reduce((acc: any, { type, quantity }) => {
         acc[type] = { type, quantity: (acc[type]?.quantity ?? 0) + quantity };
         return acc;
       }, {})
@@ -82,13 +85,21 @@ const dataByMonth = (data: Orders[]) => {
   });
 
   totalIphone.value = [];
-  dataCategoryMonth.value.forEach((element) => {
-    const filtered = element.filter((obj) => obj.type === 'apple');
+
+  const getTotalByType = (element: { type: string; quantity: number }[], type: string) => {
+    const filtered = element.filter((obj) => obj.type === type);
     if (filtered[0] !== undefined) {
-      totalIphone.value.push(filtered[0]);
+      return filtered[0];
     } else {
-      totalIphone.value.push({ type: 'apple', quantity: 0 });
+      return { type, quantity: 0 };
     }
+  };
+
+  dataCategoryMonth.value.forEach((element) => {
+    totalIphone.value.push(getTotalByType(element, 'apple'));
+    totalSamsung.value.push(getTotalByType(element, 'samsung'));
+    totalAccessory.value.push(getTotalByType(element, 'accessory'));
+    totalTablet.value.push(getTotalByType(element, 'tablet'));
   });
 
   return dataByMonths;
@@ -140,7 +151,7 @@ const dataByMonth = (data: Orders[]) => {
                 <tr>
                   <th class="border border-black py-2 text-white">Month</th>
                   <th class="border border-black py-2 text-white">Orders sold</th>
-                  <th class="border border-black py-2 text-white">Total</th>
+                  <th class="border border-black py-2 text-white">Total (VND)</th>
                   <th class="border border-black py-2 text-white">Iphone sold</th>
                   <th class="border border-black py-2 text-white">Samsung sold</th>
                   <th class="border border-black py-2 text-white">Accessory sold</th>
@@ -154,12 +165,18 @@ const dataByMonth = (data: Orders[]) => {
                   <td class="truncate border border-black p-2 text-center text-textBlack">
                     {{ dataTotalMonth[index] > 0 ? totalCart(dataTotalMonth[index]) : '0 đ' }}
                   </td>
-                  <td class="truncate border border-black p-2 text-center text-textBlack">
-                    {{ totalIphone[index] }}
+                  <td v-if="totalIphone[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                    {{ totalIphone[index].quantity }}
                   </td>
-                  <td class="truncate border border-black p-2 text-center text-textBlack">1</td>
-                  <td class="truncate border border-black p-2 text-center text-textBlack">1</td>
-                  <td class="truncate border border-black p-2 text-center text-textBlack">1</td>
+                  <td v-if="totalSamsung[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                    {{ totalSamsung[index].quantity }}
+                  </td>
+                  <td v-if="totalAccessory[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                    {{ totalAccessory[index].quantity }}
+                  </td>
+                  <td v-if="totalTablet[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                    {{ totalTablet[index].quantity }}
+                  </td>
                 </tr>
               </tbody>
             </table>
