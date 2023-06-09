@@ -76,7 +76,7 @@ const dataByMonth = (data: Orders[]) => {
   });
   dataCategoryMonths.forEach((element) => {
     const output: { type: string; quantity: number }[] = Object.values(
-      element.reduce((acc: any, { type, quantity }) => {
+      element.reduce((acc: { [key: string]: { type: string; quantity: number } }, { type, quantity }) => {
         acc[type] = { type, quantity: (acc[type]?.quantity ?? 0) + quantity };
         return acc;
       }, {})
