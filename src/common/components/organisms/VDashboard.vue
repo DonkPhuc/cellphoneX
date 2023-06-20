@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { toast } from 'vue3-toastify';
-
-import { Orders, Products } from '~/home/dtos';
+import { Orders } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
-import { Customers } from '~/user/dtos/Customers.dto';
-import { useUserStore } from '~/user/stores/user';
 
 interface Item {
   type: string;
@@ -13,10 +8,7 @@ interface Item {
   total: number;
 }
 
-const userStore = useUserStore();
 const store = useStore();
-
-const router = useRouter();
 
 const data = ref<Orders[]>([]);
 const dataMonth = ref<Orders[][]>([[]]);
@@ -48,7 +40,7 @@ onMounted(async () => {
   totalPhoneSales.value = 0;
   totalSales.value = 0;
 
-  dataMonth.value = await dataByMonth(data.value);
+  dataMonth.value = dataByMonth(data.value);
   dataMonth.value.splice(0, 1);
 
   data.value.forEach((element) => {

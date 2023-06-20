@@ -121,27 +121,14 @@ async function signUp() {
 }
 
 const notifySignUp = (error?: string, type?: string) => {
-  if (type && type === 'success') {
-    if (error !== '') {
-      toast(`${error}`, {});
-      if (error === 'Đăng ký thành công') {
-        userName.value = '';
-        userEmail.value = '';
-        userFullName.value = '';
-        password.value = '';
-        password2.value = '';
-      }
-    }
-  } else {
-    if (error !== '') {
-      toast(`${error}`, {});
-      if (error === 'Đăng ký thành công') {
-        userName.value = '';
-        userEmail.value = '';
-        userFullName.value = '';
-        password.value = '';
-        password2.value = '';
-      }
+  if (error !== '') {
+    toast(`${error}`, {});
+    if (error === 'Đăng ký thành công') {
+      userName.value = '';
+      userEmail.value = '';
+      userFullName.value = '';
+      password.value = '';
+      password2.value = '';
     }
   }
 };

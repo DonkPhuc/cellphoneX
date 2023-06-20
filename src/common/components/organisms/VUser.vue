@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
-import { Products } from '~/home/dtos';
-import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
-const store = useStore();
-
-const router = useRouter();
 
 const loading = ref(false);
 const data = ref<Customers[]>([]);

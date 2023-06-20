@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-
 import { useStore } from '~/home/stores/Store';
-import { useUserStore } from '~/user/stores/user';
 
 import { Products } from '../dtos';
-const userStore = useUserStore();
 const store = useStore();
 
 const router = useRouter();
@@ -23,7 +19,7 @@ onMounted(() => {
 
 async function getData() {
   itemList.value = [];
-  const result = (await store.getData()) as Products[];
+  const result = await store.getData();
   result.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     function countRate() {
@@ -176,12 +172,8 @@ async function goDetail(index: number, id: string) {
           </div>
         </div>
 
-        <div class="flex h-[135px]">
-          <img
-            src="https://cdn2.cellphones.com.vn/595x,webp,q80/https://dashboard.cellphones.com.vn/storage/iphone%2012-cate-th5.png"
-            alt=""
-            class="w-full rounded-xl"
-          />
+        <div class="flex h-[110px]">
+          <img src="dist\assets\xa-kho-khet-special.png" alt="" class="w-full rounded-xl" />
         </div>
 
         <div v-if="itemList.length" class="flex flex-col gap-4">

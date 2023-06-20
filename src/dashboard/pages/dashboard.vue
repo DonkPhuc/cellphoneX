@@ -1,14 +1,10 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { routerKey } from 'vue-router';
-import { toast } from 'vue3-toastify';
 
-import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
-const store = useStore();
-const { isLoginSuccess, userFullName } = storeToRefs(userStore);
+const { isLoginSuccess } = storeToRefs(userStore);
 const router = useRouter();
 
 const selected = ref(0);

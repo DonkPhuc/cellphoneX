@@ -93,6 +93,7 @@ watchEffect(async () => {
     window.scrollTo(0, 0);
   }
 });
+
 async function selectedMode(value: number) {
   selected.value = value;
 

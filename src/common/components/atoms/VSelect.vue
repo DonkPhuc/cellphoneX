@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/vue';
 
-import { Products } from '~/home/dtos';
-
 interface VSelectProps {
   options?: any[];
   type?: 'dropdown' | 'combobox';
@@ -145,10 +143,6 @@ const comboboxIconStyle = computed(() => (open: boolean) => {
  * @returns string
  */
 const comboboxOpenStyle = computed(() => (open: boolean) => {
-  if (open) {
-    return 'border-none ';
-  }
-
   return 'border-none ';
 });
 

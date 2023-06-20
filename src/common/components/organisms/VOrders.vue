@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
-import { Orders, Products } from '~/home/dtos';
+import { Orders } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
-import { Customers } from '~/user/dtos/Customers.dto';
-import { useUserStore } from '~/user/stores/user';
-const userStore = useUserStore();
 const store = useStore();
-
-const router = useRouter();
 
 const loading = ref(false);
 const data = ref<Orders[]>([]);
@@ -53,31 +47,7 @@ async function deleteProduct() {
   }
   openDel.value = false;
 }
-async function editProduct() {
-  // const params = {
-  //   userFullName: editedDisplayName.value,
-  //   username: editedUserName.value,
-  //   email: editedEmail.value,
-  //   password: editedPassword.value,
-  //   role: editedRole.value,
-  // };
-  // const rs = await userStore.postUpdateUser(
-  //   params.userFullName,
-  //   params.username,
-  //   params.email,
-  //   editedPassword.value,
-  //   data.value[editIndex.value].username,
-  //   params.role
-  // );
-  // if (rs === 'Updated successfully!') {
-  //   data.value = [];
-  //   data.value = (await store.getOrders()) as Orders[];
-  //   notifySignUp(`Chỉnh sửa thành công`);
-  // } else {
-  //   notifySignUp(`Đã xảy ra lỗi ,vui lòng thử lại`);
-  // }
-  // openEdit.value = false;
-}
+
 function deleteModel(index: number) {
   openDel.value = true;
   delIndex.value = index;
@@ -103,41 +73,6 @@ const totalCart = computed(() => (total: number) => {
 </script>
 
 <template>
-  <VDialog :is-open="openEdit" @close="openEdit = false">
-    <template #title> </template>
-    <template #detail>
-      <p v-if="data[editIndex]" class="w-[500px] text-center font-bold">
-        Chỉnh sửa : {{ data[editIndex].orderNumber }} ?
-      </p>
-
-      <div class="flex flex-col gap-4 pt-6 [&_>input]:rounded-lg">
-        <input v-model="editedOrderNumber" type="text" placeholder="Display name" />
-        <input v-model="editedOrderDelivery" type="text" placeholder="Email" />
-        <input v-model="editedCustomerName" type="text" placeholder="Password" />
-        <input v-model="editedOrderAddress" :disabled="true" type="text" placeholder="User Name" />
-        <input v-model="editedOrderTotal" :disabled="true" type="text" placeholder="User Name" />
-        <select id="category" v-model="editedStatus" class="w-full appearance-none rounded-lg bg-white p-2 !ring-0">
-          <option :value="editedStatus">{{ editedStatus }}</option>
-          <option :value="editedStatus === 'paid' ? 'unpaid' : 'paid'">
-            {{ editedStatus === 'paid' ? 'unpaid' : 'paid' }}
-          </option>
-        </select>
-      </div>
-    </template>
-    <template #action>
-      <div class="mb-5 flex justify-between gap-2">
-        <VButton input-class="w-36 !ring-0" size="large" label="Đồng ý" @click="editProduct" />
-        <VButton
-          input-class="w-36 !ring-0"
-          size="large"
-          variant="outlined"
-          class="w-20"
-          label="Bỏ qua"
-          @click="openEdit = false"
-        />
-      </div>
-    </template>
-  </VDialog>
   <VDialog :is-open="openDel" @close="openDel = false">
     <template #title>
       <div class="flex items-center gap-2">
@@ -199,12 +134,7 @@ const totalCart = computed(() => (total: number) => {
             <div class="flex flex-[2] items-center justify-center truncate p-2">
               <VTitle title="order Date" class="text-white" />
             </div>
-            <!-- <div class="flex flex-1 items-center justify-center truncate p-2">
-              <VTitle title="Detail" class="text-white" />
-            </div>
-            <div class="flex flex-1 items-center justify-center truncate p-2">
-              <VTitle title="Edit" class="text-white" />
-            </div> -->
+
             <div class="flex flex-1 items-center justify-center truncate p-2">
               <VTitle title="Delete" class="text-white" />
             </div>
@@ -254,12 +184,6 @@ const totalCart = computed(() => (total: number) => {
                     <span>{{ `${item.orderDate.toString().replaceAll('T', ' ').substring(0, 19)}` }}</span>
                   </div>
                 </div>
-                <!-- <div class="flex flex-1 items-center justify-center truncate p-2">
-                  <VButton label="Edit" @click="detailMode(index)" />
-                </div>
-                <div class="flex flex-1 items-center justify-center truncate p-2">
-                  <VButton label="Edit" @click="editModel(index)" />
-                </div> -->
                 <div class="flex flex-1 items-center justify-center truncate p-2">
                   <VButton label="Delete" @click="deleteModel(index)" />
                 </div>

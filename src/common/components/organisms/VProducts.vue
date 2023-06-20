@@ -1,14 +1,9 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
 import { Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
-import { useUserStore } from '~/user/stores/user';
-const userStore = useUserStore();
 const store = useStore();
-
-const router = useRouter();
 
 const editedImageGroup = ref([]);
 const data = ref<Products[]>([]);
