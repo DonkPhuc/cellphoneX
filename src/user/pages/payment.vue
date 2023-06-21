@@ -10,14 +10,13 @@ import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '../stores/user';
 const userStore = useUserStore();
 const store = useStore();
-const { isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess, stepPayment } = storeToRefs(userStore);
 
 const router = useRouter();
 
-const cart = ref<Products[]>([]);
+const cart = ref<any[]>([]);
 const deliveryMode = ref('pickup');
 const company = ref(false);
-const step = ref(0);
 const selectedPayment = ref(0);
 const selectedPhoneNo = ref('');
 const selectedName = ref('');
@@ -148,6 +147,9 @@ const districtList = [
     value: 17,
   },
 ];
+onBeforeMount(() => {
+  stepPayment.value = 0;
+});
 onMounted(async () => {
   const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
   if (result) {
@@ -204,7 +206,7 @@ async function goCart(go: string) {
 async function nextStep() {
   let errorMessage = '';
 
-  if (step.value === 0) {
+  if (stepPayment.value === 0) {
     generateRandomString(10);
     if (deliveryMode.value === 'delivery' && !selectedDeliveryAddress.value) errorMessage = 'Vui lòng chọn địa chỉ';
     if (deliveryMode.value === 'pickup' && !selectedStore.value) errorMessage = 'Vui lòng chọn địa chỉ';
@@ -216,44 +218,43 @@ async function nextStep() {
     if (!selectedPhoneNo.value) errorMessage = 'Vui lòng nhập SĐT';
     if (!selectedName.value) errorMessage = 'Vui lòng nhập họ tên';
     if (errorMessage === '') {
-      step.value = 1;
+      stepPayment.value = 1;
     }
     notifySignUp(errorMessage);
   }
+}
+async function nextStepFromOne() {
+  if (selectedPayment.value === 0) {
+    notifySignUp('Vui lòng chọn phương thức thanh toán');
+  } else if (selectedPayment.value !== 0) {
+    stepPayment.value = 2;
 
-  if (step.value === 1) {
-    if (selectedPayment.value === 0) {
-      notifySignUp('Vui lòng chọn phương thức thanh toán');
-    } else {
-      step.value = 2;
+    const params = {
+      items: cart.value as [],
+      status: 'unpaid',
+      orderTotal: total,
+      orderAddress:
+        deliveryMode.value !== 'pickup'
+          ? selectedDeliveryAddress.value + ', ' + selectedDistrict.value + ' ,' + selectedCity.value
+          : selectedStore.value + ', ' + selectedCity.value,
+      customerUserName: isLoginSuccess.value,
+      orderDelivery: deliveryMode.value,
+      customerName: selectedName.value,
+      orderNumber: orderNo.value,
+    } as any;
 
-      const params = {
-        items: cart.value as [],
-        status: 'unpaid',
-        orderTotal: total,
-        orderAddress:
-          deliveryMode.value !== 'pickup'
-            ? selectedDeliveryAddress.value + ', ' + selectedDistrict.value + ' ,' + selectedCity.value
-            : selectedStore.value + ', ' + selectedCity.value,
-        customerUserName: isLoginSuccess.value,
-        orderDelivery: deliveryMode.value,
-        customerName: selectedName.value,
-        orderNumber: orderNo.value,
-      } as any;
-
-      if (total > 0) {
-        const rs = await store.postAddOrder(params);
-        if (rs === 'successfully') {
-          notifySignUp('Đơn hàng thành công!', 'success');
-          cart.value.forEach((element) => {
-            remove(element._id);
-          });
-        } else {
-          notifySignUp('Có lỗi xảy ra,vui lòng thử lại');
-        }
+    if (total > 0) {
+      const rs = await store.postAddOrder(params);
+      if (rs === 'successfully') {
+        notifySignUp('Đơn hàng thành công!', 'success');
+        cart.value.forEach((element) => {
+          remove(element._id);
+        });
       } else {
         notifySignUp('Có lỗi xảy ra,vui lòng thử lại');
       }
+    } else {
+      notifySignUp('Có lỗi xảy ra,vui lòng thử lại');
     }
   }
 }
@@ -303,6 +304,9 @@ function validateName(name: string): boolean {
   const regex = /[\w]{2,}/g;
   return regex.test(name);
 }
+onBeforeUnmount(() => {
+  stepPayment.value = 0;
+});
 </script>
 
 <template>
@@ -343,33 +347,33 @@ function validateName(name: string): boolean {
                 <p class="text-center text-xs text-main">Thông tin đặt hàng</p>
               </div>
             </div>
-            <div class="flex flex-[0.2] items-center" :class="step > 0 ? 'text-main' : ''">---</div>
+            <div class="flex flex-[0.2] items-center" :class="stepPayment > 0 ? 'text-main' : ''">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
-                  :class="step > 0 ? '!border-main !text-main' : ''"
+                  :class="stepPayment > 0 ? '!border-main !text-main' : ''"
                   class="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-black/40 text-lg text-black/40"
                 >
                   <VIcon icon="fa-credit-card-alt" />
                 </div>
-                <p :class="step > 0 ? 'text-main' : ''" class="text-center text-xs">Thanh toán</p>
+                <p :class="stepPayment > 0 ? 'text-main' : ''" class="text-center text-xs">Thanh toán</p>
               </div>
             </div>
-            <div class="flex flex-[0.2] items-center" :class="step > 1 ? 'text-main' : ''">---</div>
+            <div class="flex flex-[0.2] items-center" :class="stepPayment > 1 ? 'text-main' : ''">---</div>
             <div class="flex flex-1 items-center justify-center">
               <div class="flex-col">
                 <div
-                  :class="step > 1 ? '!border-main !text-main' : ''"
+                  :class="stepPayment > 1 ? '!border-main !text-main' : ''"
                   class="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-black/40 text-lg text-black/40"
                 >
                   <VIcon icon="fa-archive" />
                 </div>
-                <p class="text-center text-xs" :class="step > 1 ? 'text-main' : ''">Hoàn tất đặt hàng</p>
+                <p class="text-center text-xs" :class="stepPayment > 1 ? 'text-main' : ''">Hoàn tất đặt hàng</p>
               </div>
             </div>
           </div>
 
-          <div v-if="step === 0" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
+          <div v-if="stepPayment === 0" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
             <VTitle title="Thông tin khách hàng" />
             <VInput
               :model="selectedName"
@@ -466,7 +470,7 @@ function validateName(name: string): boolean {
             <VInput v-if="company" placeholder="Mã số thuế" input-class="rounded-lg !h-10" />
           </div>
 
-          <div v-if="step === 1" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
+          <div v-if="stepPayment === 1" class="z-1 flex flex-col gap-3 rounded-2xl border bg-white p-2 shadow-xl">
             <div class="flex flex-col gap-3 rounded-2xl border p-3 shadow-xl">
               <div class="flex justify-center">
                 <VTitle title="THÔNG TIN ĐẶT HÀNG" />
@@ -518,7 +522,7 @@ function validateName(name: string): boolean {
             </div>
           </div>
 
-          <div v-if="step === 2" class="z-1 flex flex-col gap-6 rounded-2xl border bg-white p-2 shadow-xl">
+          <div v-if="stepPayment === 2" class="z-1 flex flex-col gap-6 rounded-2xl border bg-white p-2 shadow-xl">
             <div class="flex">
               <p>
                 Cảm ơn Quý khách hàng đã chọn mua hàng tại CellphoneS. Trong 15 phút, CellphoneS sẽ SMS hoặc gọi để xác
@@ -621,7 +625,7 @@ function validateName(name: string): boolean {
           </div>
         </div>
 
-        <div v-if="step !== 2" class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
+        <div v-if="stepPayment !== 2" class="flex flex-col justify-center gap-4 rounded-lg border p-2 shadow-lg">
           <div class="flex flex-1 justify-between">
             <span class="font-bold">Tổng tiền tạm tính:</span>
             <span class="font-bold text-main">{{ totalCart }} </span>
@@ -629,7 +633,7 @@ function validateName(name: string): boolean {
           <VButton
             input-class="!h-16 w-full !bg-main border-none rounded text-[16px] !font-bold"
             label="TIẾP TỤC"
-            @click="nextStep"
+            @click="stepPayment !== 1 ? nextStep() : nextStepFromOne()"
           />
           <VButton
             variant="outlined"

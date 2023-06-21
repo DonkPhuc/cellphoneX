@@ -12,7 +12,7 @@ export class Products {
   discount = 0;
   label = '';
   type = '';
-  value = 0 || '';
+  value = 0;
   imageDetail = [];
   rate = [];
   averageRate = 0;
