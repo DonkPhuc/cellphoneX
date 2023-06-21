@@ -30,7 +30,6 @@ onMounted(async () => {
   if (isLoginSuccess.value) {
     await router.push(`/`);
   }
-  window.scrollTo(0, 0);
   customerList.value = (await userStore.getAllCustomers()) as Customers[];
 });
 
@@ -141,7 +140,7 @@ const notifySignUp = (error?: string, type?: string) => {
     <div v-if="isLogin" class="flex flex-1 flex-col px-2 py-4">
       <div class="flex flex-1 flex-col gap-4">
         <div class="flex justify-center">
-          <img class="w-[300px]" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
+          <img class="w-[300px]" alt="" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
         </div>
         <div class="flex justify-center">
           <p class="text-lg font-bold">Đăng nhập tài khoản Smember</p>
@@ -180,7 +179,7 @@ const notifySignUp = (error?: string, type?: string) => {
           ><VIcon icon="fa-arrow-left" /> Đăng nhập tài khoản</span
         >
         <div class="flex justify-center">
-          <img class="w-[300px]" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
+          <img class="w-[300px]" alt="" src="https://account.cellphones.com.vn/_nuxt/img/Shipper_CPS3.0251fdd.png" />
         </div>
         <div class="flex justify-center">
           <p class="text-lg font-bold">Đăng ký tài khoản Smember</p>

@@ -51,9 +51,8 @@ onMounted(async () => {
   } else {
     data.value = dataAll.value.filter((e) => e.type === route.params.type);
   }
-  window.scrollTo(0, 0);
 });
-watchEffect(async () => {
+watchEffect(() => {
   if (route.params.type) {
     if (route.params.type === 'all') {
       data.value = dataAll.value;
@@ -124,15 +123,15 @@ const formatRange = computed(() => (slide: number) => {
     currency: 'VND',
   }).format(slide);
 });
+
 async function getData() {
   loading.value = false;
-  const result = (await store.getData()) as Products[];
+  const result = await store.getData();
   result.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
     function countRate() {
       let total = 0;
-      let length = 0;
-      length = e.rate.length;
+      let length = e.rate.length;
       e.rate.forEach((e: { value: number }) => {
         total += e.value / length;
       });

@@ -77,7 +77,7 @@ function search(event?: Event) {
 
   <header class="fixed top-0 z-10 flex w-full bg-main py-2 text-white shadow-md">
     <div class="hidden flex-[0.3] lg:flex"></div>
-    <nav class="flex h-10 flex-1">
+    <div class="flex h-10 flex-1">
       <div class="flex w-full gap-2 px-2">
         <div class="flex flex-1 gap-2">
           <div class="flex flex-1 cursor-pointer items-center justify-center" @click="go('home')">
@@ -129,7 +129,7 @@ function search(event?: Event) {
           </div>
         </div>
       </div>
-    </nav>
+    </div>
     <div class="hidden flex-[0.3] lg:flex"></div>
   </header>
 

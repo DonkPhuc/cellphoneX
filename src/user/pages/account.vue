@@ -66,7 +66,6 @@ onMounted(async () => {
   if (route.query.order) {
     selected.value = 1;
   }
-  window.scrollTo(0, 0);
 });
 watchEffect(async () => {
   if (selected.value === 10) {
@@ -89,15 +88,11 @@ watchEffect(async () => {
     });
 
     totalOrderDiscount.value = totalOrderDiscount.value - totalOrder.value;
-
-    window.scrollTo(0, 0);
   }
 });
 
 async function selectedMode(value: number) {
   selected.value = value;
-
-  window.scrollTo(0, 0);
 
   if (value === 3) {
     open.value = true;
@@ -433,7 +428,7 @@ function selectedStatusOrders(index: number) {
                 >
                   <div class="flex w-full flex-1 flex-col gap-2">
                     <div class="flex gap-2">
-                      <img class="h-20 w-20" :src="dataOrders[index].items[0].imageLink" />
+                      <img class="h-20 w-20" alt="" :src="dataOrders[index].items[0].imageLink" />
                       <span class="flex-1 cursor-pointer font-bold hover:text-main hover:underline">{{
                         dataOrders[index].items[0].name
                       }}</span>

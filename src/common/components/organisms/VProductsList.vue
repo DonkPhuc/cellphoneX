@@ -54,7 +54,6 @@ const resize = computed(() => {
 });
 const addingFavrtion = ref(false);
 function addFavorites() {
-  addingFavrtion.value = true;
   console.log(addingFavrtion.value);
 }
 </script>
@@ -123,7 +122,7 @@ function addFavorites() {
               <VIcon :icon-class="slide.averageRate > 4 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
             </div>
 
-            <div class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2">
+            <div class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2" @click="addFavorites">
               <span class="text-xs text-gray-500">Yêu Thích</span>
               <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
             </div>

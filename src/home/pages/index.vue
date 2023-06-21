@@ -12,9 +12,8 @@ const laptopList = ref<Products[]>([]);
 const tablet = ref<Products[]>([]);
 const accessory = ref<Products[]>([]);
 
-onMounted(() => {
+onMounted(async () => {
   getData();
-  window.scrollTo(0, 0);
 });
 
 async function getData() {
@@ -166,7 +165,7 @@ async function goDetail(index: number, id: string) {
           <div class="hidden flex-[0.5] lg:flex">
             <div class="flex h-full flex-1 flex-col gap-4">
               <div v-for="item in listFeature" :key="item.imageLink" class="flex-1 rounded-xl border shadow-xl">
-                <img class="h-[114px] w-full rounded-xl" :src="item.imageLink" />
+                <img alt="" class="h-[114px] w-full rounded-xl" :src="item.imageLink" />
               </div>
             </div>
           </div>

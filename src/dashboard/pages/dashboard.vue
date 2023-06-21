@@ -14,7 +14,6 @@ onMounted(async () => {
   if (result.role !== 'admin') {
     router.push('/');
   }
-  window.scrollTo(0, 0);
 });
 function selectedMode(value: number) {
   selected.value = value;

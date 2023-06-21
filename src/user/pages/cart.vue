@@ -22,7 +22,6 @@ watchEffect(() => {
 });
 
 onMounted(async () => {
-  window.scrollTo(0, 0);
   getData();
 });
 

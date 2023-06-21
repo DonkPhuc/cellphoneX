@@ -4,7 +4,6 @@ import 'vue3-toastify/dist/index.css';
 import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
-import { Orders, Products } from '~/home/dtos';
 import { useStore } from '~/home/stores/Store';
 import { Customers } from '~/user/dtos/Customers.dto';
 
@@ -165,7 +164,6 @@ onMounted(async () => {
       router.push(`/`);
     }
   }
-  window.scrollTo(0, 0);
 });
 const notifySignUp = (error?: string, type?: string) => {
   if (type && type === 'success') {
