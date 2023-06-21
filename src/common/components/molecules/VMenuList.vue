@@ -25,7 +25,7 @@ const block = computed(() => (title: string) => {
     <div
       :class="block(item.title)"
       class="flex flex-1 cursor-pointer justify-between rounded-xl"
-      @click="eventMenu(item.title)"
+      @click="item.title === 'Điện Thoại' || item.title === 'Khuyến Mãi' ? eventMenu(item.title) : ''"
     >
       <div class="flex items-center gap-2">
         <img class="h-[20px] pl-2" :src="item.imageLink" alt="" />

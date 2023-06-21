@@ -34,20 +34,16 @@ const formatVND = computed(() => (slide: Products) => {
 
   return result;
 });
-
 const eventButton = async (title: string) => {
   await router.push(`products/brand/${title.toLowerCase()}`);
 };
-
 function goToProduct(index: number, id: string) {
   emit('goDetail', index, id);
 }
-
 const currentSlide = ref(0);
 const slideTo = (index: number) => {
   currentSlide.value = index;
 };
-
 const resize = computed(() => {
   let itemShow = 5;
   const screenWidth = window.innerWidth;
@@ -56,6 +52,11 @@ const resize = computed(() => {
   }
   return itemShow;
 });
+const addingFavrtion = ref(false);
+function addFavorites() {
+  addingFavrtion.value = true;
+  console.log(addingFavrtion.value);
+}
 </script>
 
 <template>
@@ -123,7 +124,7 @@ const resize = computed(() => {
             </div>
 
             <div class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2">
-              <p class="text-xs text-gray-500">Yêu Thích</p>
+              <span class="text-xs text-gray-500">Yêu Thích</span>
               <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
             </div>
           </div>
