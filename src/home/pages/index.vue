@@ -172,7 +172,7 @@ async function goDetail(index: number, id: string) {
         </div>
 
         <div class="flex h-[110px]">
-          <img src="\public\images\xa-kho-khet-special.png" alt="" class="w-full rounded-xl" />
+          <img src="/images/xa-kho-khet-special.png" alt="" class="w-full rounded-xl" />
         </div>
 
         <div v-if="itemList.length" class="flex flex-col gap-4">
