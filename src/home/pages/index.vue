@@ -41,16 +41,14 @@ async function getData() {
 
 const listFeature = [
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/s20-fe-right-th555.jpg',
+    imageLink: 'public\\images\\right-banner-th5-newww1.png',
+  },
+  {
+    imageLink: 'public\\images\\msi gaming right banner.png',
   },
   {
     imageLink:
       'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-th5-newww1.jpg',
-  },
-  {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-ideapad-3.jpg',
   },
 ] as Products[];
 const listCarousel = [
