@@ -101,13 +101,13 @@ const totalCart = computed(() => (total: number) => {
     </template>
   </VDialog>
 
-  <main class="h-full flex-[1] bg-black p-6">
-    <div class="flex flex-col gap-6 bg-bgBlack p-6">
+  <main class="h-full flex-[1] p-4">
+    <div class="flex flex-col gap-6 p-6">
       <div class="flex justify-between">
-        <span class="font-bold text-white">Recent Orders ({{ data.length }})</span>
+        <span class="font-bold text-black">Recent Orders ({{ data.length }})</span>
       </div>
 
-      <div class="flex h-1 flex-1">
+      <div class="flex h-1 flex-1 border border-black">
         <div class="flex w-full flex-col">
           <div class="flex items-center divide-x bg-primary">
             <div class="flex flex-[0.2] items-center justify-center truncate p-2">
@@ -141,7 +141,7 @@ const totalCart = computed(() => (total: number) => {
             <div class="overflow-y-scroll"></div>
           </div>
 
-          <div v-if="!loading" class="max-h-[700px] overflow-y-scroll">
+          <div v-if="!loading" class="max-h-[800px] overflow-y-scroll">
             <div v-for="(item, index) in data" :key="index" class="flex">
               <div class="flex w-full border-b border-textBlack">
                 <div class="flex flex-[0.2] items-center justify-center truncate p-2">

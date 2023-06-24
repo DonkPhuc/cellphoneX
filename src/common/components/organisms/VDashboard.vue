@@ -133,81 +133,81 @@ const dataByMonth = (data: Orders[]) => {
 </script>
 
 <template>
-  <main class="h-full flex-[1] bg-black p-6">
+  <main class="h-full flex-[1] p-6 py-12">
     <template v-if="!loading">
-      <div class="flex flex-col gap-6 bg-black">
-        <div class="flex h-full w-full gap-6 bg-black">
-          <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
+      <div class="flex flex-col gap-6">
+        <div class="flex h-full w-full gap-6">
+          <div class="flex flex-1 justify-between rounded-md border border-black bg-red-50 p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Sale</span>
-              <span class="font-bold text-white">{{ totalCart(totalSales) }}</span>
+              <span class="text-black">Total Sale</span>
+              <span class="font-bold text-black">{{ totalCart(totalSales) }}</span>
             </div>
           </div>
-          <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
+          <div class="flex flex-1 justify-between rounded-md border border-black bg-red-50 p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Accessory Sale</span>
-              <span class="font-bold text-white">{{ totalCart(accessoryTotal) }}</span>
+              <span class="text-black">Total Accessory Sale</span>
+              <span class="font-bold text-black">{{ totalCart(accessoryTotal) }}</span>
             </div>
           </div>
-          <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
+          <div class="flex flex-1 justify-between rounded-md border border-black bg-red-50 p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Samsung Sale</span>
-              <span class="font-bold text-white">{{ totalCart(samsungTotal) }}</span>
+              <span class="text-black">Total Samsung Sale</span>
+              <span class="font-bold text-black">{{ totalCart(samsungTotal) }}</span>
             </div>
           </div>
-          <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
+          <div class="flex flex-1 justify-between rounded-md border border-black bg-red-50 p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Tablet Sale</span>
-              <span class="font-bold text-white">{{ totalCart(tabletTotal) }}</span>
+              <span class="text-black">Total Tablet Sale</span>
+              <span class="font-bold text-black">{{ totalCart(tabletTotal) }}</span>
             </div>
           </div>
-          <div class="flex flex-1 justify-between rounded-md bg-bgBlack p-6">
+          <div class="flex flex-1 justify-between rounded-md border border-black bg-red-50 p-6">
             <VIcon size="text-main text-5xl" icon="fa-bar-chart-o" />
             <div class="flex flex-col">
-              <span class="text-textBlack">Total Apple Sale</span>
-              <span class="font-bold text-white">{{ totalCart(appleTotal) }}</span>
+              <span class="text-black">Total Apple Sale</span>
+              <span class="font-bold text-black">{{ totalCart(appleTotal) }}</span>
             </div>
           </div>
         </div>
-        <div class="flex h-full w-full flex-1 gap-6 bg-black pb-6">
-          <div class="flex h-full flex-1 flex-col gap-6 rounded-md bg-bgBlack p-6">
+        <div class="flex h-full w-full flex-1 gap-6 pb-6">
+          <div class="flex h-full flex-1 flex-col gap-6 rounded-md p-6">
             <div class="flex flex-1 justify-between">
-              <span class="font-bold text-white">Recent Salse ({{ data.length }} orders)</span>
+              <span class="font-bold text-black">Recent Salse ({{ data.length }} orders)</span>
             </div>
 
             <table class="w-full overflow-auto border border-black">
-              <thead>
+              <thead class="bg-main">
                 <tr>
-                  <th class="border border-black py-2 text-white">Month</th>
-                  <th class="border border-black py-2 text-white">Orders sold</th>
-                  <th class="border border-black py-2 text-white">Total (VND)</th>
-                  <th class="border border-black py-2 text-white">Iphone sold</th>
-                  <th class="border border-black py-2 text-white">Samsung sold</th>
-                  <th class="border border-black py-2 text-white">Accessory sold</th>
-                  <th class="border border-black py-2 text-white">Tablet sold</th>
+                  <th class="h-16 border border-black py-2 text-white">Month</th>
+                  <th class="h-16 border border-black py-2 text-white">Orders sold</th>
+                  <th class="h-16 border border-black py-2 text-white">Total (VND)</th>
+                  <th class="h-16 border border-black py-2 text-white">Iphone sold</th>
+                  <th class="h-16 border border-black py-2 text-white">Samsung sold</th>
+                  <th class="h-16 border border-black py-2 text-white">Accessory sold</th>
+                  <th class="h-16 border border-black py-2 text-white">Tablet sold</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(item, index) in dataMonth" :key="index">
-                  <td class="truncate border border-black p-2 text-center text-textBlack">{{ index + 1 }}</td>
-                  <td class="truncate border border-black p-2 text-center text-textBlack">{{ item.length }}</td>
-                  <td class="truncate border border-black p-2 text-center text-textBlack">
+                  <td class="h-12 truncate border border-black p-2 text-center text-black">{{ index + 1 }}</td>
+                  <td class="h-12 truncate border border-black p-2 text-center text-black">{{ item.length }}</td>
+                  <td class="h-12 truncate border border-black p-2 text-center text-black">
                     {{ dataTotalMonth[index] > 0 ? totalCart(dataTotalMonth[index]) : '0 đ' }}
                   </td>
-                  <td v-if="totalIphone[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                  <td v-if="totalIphone[index]" class="h-12 truncate border border-black p-2 text-center text-black">
                     {{ totalIphone[index].quantity }}
                   </td>
-                  <td v-if="totalSamsung[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                  <td v-if="totalSamsung[index]" class="h-12 truncate border border-black p-2 text-center text-black">
                     {{ totalSamsung[index].quantity }}
                   </td>
-                  <td v-if="totalAccessory[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                  <td v-if="totalAccessory[index]" class="h-12 truncate border border-black p-2 text-center text-black">
                     {{ totalAccessory[index].quantity }}
                   </td>
-                  <td v-if="totalTablet[index]" class="truncate border border-black p-2 text-center text-textBlack">
+                  <td v-if="totalTablet[index]" class="h-12 truncate border border-black p-2 text-center text-black">
                     {{ totalTablet[index].quantity }}
                   </td>
                 </tr>
