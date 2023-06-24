@@ -41,14 +41,13 @@ async function getData() {
 
 const listFeature = [
   {
-    imageLink: 'public\\images\\right-banner-th5-newww1.png',
+    imageLink: 'images\\right-banner-th5-newww1.png',
   },
   {
-    imageLink: 'public\\images\\msi gaming right banner.png',
+    imageLink: 'images\\msi gaming right banner.png',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q10/https://dashboard.cellphones.com.vn/storage/right-banner-th5-newww1.jpg',
+    imageLink: 'images\\right-banner-th5-newww1.png',
   },
 ] as Products[];
 const listCarousel = [
