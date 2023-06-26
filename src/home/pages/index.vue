@@ -52,27 +52,27 @@ const listFeature = [
 ] as Products[];
 const listCarousel = [
   {
-    imageLink: 'images\\carousel_1',
+    imageLink: 'images\\carousel_1.png',
     title: 'Mừng Khai Trương',
     description: 'giảm đến 70%',
   },
   {
-    imageLink: 'images\\carousel_2',
+    imageLink: 'images\\carousel_2.png',
     title: 'IPhone 14 Pro',
     description: 'giá tốt bất ngờ',
   },
   {
-    imageLink: 'images\\carousel_3',
+    imageLink: 'images\\carousel_3.png',
     title: 'Redmi Note 12',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink: 'images\\carousel_2',
+    imageLink: 'images\\carousel_2.png',
     title: 'Redmi Note 123',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink: 'images\\carousel_1',
+    imageLink: 'images\\carousel_1.png',
     title: 'Redmi Note 124',
     description: 'mở bán giá tốt',
   },

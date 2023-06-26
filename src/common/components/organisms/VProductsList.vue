@@ -148,8 +148,8 @@ function addFavorites() {
           class="h-[76px] w-full cursor-pointer rounded-b-xl pt-5 hover:bg-gray-100"
           @click="slideTo(index)"
         >
-          <p class="text-center text-xs font-bold">{{ slide.title }}</p>
-          <p class="text-center text-xs font-normal">{{ slide.description }}</p>
+          <p class="cursor-pointer text-center text-xs font-bold">{{ slide.title }}</p>
+          <p class="cursor-pointer text-center text-xs font-normal">{{ slide.description }}</p>
         </div>
       </Slide>
     </Carousel>
