@@ -52,32 +52,27 @@ const listFeature = [
 ] as Products[];
 const listCarousel = [
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12s-004-sliding.png',
+    imageLink: 'images\\carousel_1',
     title: 'Mừng Khai Trương',
     description: 'giảm đến 70%',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/apple%20watch%20sliding.png',
+    imageLink: 'images\\carousel_2',
     title: 'IPhone 14 Pro',
     description: 'giá tốt bất ngờ',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12s-004-sliding.png',
+    imageLink: 'images\\carousel_3',
     title: 'Redmi Note 12',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12-sliding-0805.jpg',
+    imageLink: 'images\\carousel_2',
     title: 'Redmi Note 123',
     description: 'mở bán giá tốt',
   },
   {
-    imageLink:
-      'https://cdn2.cellphones.com.vn/690x300,webp,q100/https://dashboard.cellphones.com.vn/storage/redmi-note12s-004-sliding.png',
+    imageLink: 'images\\carousel_1',
     title: 'Redmi Note 124',
     description: 'mở bán giá tốt',
   },

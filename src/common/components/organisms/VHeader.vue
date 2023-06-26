@@ -108,7 +108,7 @@ function search(event?: Event) {
             class="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg hover:bg-[hsla(0,0%,100%,.2)] md:flex-row"
             @click="isLoginSuccess ? go('cart') : (open = true)"
           >
-            <VIcon class="text-white" size="text-lg" icon="fa-shopping-cart " />
+            <VIcon class="text-white" size="text-lg" icon="fa-shopping-cart" />
             <span> Giỏ hàng </span>
           </div>
 
@@ -160,7 +160,7 @@ function search(event?: Event) {
           >
             <VIcon
               :size="currentPath === '/cart' ? '!text-main text-2xl' : 'text-2xl text-gray-600'"
-              icon="fa-shopping-cart "
+              icon="fa-shopping-cart"
             />
             <span :class="currentPath === '/cart' ? '!text-main' : ''" class="text-xs font-bold text-gray-600"
               >Giỏ hàng</span
