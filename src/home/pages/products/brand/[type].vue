@@ -69,8 +69,8 @@ watch(
   async () => {
     if (route.query.search) {
       loading.value = true;
-      setTimeout(async () => {
-        await getDataSearch();
+      setTimeout(() => {
+        getDataSearch();
       }, 500);
       setTimeout(() => {
         searchKey.value = true;
@@ -90,14 +90,12 @@ async function getDataSearch() {
   }
   result.forEach((e) => {
     e.price = e.priceRRP - e.priceRRP * (e.discount / 100);
-    const countRate = computed(() => {
-      let total = 0;
-      let length = 0;
-      length = Number(e.rate.length);
-      e.rate.forEach((e: { value: number }) => (total = (total + e.value) / length));
-      return total;
-    });
-    e.averageRate = countRate.value;
+
+    let total = 0;
+    let length = 0;
+    length = Number(e.rate.length);
+    e.rate.forEach((e: { value: number }) => (total = total + e.value));
+    e.averageRate = total / length;
   });
   data.value = result;
 }
