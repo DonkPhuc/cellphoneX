@@ -3,12 +3,16 @@ import { acceptHMRUpdate, defineStore } from 'pinia';
 import Services from '~/home/services/Service';
 
 import { Products } from '../dtos';
+import { log } from 'console';
 
 export const useStore = defineStore(
   'store',
   () => {
+    const favrouteList = ref<Products[]>([]);
+
     async function getData() {
-      return (await Services.getData()) as Products[];
+      const result = (await Services.getData()) as Products[];
+      return result;
     }
     async function getProduct(id: string) {
       return await Services.getProduct(id);
@@ -88,8 +92,16 @@ export const useStore = defineStore(
     }) {
       return await Services.postAddOrder(data);
     }
+    async function postAddToFavourite(username: string, id: string) {
+      const result = await Services.postAddToFavourite(username, id);
+      if (result === 'successfully') {
+        console.log('🚀 ~ file: Store.ts:97 ~ postAddToFavourite ~ result:', result);
+      }
+      return result;
+    }
 
     return {
+      favrouteList,
       getData,
       getProduct,
       getOrders,
@@ -103,6 +115,7 @@ export const useStore = defineStore(
       postDeleteOrder,
       postAddOrder,
       postUpdateToCart,
+      postAddToFavourite,
     };
   },
   {

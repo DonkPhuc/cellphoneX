@@ -16,6 +16,14 @@ interface Props {
 const props = defineProps<Props>();
 const { title, data, buttonList, type, dataCarousel } = toRefs(props);
 
+import { storeToRefs } from 'pinia';
+
+import { useStore } from '~/home/stores/Store';
+import { useUserStore } from '~/user/stores/user';
+const userStore = useUserStore();
+const store = useStore();
+const { isLoginSuccess } = storeToRefs(userStore);
+
 const emit = defineEmits(['goDetail']);
 
 const formatVND = computed(() => (slide: Products) => {
@@ -52,9 +60,11 @@ const resize = computed(() => {
   }
   return itemShow;
 });
+
 const addingFavrtion = ref(false);
-function addFavorites() {
-  console.log(addingFavrtion.value);
+async function addFavorites(id: string) {
+  const result = await store.postAddToFavourite(isLoginSuccess.value, id);
+  console.log('🚀 ~ file: [type].vue:194 ~ addFavorites ~ result:', result);
 }
 </script>
 
@@ -122,7 +132,10 @@ function addFavorites() {
               <VIcon :icon-class="slide.averageRate > 4 ? 'text-yellow-600' : 'text-black'" icon="fa-star" />
             </div>
 
-            <div class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2" @click="addFavorites">
+            <div
+              class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2"
+              @click="addFavorites(slide._id)"
+            >
               <span class="text-xs text-gray-500">Yêu Thích</span>
               <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
             </div>

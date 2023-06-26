@@ -186,6 +186,12 @@ const buttonList = [
   { title: 'Tablet' },
   { title: 'Accessory' },
 ] as Products[];
+
+const addingFavrtion = ref(false);
+async function addFavorites(id: string) {
+  const result = await store.postAddToFavourite(isLoginSuccess.value, id);
+  console.log('🚀 ~ file: [type].vue:194 ~ addFavorites ~ result:', result);
+}
 </script>
 
 <template>
@@ -403,8 +409,11 @@ const buttonList = [
             <VIcon :icon-class="item.averageRate > 4 ? 'text-yellow-600' : 'text-black-600'" icon="fa-star" />
           </div>
 
-          <div class="hidden h-[20px] flex-1 cursor-pointer items-center justify-end gap-2 md:flex">
-            <p class="text-xs text-gray-500">Yêu Thích</p>
+          <div
+            class="flex h-[20px] flex-1 cursor-pointer items-center justify-end gap-2"
+            @click="addFavorites(item._id)"
+          >
+            <span class="text-xs text-gray-500">Yêu Thích</span>
             <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
           </div>
         </div>

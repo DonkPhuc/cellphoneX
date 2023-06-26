@@ -123,11 +123,6 @@ const dataByMonth = (data: Orders[]) => {
     });
   });
 
-  console.log(`Samsung Total: ${samsungTotal}`);
-  console.log(`Apple Total: ${appleTotal}`);
-  console.log(`accessoryTotal Total: ${accessoryTotal}`);
-  console.log(`tabletTotal Total: ${tabletTotal}`);
-
   return dataByMonths;
 };
 </script>

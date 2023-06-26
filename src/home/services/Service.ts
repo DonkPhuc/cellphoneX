@@ -81,5 +81,8 @@ class Services extends BaseService {
   }) {
     return await this.performRequest(METHODS.POST, `order/add`, data);
   }
+  async postAddToFavourite(username: string, id: string) {
+    return await this.performRequest(METHODS.POST, `product/favorite/${username}`, { _id: id });
+  }
 }
 export default new Services('v1/api');
