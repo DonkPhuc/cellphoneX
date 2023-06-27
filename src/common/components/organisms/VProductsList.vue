@@ -18,10 +18,8 @@ const { title, data, buttonList, type, dataCarousel } = toRefs(props);
 
 import { storeToRefs } from 'pinia';
 
-import { useStore } from '~/home/stores/Store';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
-const store = useStore();
 const { isLoginSuccess } = storeToRefs(userStore);
 
 const emit = defineEmits(['goDetail']);
@@ -63,8 +61,7 @@ const resize = computed(() => {
 
 const addingFavrtion = ref(false);
 async function addFavorites(id: string) {
-  const result = await store.postAddToFavourite(isLoginSuccess.value, id);
-  console.log('🚀 ~ file: [type].vue:194 ~ addFavorites ~ result:', result);
+  const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
 }
 </script>
 

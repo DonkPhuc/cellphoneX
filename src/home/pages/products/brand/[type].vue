@@ -12,7 +12,7 @@ import { useStore } from '~/home/stores/Store';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const store = useStore();
-const { isLoginSuccess } = storeToRefs(userStore);
+const { isLoginSuccess, favrouteList } = storeToRefs(userStore);
 
 const router = useRouter();
 const route = useRoute();
@@ -189,9 +189,12 @@ const buttonList = [
 
 const addingFavrtion = ref(false);
 async function addFavorites(id: string) {
-  const result = await store.postAddToFavourite(isLoginSuccess.value, id);
-  console.log('🚀 ~ file: [type].vue:194 ~ addFavorites ~ result:', result);
+  const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
+  console.log('🚀 ~ file: [type].vue:193 ~ addFavorites ~ result:', result);
 }
+const findFavrouteList = computed(() => (id: string) => {
+  return favrouteList.value.findIndex((e: { _id: string }) => e._id === id);
+});
 </script>
 
 <template>
@@ -414,7 +417,10 @@ async function addFavorites(id: string) {
             @click="addFavorites(item._id)"
           >
             <span class="text-xs text-gray-500">Yêu Thích</span>
-            <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
+            <VIcon
+              :icon="findFavrouteList(item._id) !== 0 ? 'fa-heart' : 'fa-heart-o'"
+              :icon-class="findFavrouteList(item._id) !== 0 ? '!text-red-500' : '!text-black-500'"
+            />
           </div>
         </div>
         <div v-if="data.length === 0 && searchKey" class="flex w-full flex-col items-center justify-center gap-2 py-8">

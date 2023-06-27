@@ -1,5 +1,6 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
 
+import { Customers } from '../dtos/Customers.dto';
 import customerServices from '../services/user';
 
 export const useUserStore = defineStore(
@@ -8,9 +9,12 @@ export const useUserStore = defineStore(
     const isLoginSuccess = ref('');
     const userFullName = ref('');
     const stepPayment = ref(0);
+    const favrouteList = ref([]);
 
     async function getCustomer(params: string) {
-      return await customerServices.getCustomer(params);
+      const result = (await customerServices.getCustomer(params)) as Customers;
+      favrouteList.value = result.favorite;
+      return result;
     }
     async function getAllCustomers() {
       return await customerServices.getAllCustomers();
@@ -31,8 +35,19 @@ export const useUserStore = defineStore(
     async function postDeleteCustomer(id: string) {
       return await customerServices.postDeleteCustomer(id);
     }
+    async function postAddToFavourite(username: string, id: string) {
+      const result = await customerServices.postAddToFavourite(username, id);
+      if (result === 'successfully') {
+        const item = { _id: id };
+        console.log('🚀 ~ file: Store.ts:98 ~ postAddToFavourite ~ item:', item);
+      } else {
+        console.log('🚀 :', favrouteList.value);
+      }
+      return result;
+    }
 
     return {
+      favrouteList,
       isLoginSuccess,
       userFullName,
       stepPayment,
@@ -41,6 +56,7 @@ export const useUserStore = defineStore(
       postSignUp,
       postUpdateUser,
       postDeleteCustomer,
+      postAddToFavourite,
     };
   },
   {
