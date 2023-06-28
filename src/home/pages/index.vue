@@ -142,9 +142,10 @@ async function goDetail(index: number, id: string) {
   }
 }
 
-function addFav(isSuccess: boolean) {
+async function addFav(isSuccess: boolean) {
   if (isSuccess) {
     toast.success(`Đã thêm vào yêu thích`, {});
+    await getData();
   } else {
     toast.error(`Đã có trong mục yêu thích`, {});
   }
@@ -179,7 +180,7 @@ function addFav(isSuccess: boolean) {
           <img src="/images/xa-kho-khet-special.png" alt="" class="w-full rounded-xl" />
         </div>
 
-        <div v-if="itemList.length" class="flex flex-col gap-4">
+        <div v-if="itemList.length > 0" class="flex flex-col gap-4">
           <div class="flex w-full">
             <VProductsList
               v-if="phoneList[0] && phoneList[0]._id"

@@ -22,7 +22,7 @@ import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const { isLoginSuccess, favrouteList } = storeToRefs(userStore);
 
-const emit = defineEmits(['goDetail', 'addFav']);
+const emit = defineEmits(['goDetail', 'addFav', 'loading']);
 
 const formatVND = computed(() => (slide: Products) => {
   let result = {
@@ -61,8 +61,8 @@ const resize = computed(() => {
 async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
   if (result === 'successfully') {
+    // await userStore.getCustomer(isLoginSuccess.value);
     emit('addFav', true);
-    await userStore.getCustomer(isLoginSuccess.value);
   } else {
     emit('addFav', false);
   }
@@ -141,7 +141,10 @@ const findFavrouteList = computed(() => (id: string) => {
               @click="addFavorites(slide._id)"
             >
               <span class="text-xs text-gray-500">Yêu Thích</span>
-              <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
+              <VIcon
+                :icon="findFavrouteList(slide._id) !== -1 ? 'fa-heart' : 'fa-heart-o'"
+                :icon-class="findFavrouteList(slide._id) !== -1 ? '!text-red-500' : '!text-black-500'"
+              />
             </div>
           </div>
         </div>
