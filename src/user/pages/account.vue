@@ -561,44 +561,65 @@ const formatVND = computed(() => (slide: number) => {
       </template>
       <template v-if="selected === 3">
         <div class="flex flex-[4] gap-4 rounded-lg">
-          <div class="flex flex-1 flex-wrap gap-4">
-            <div
-              v-for="(item, index) in (favrouteList as Products[])"
-              :key="index"
-              class="mx-auto flex w-full basis-[100%] flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-lg md:basis-[46%] lg:basis-[21%]"
-            >
-              <div class="flex w-full justify-end">
-                <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block"
-                  >Giảm {{ item.discount + '%' }}</span
-                >
-              </div>
-              <img
-                class="mx-auto h-[180px] w-[180px] cursor-pointer"
-                :src="item.imageLink"
-                alt=""
-                @click="router.push(`/products/${item._id}`)"
-              />
-              <p
-                class="h-14 cursor-pointer text-justify text-sm font-bold md:flex"
-                @click="router.push(`/products/${item._id}`)"
+          <template v-if="favrouteList.length > 0">
+            <div class="flex flex-1 flex-wrap gap-4">
+              <div
+                v-for="(item, index) in (favrouteList as Products[])"
+                :key="index"
+                class="mx-auto flex w-full basis-[100%] flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-lg md:basis-[46%] lg:basis-[21%]"
               >
-                {{ item.name }}
-              </p>
-
-              <div class="gap-2 md:flex">
-                <p class="font-bold text-red-500">
-                  {{ formatVND(item.priceRRP - (item.priceRRP * item.discount) / 100) }}
+                <div class="flex w-full justify-end">
+                  <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block"
+                    >Giảm {{ item.discount + '%' }}</span
+                  >
+                </div>
+                <img
+                  class="mx-auto h-[180px] w-[180px] cursor-pointer"
+                  :src="item.imageLink"
+                  alt=""
+                  @click="router.push(`/products/${item._id}`)"
+                />
+                <p
+                  class="h-14 cursor-pointer text-justify text-sm font-bold md:flex"
+                  @click="router.push(`/products/${item._id}`)"
+                >
+                  {{ item.name }}
                 </p>
-                <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
-                  {{ formatVND(item.priceRRP) }}
-                </p>
-              </div>
 
-              <div class="-mt-2 flex justify-center">
-                <VButton label="Bỏ yêu thích" @click="unFavrouteList(item._id)" />
+                <div class="gap-2 md:flex">
+                  <p class="font-bold text-red-500">
+                    {{ formatVND(item.priceRRP - (item.priceRRP * item.discount) / 100) }}
+                  </p>
+                  <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
+                    {{ formatVND(item.priceRRP) }}
+                  </p>
+                </div>
+
+                <div class="-mt-2 flex justify-center">
+                  <VButton label="Bỏ yêu thích" @click="unFavrouteList(item._id)" />
+                </div>
               </div>
             </div>
-          </div>
+          </template>
+          <template v-else>
+            <div class="flex w-full flex-col items-center gap-4">
+              <div class="flex justify-center pt-20">
+                <VIcon size="text-[80px]" icon="fa-smile-o" />
+              </div>
+
+              <div class="flex justify-center">
+                <p class="px-4 text-center text-xl">Không có sản phẩm yêu thích, vui lòng quay lại</p>
+              </div>
+
+              <div class="flex justify-center">
+                <VButton
+                  input-class="!h-10 w-44 !bg-main border-none rounded-lg"
+                  label="Quay lại trang chủ"
+                  @click="router.push('/')"
+                />
+              </div>
+            </div>
+          </template>
         </div>
       </template>
 
