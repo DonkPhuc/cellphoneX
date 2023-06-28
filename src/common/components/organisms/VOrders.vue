@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import 'vue3-toastify/dist/index.css';
+
 import { toast } from 'vue3-toastify';
 
 import { Orders } from '~/home/dtos';

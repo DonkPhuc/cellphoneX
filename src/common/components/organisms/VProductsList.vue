@@ -22,7 +22,7 @@ import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const { isLoginSuccess, favrouteList } = storeToRefs(userStore);
 
-const emit = defineEmits(['goDetail']);
+const emit = defineEmits(['goDetail', 'addFav']);
 
 const formatVND = computed(() => (slide: Products) => {
   let result = {
@@ -61,9 +61,10 @@ const resize = computed(() => {
 async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
   if (result === 'successfully') {
-    let item = { _id: id } as Products;
-    // favrouteList.value.push(item);
+    emit('addFav', true);
     await userStore.getCustomer(isLoginSuccess.value);
+  } else {
+    emit('addFav', false);
   }
 }
 const findFavrouteList = computed(() => (id: string) => {

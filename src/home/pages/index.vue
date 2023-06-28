@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import 'vue3-toastify/dist/index.css';
+
+import { toast } from 'vue3-toastify';
+
 import { useStore } from '~/home/stores/Store';
 
 import { Products } from '../dtos';
@@ -137,6 +141,14 @@ async function goDetail(index: number, id: string) {
     router.go(0);
   }
 }
+
+function addFav(isSuccess: boolean) {
+  if (isSuccess) {
+    toast.success(`Đã thêm vào yêu thích`, {});
+  } else {
+    toast.error(`Đã có trong mục yêu thích`, {});
+  }
+}
 </script>
 
 <template>
@@ -175,6 +187,7 @@ async function goDetail(index: number, id: string) {
               :button-list="buttonList"
               :data="phoneList"
               title="IPHONE NỔI BẬT NHẤT"
+              @add-fav="addFav"
               @go-detail="goDetail"
             />
           </div>
@@ -185,6 +198,7 @@ async function goDetail(index: number, id: string) {
               :button-list="buttonList"
               :data="laptopList"
               title="SAMSUNG NỔI BẬT NHẤT"
+              @add-fav="addFav"
               @go-detail="goDetail"
             />
           </div>
@@ -195,6 +209,7 @@ async function goDetail(index: number, id: string) {
               :button-list="buttonList"
               :data="tablet"
               title="TABLET NỔI BẬT NHẤT"
+              @add-fav="addFav"
               @go-detail="goDetail"
             />
           </div>
@@ -205,6 +220,7 @@ async function goDetail(index: number, id: string) {
               :button-list="buttonList"
               :data="accessory"
               title="PHỤ KIỆN NỔI BẬT NHẤT"
+              @add-fav="addFav"
               @go-detail="goDetail"
             />
           </div>
