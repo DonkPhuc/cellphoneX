@@ -61,7 +61,9 @@ const resize = computed(() => {
 async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
   if (result === 'successfully') {
-    console.log('ok');
+    let item = { _id: id } as Products;
+    // favrouteList.value.push(item);
+    await userStore.getCustomer(isLoginSuccess.value);
   }
 }
 const findFavrouteList = computed(() => (id: string) => {
@@ -138,10 +140,7 @@ const findFavrouteList = computed(() => (id: string) => {
               @click="addFavorites(slide._id)"
             >
               <span class="text-xs text-gray-500">Yêu Thích</span>
-              <VIcon
-                :icon="findFavrouteList(slide._id) !== -1 ? 'fa-heart' : 'fa-heart-o'"
-                :icon-class="findFavrouteList(slide._id) !== -1 ? '!text-red-500' : '!text-black-500'"
-              />
+              <VIcon :icon="1 ? 'fa-heart' : 'fa-heart-o'" :icon-class="1 ? '!text-red-500' : '!text-black-500'" />
             </div>
           </div>
         </div>

@@ -1,5 +1,7 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
 
+import { Products } from '~/home/dtos';
+
 import { Customers } from '../dtos/Customers.dto';
 import CustomerServices from '../services/user';
 
@@ -9,7 +11,7 @@ export const useUserStore = defineStore(
     const isLoginSuccess = ref('');
     const userFullName = ref('');
     const stepPayment = ref(0);
-    const favrouteList = ref([]);
+    const favrouteList = ref(<Products[]>[]);
 
     async function getCustomer(params: string) {
       const result = (await CustomerServices.getCustomer(params)) as Customers;
