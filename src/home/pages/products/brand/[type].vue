@@ -191,8 +191,12 @@ async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
   if (result === 'successfully') {
     await userStore.getCustomer(isLoginSuccess.value);
+    toast.success(`Đã thêm vào yêu thích`, {});
+  } else {
+    toast.error(`Đã có trong mục yêu thích`, {});
   }
 }
+
 const findFavrouteList = computed(() => (id: string) => {
   return favrouteList.value.findIndex((e: { _id: string }) => e._id === id);
 });
