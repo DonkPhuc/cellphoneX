@@ -174,7 +174,7 @@ const dataByMonth = (data: Orders[]) => {
               <span class="font-bold text-black">Recent Salse ({{ data.length }} orders)</span>
             </div>
 
-            <table class="w-full overflow-auto border border-black">
+            <table aria-describedby="mydesc" class="w-full overflow-auto border border-black">
               <thead class="bg-main">
                 <tr>
                   <th class="h-16 border border-black py-2 text-white">Month</th>

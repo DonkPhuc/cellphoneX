@@ -1,6 +1,6 @@
 import BaseService, { METHODS } from '~/common/services/BaseService';
 
-class customerServices extends BaseService {
+class CustomerServices extends BaseService {
   constructor(prefix: string) {
     super(prefix);
   }
@@ -36,6 +36,9 @@ class customerServices extends BaseService {
   async postAddToFavourite(username: string, id: string) {
     return await this.performRequest(METHODS.POST, `product/favorite/${username}`, { _id: id });
   }
+  async postDelToFavourite(username: string, id: string) {
+    return await this.performRequest(METHODS.DELETE, `product/favorite/delete/${username}/${id}`);
+  }
 }
 
-export default new customerServices('v1/api');
+export default new CustomerServices('v1/api');

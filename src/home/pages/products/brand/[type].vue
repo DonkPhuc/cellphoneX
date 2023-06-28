@@ -187,7 +187,6 @@ const buttonList = [
   { title: 'Accessory' },
 ] as Products[];
 
-const addingFavrtion = ref(false);
 async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
   if (result === 'successfully') {
@@ -420,8 +419,8 @@ const findFavrouteList = computed(() => (id: string) => {
           >
             <span class="text-xs text-gray-500">Yêu Thích</span>
             <VIcon
-              :icon="findFavrouteList(item._id) === 0 ? 'fa-heart' : 'fa-heart-o'"
-              :icon-class="findFavrouteList(item._id) === 0 ? '!text-red-500' : '!text-black-500'"
+              :icon="findFavrouteList(item._id) !== -1 ? 'fa-heart' : 'fa-heart-o'"
+              :icon-class="findFavrouteList(item._id) !== -1 ? '!text-red-500' : '!text-black-500'"
             />
           </div>
         </div>

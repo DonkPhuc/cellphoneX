@@ -12,7 +12,7 @@ import { useUserStore } from '../stores/user';
 
 const userStore = useUserStore();
 const store = useStore();
-const { isLoginSuccess, userFullName } = storeToRefs(userStore);
+const { isLoginSuccess, userFullName, favrouteList } = storeToRefs(userStore);
 
 const router = useRouter();
 const route = useRoute();
@@ -49,6 +49,10 @@ const listMode = [
   {
     name: 'Tài khoản của bạn',
     icon: 'fa-user ',
+  },
+  {
+    name: 'Yêu Thích',
+    icon: 'fa-heart',
   },
 ];
 const listStatusOrders = ['Tất cả', 'Chờ xác nhận', 'Đã xác nhận', 'Đang vận chuyển', 'Đã nhận hàng', 'Đã huỷ'];
@@ -94,7 +98,7 @@ watchEffect(async () => {
 async function selectedMode(value: number) {
   selected.value = value;
 
-  if (value === 3) {
+  if (value === 4) {
     open.value = true;
   }
 }
@@ -153,7 +157,7 @@ async function updateUser() {
 async function initial() {
   loading.value = true;
 
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  const result = await userStore.getCustomer(isLoginSuccess.value);
 
   dataOrders.value = result.orders;
 
@@ -182,6 +186,22 @@ async function initial() {
 function selectedStatusOrders(index: number) {
   selectedStatus.value = index;
 }
+
+async function unFavrouteList(id: string) {
+  const result = await userStore.postDelToFavourite(isLoginSuccess.value, id);
+  if (result === 'successfully') {
+    await userStore.getCustomer(isLoginSuccess.value);
+  }
+}
+
+const formatVND = computed(() => (slide: number) => {
+  let result = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(slide);
+
+  return result;
+});
 </script>
 
 <template>
@@ -539,6 +559,48 @@ function selectedStatusOrders(index: number) {
           />
         </div>
       </template>
+      <template v-if="selected === 3">
+        <div class="flex flex-[4] gap-4 rounded-lg">
+          <div class="flex flex-1 flex-wrap gap-4">
+            <div
+              v-for="(item, index) in (favrouteList as Products[])"
+              :key="index"
+              class="mx-auto flex w-full basis-[100%] flex-col gap-4 rounded-xl border border-slate-200 p-2 shadow-lg md:basis-[46%] lg:basis-[21%]"
+            >
+              <div class="flex w-full justify-end">
+                <span class="vc py-1 text-xs font-semibold before:hidden after:hidden before:md:block after:md:block"
+                  >Giảm {{ item.discount + '%' }}</span
+                >
+              </div>
+              <img
+                class="mx-auto h-[180px] w-[180px] cursor-pointer"
+                :src="item.imageLink"
+                alt=""
+                @click="router.push(`/products/${item._id}`)"
+              />
+              <p
+                class="h-14 cursor-pointer text-justify text-sm font-bold md:flex"
+                @click="router.push(`/products/${item._id}`)"
+              >
+                {{ item.name }}
+              </p>
+
+              <div class="gap-2 md:flex">
+                <p class="font-bold text-red-500">
+                  {{ formatVND(item.priceRRP - (item.priceRRP * item.discount) / 100) }}
+                </p>
+                <p class="flex items-center text-[14px] font-semibold text-gray-500 line-through">
+                  {{ formatVND(item.priceRRP) }}
+                </p>
+              </div>
+
+              <div class="-mt-2 flex justify-center">
+                <VButton label="Bỏ yêu thích" @click="unFavrouteList(item._id)" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
 
       <template v-if="selected === 10 && dataOrder">
         <div class="flex w-full flex-col gap-4 md:pl-4">
@@ -628,3 +690,39 @@ function selectedStatusOrders(index: number) {
 meta:
   layout: Base
 </route>
+
+<style scoped>
+.vc {
+  right: -10px;
+  background: #ff0045;
+  border-radius: 30px 0 0 30px;
+  color: #fff;
+  width: 80px;
+  text-align: center;
+  position: relative;
+  border-right: 1px dashed #fff;
+}
+
+.vc:after {
+  width: 0;
+  height: 0;
+  border: 12.5px solid transparent;
+  position: absolute;
+  content: '';
+  border-top-color: #ff0045;
+  right: -26px;
+  top: 0px;
+  border-left-color: #ff0045;
+}
+
+.vc:before {
+  width: 0;
+  height: 0;
+  border: 13px solid transparent;
+  position: absolute;
+  content: '';
+  border-bottom-color: #ff0045;
+  right: -25px;
+  top: 2px;
+}
+</style>

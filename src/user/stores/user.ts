@@ -1,7 +1,7 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
 
 import { Customers } from '../dtos/Customers.dto';
-import customerServices from '../services/user';
+import CustomerServices from '../services/user';
 
 export const useUserStore = defineStore(
   'user',
@@ -12,15 +12,15 @@ export const useUserStore = defineStore(
     const favrouteList = ref([]);
 
     async function getCustomer(params: string) {
-      const result = (await customerServices.getCustomer(params)) as Customers;
+      const result = (await CustomerServices.getCustomer(params)) as Customers;
       favrouteList.value = result.favorite;
       return result;
     }
     async function getAllCustomers() {
-      return await customerServices.getAllCustomers();
+      return await CustomerServices.getAllCustomers();
     }
     async function postSignUp(username: string, password: string, userFullName: string, email: string) {
-      return await customerServices.postSignUp(username, password, userFullName, email);
+      return await CustomerServices.postSignUp(username, password, userFullName, email);
     }
     async function postUpdateUser(
       userFullName?: string,
@@ -30,20 +30,16 @@ export const useUserStore = defineStore(
       id?: string,
       role?: string
     ) {
-      return await customerServices.postUpdateUser(userFullName, username, email, password, id, role);
+      return await CustomerServices.postUpdateUser(userFullName, username, email, password, id, role);
     }
     async function postDeleteCustomer(id: string) {
-      return await customerServices.postDeleteCustomer(id);
+      return await CustomerServices.postDeleteCustomer(id);
     }
     async function postAddToFavourite(username: string, id: string) {
-      const result = await customerServices.postAddToFavourite(username, id);
-      if (result === 'successfully') {
-        const item = { _id: id };
-        console.log('🚀 ~ file: Store.ts:98 ~ postAddToFavourite ~ item:', item);
-      } else {
-        console.log('🚀 :', favrouteList.value);
-      }
-      return result;
+      return await CustomerServices.postAddToFavourite(username, id);
+    }
+    async function postDelToFavourite(username: string, id: string) {
+      return await CustomerServices.postDelToFavourite(username, id);
     }
 
     return {
@@ -57,6 +53,7 @@ export const useUserStore = defineStore(
       postUpdateUser,
       postDeleteCustomer,
       postAddToFavourite,
+      postDelToFavourite,
     };
   },
   {

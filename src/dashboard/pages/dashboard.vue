@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 
-import { Customers } from '~/user/dtos/Customers.dto';
 import { useUserStore } from '~/user/stores/user';
 const userStore = useUserStore();
 const { isLoginSuccess } = storeToRefs(userStore);
@@ -10,7 +9,7 @@ const router = useRouter();
 const selected = ref(0);
 
 onMounted(async () => {
-  const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+  const result = await userStore.getCustomer(isLoginSuccess.value);
   if (result.role !== 'admin') {
     router.push('/');
   }

@@ -108,7 +108,7 @@ async function addToCart(action: string) {
       type: currentProduct.value.type,
       name: currentProduct.value.name,
     };
-    const result = (await userStore.getCustomer(isLoginSuccess.value)) as Customers;
+    const result = await userStore.getCustomer(isLoginSuccess.value);
     const find = result.cart.findIndex((e: Customers) => e._id === route.params.id.toString());
     if (action === 'buy') {
       if (find !== undefined && find > -1) {

@@ -23,7 +23,7 @@ const { size, inputClass, type, max, model, format, maxLength } = toRefs(props);
 
 const emit = defineEmits(['update:model']);
 
-const FILTER_PAG_REGEX = /[^0-9]/g;
+const FILTER_PAG_REGEX = /\D/g;
 
 const inputRef = ref<HTMLInputElement>();
 const canClear = ref<boolean>(false);
