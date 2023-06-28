@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import 'vue3-toastify/dist/index.css';
 
+import { storeToRefs } from 'pinia';
 import { toast } from 'vue3-toastify';
 
 import { useStore } from '~/home/stores/Store';
+import { useUserStore } from '~/user/stores/user';
 
 import { Products } from '../dtos';
+const userStore = useUserStore();
 const store = useStore();
+const { isLoginSuccess, favrouteList } = storeToRefs(userStore);
 
 const router = useRouter();
 
@@ -144,6 +148,7 @@ async function goDetail(index: number, id: string) {
 
 async function addFav(isSuccess: boolean) {
   if (isSuccess) {
+    await userStore.getCustomer(isLoginSuccess.value);
     toast.success(`Đã thêm vào yêu thích`, {});
     await getData();
   } else {

@@ -61,7 +61,6 @@ const resize = computed(() => {
 async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
   if (result === 'successfully') {
-    // await userStore.getCustomer(isLoginSuccess.value);
     emit('addFav', true);
   } else {
     emit('addFav', false);
