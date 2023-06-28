@@ -190,7 +190,9 @@ const buttonList = [
 const addingFavrtion = ref(false);
 async function addFavorites(id: string) {
   const result = await userStore.postAddToFavourite(isLoginSuccess.value, id);
-  console.log('🚀 ~ file: [type].vue:193 ~ addFavorites ~ result:', result);
+  if (result === 'successfully') {
+    await userStore.getCustomer(isLoginSuccess.value);
+  }
 }
 const findFavrouteList = computed(() => (id: string) => {
   return favrouteList.value.findIndex((e: { _id: string }) => e._id === id);
@@ -418,8 +420,8 @@ const findFavrouteList = computed(() => (id: string) => {
           >
             <span class="text-xs text-gray-500">Yêu Thích</span>
             <VIcon
-              :icon="findFavrouteList(item._id) !== 0 ? 'fa-heart' : 'fa-heart-o'"
-              :icon-class="findFavrouteList(item._id) !== 0 ? '!text-red-500' : '!text-black-500'"
+              :icon="findFavrouteList(item._id) === 0 ? 'fa-heart' : 'fa-heart-o'"
+              :icon-class="findFavrouteList(item._id) === 0 ? '!text-red-500' : '!text-black-500'"
             />
           </div>
         </div>
