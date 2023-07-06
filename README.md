@@ -42,3 +42,7 @@ This project is generate when using Nodejs version **16.14.2** and NPM version *
 
 #ExpressJS
   *ExpressJS is a popular framework used to build server-side web applications.
+
+#Tailwind CSS
+  *Tailwind CSS is a popular utility-first CSS framework that provides low-level CSS classes to build custom user interfaces quickly and easily. It provides a comprehensive set of pre-defined CSS classes that can be used to style any HTML element without writing custom CSS.
+
