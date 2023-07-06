@@ -1,34 +1,44 @@
+## Deploy netlify
+## https://cellphonex.netlify.app
+## This project
+
 This project is generate when using Nodejs version **16.14.2** and NPM version **7.17.0**
 
 ## To start the source please follow
 
 1. Run `pnpm install` for install nodejs libraries and dependencies (# If you don't have pnpm installed, run: npm install -g pnpm)
-2. Run `pnpm lint` to fix all eslint error
-3. Run `pnpm dev` to start the local server
-4. Run `pnpm build` to build the app
+2. Run `pnpm dev` to start the local server
+3. Run `pnpm build` to build the app
 
-**Note**: please check for env file before run
+**Description**
 
-## Source structure
+#Client-side
+  */client/src: Contains the source code for the Vue 3 application.
+  */client/public: Contains static files such as images, fonts, etc.
 
-**Common folder** (path: `src\common`): Use for storing layouts, reused components
+#Server-side
+  */server/routes: Contains the API routes.
+  */server/models: Contains the models for MongoDB.
+  */server/controllers: Contains the functions for API requests.
+  
+##
+##Technologies Used
+##
 
-**Group (Module) folder** (path: example as `src\tracks`): For not businesses not relevevant to each other please seperate it into a group
+#Vue 3
+  *Vue 3 is a popular framework used to build dynamic web applications.
 
-**Layout folder** (path: example as `src\common\layouts`): Place all the layouts files.
+#Vite
+  *Vite is a fast build tool for Vue 3 applications.
 
-**Style folder** (path: example as `src\common\styles`): Place all the custom css files.
+#Typescript
+  *Typescript is an open-source programming language extension of Javascript, providing static typing and other features to the code.
 
-**Module folder** (path: example as `src\common\modules`): Place all the registered plugin
+#MongoDB
+  *MongoDB is a non-relational database management system used for modern web applications.
 
-**Util folder** (path: example as `src\common\utils`): Place all the utility function or helper classes that can be used throughout the application.
+#Mongoose
+  *Mongoose is a middleware library that helps connect applications to MongoDB.
 
-**Components folder** (path: example as `src\tracks\components`): Contains reusable components that can be used across different parts of an application.
-
-**DTO folder** (path: example as `src\app\users\dtos`): For storing all of the DTO that used to transfer data between components, between the client and server, or between different layers of the application.
-
-**Service folder** (path: example as `src\tracks\services`): For storing all the file that used to communicate with APIs, retrieve data from databases, and handle other data-related tasks.
-
-**Store folder** (path: example as `src\tracks\stores`): Contains all the file that define the application's global state management system.
-
-**Page folder** (path: example as `src\tracks\pages`): Helps to organize the different pages or views of the application into a modular and maintainable structure. Each file in the pages folder corresponds to a unique page or route within the application.
+#ExpressJS
+  *ExpressJS is a popular framework used to build server-side web applications.
