@@ -1,49 +1,49 @@
-## Deploy netlify
-## https://cellphonex.netlify.app
-## https://cellphone-x.vercel.app
-## This project
+# CellPhoneX Project
 
-This project is generate when using Nodejs version **16.14.2** and NPM version **7.17.0**
+This project is a web application for CellPhoneX, developed using Vue 3, Vite, Typescript, MongoDB, Mongoose, ExpressJS, and Tailwind CSS. It features both client-side and server-side components for a comprehensive web experience.
 
-## To start the source please follow
+## Deployment Links
 
-1. Run `pnpm install` for install nodejs libraries and dependencies (# If you don't have pnpm installed, run: npm install -g pnpm)
-2. Run `pnpm dev` to start the local server
-3. Run `pnpm build` to build the app
+- [Netlify Deployment](https://cellphonex.netlify.app)
+- [Vercel Deployment](https://cellphone-x.vercel.app)
 
-**Description**
+## Getting Started
 
-#Client-side
-  */client/src: Contains the source code for the Vue 3 application.
-  */client/public: Contains static files such as images, fonts, etc.
+To run this project locally, please follow these steps:
 
-#Server-side
-  */server/routes: Contains the API routes.
-  */server/models: Contains the models for MongoDB.
-  */server/controllers: Contains the functions for API requests.
-  
-##
-##Technologies Used
-##
+1. Install [pnpm](https://pnpm.io/) if you haven't already (you can install it via `npm install -g pnpm`).
+2. Run `pnpm install` to install the necessary Node.js libraries and dependencies.
+3. Run `pnpm dev` to start the local server.
+4. Run `pnpm build` to build the application.
 
-#Vue 3
-  *Vue 3 is a popular framework used to build dynamic web applications.
+## Project Structure
 
-#Vite
-  *Vite is a fast build tool for Vue 3 applications.
+### Client-side
 
-#Typescript
-  *Typescript is an open-source programming language extension of Javascript, providing static typing and other features to the code.
+- **/client/src:** Contains the source code for the Vue 3 application.
+- **/client/public:** Contains static files such as images, fonts, etc.
 
-#MongoDB
-  *MongoDB is a non-relational database management system used for modern web applications.
+### Server-side
 
-#Mongoose
-  *Mongoose is a middleware library that helps connect applications to MongoDB.
+- **/server/routes:** Contains the API routes.
+- **/server/models:** Contains the models for MongoDB.
+- **/server/controllers:** Contains the functions for handling API requests.
 
-#ExpressJS
-  *ExpressJS is a popular framework used to build server-side web applications.
+## Technologies Used
 
-#Tailwind CSS
-  *Tailwind CSS is a popular utility-first CSS framework that provides low-level CSS classes to build custom user interfaces quickly and easily. It provides a comprehensive set of pre-defined CSS classes that can be used to style any HTML element without writing custom CSS.
+### Frontend
 
+- **Vue 3:** A popular framework used to build dynamic web applications.
+- **Vite:** A fast build tool for Vue 3 applications.
+- **Typescript:** An open-source programming language extension of Javascript, providing static typing and other features to the code.
+- **Tailwind CSS:** A utility-first CSS framework for building custom user interfaces quickly and easily.
+
+### Backend
+
+- **MongoDB:** A non-relational database management system used for modern web applications.
+- **Mongoose:** A middleware library that helps connect applications to MongoDB.
+- **ExpressJS:** A popular framework used to build server-side web applications.
+
+## About
+
+This project utilizes modern web development technologies to create a robust and efficient web application for CellPhoneX. It's designed to be easily deployable and scalable for future enhancements and updates.
