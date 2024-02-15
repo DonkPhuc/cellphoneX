@@ -1,5 +1,6 @@
 ## Deploy netlify
 ## https://cellphonex.netlify.app
+## https://cellphone-x.vercel.app
 ## This project
 
 This project is generate when using Nodejs version **16.14.2** and NPM version **7.17.0**
