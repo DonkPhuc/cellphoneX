@@ -97,7 +97,7 @@ const listInfo3rd = [
 
     <div class="w-full bg-slate-100 py-4">
       <span class="flex flex-1 justify-center pb-4 text-[10px]"
-        >@dmca_copyright_protected150c by leduykhanh @dmca_copyright_protected150c 000997728821.
+        >@dmca_copyright_protected150c by phuc.do @dmca_copyright_protected150c 000997728821.
         @dmca_copyright_protected150c @dmca_copyright_protected150c @dmca_copyright_protected150c</span
       >
       <div class="flex flex-1 justify-center">
